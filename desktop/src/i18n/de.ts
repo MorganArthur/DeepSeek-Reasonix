@@ -40,7 +40,7 @@ export const de: typeof en = {
   about: {
     ...en.about,
     sidebarLabel: "Über",
-    tagline: "DeepSeek-nativer Coding-Agent",
+    tagline: "Xiaomi MiMo-nativer Coding-Agent",
     version: "Version",
     repo: "Repository",
     checkUpdates: "Nach Updates suchen",
@@ -73,7 +73,7 @@ export const de: typeof en = {
     copiedMd: "Unterhaltung als Markdown kopiert",
     newSession: "Neue Sitzung gestartet",
     cleared: "UI geleert",
-    aboutLine: "Reasonix v{version} · Cache-First-DeepSeek-Agent",
+    aboutLine: "Reasonix v{version} · Cache-First-Xiaomi-MiMo-Agent",
   },
   composer: {
     ...en.composer,
@@ -120,7 +120,7 @@ export const de: typeof en = {
     costCurrency: "Kostenwährung",
     costCurrencyHint:
       "Nur Anzeige. Interne Kosten werden in USD-Äquivalent pro Token berechnet, zum festen Kurs von 7,2 FX umgerechnet.",
-    cnyDesc: "entspricht DeepSeek-Dashboard",
+    cnyDesc: "entspricht der Xiaomi-MiMo-Konsole",
     usdDesc: "entspricht Referenztarifen pro Token",
     theme: "Theme",
     themeHint: "Lokal auf diesem Gerät, nicht mit der TUI synchronisiert.",
@@ -197,7 +197,7 @@ export const de: typeof en = {
       brave: "Brave API-Key",
       ollama: "Ollama API-Key",
     },
-    baseUrl: "DeepSeek-Basis-URL",
+    baseUrl: "Xiaomi-MiMo-Basis-URL",
     baseUrlHint:
       "Nur bei Verwendung eines Proxys überschreiben. Leer = offizieller Endpunkt. Neustart erforderlich.",
     workspace: "Arbeitsbereich",
@@ -212,7 +212,7 @@ export const de: typeof en = {
     editorPlaceholder: 'z.B. "code", "subl" oder vollständiger Pfad zur ausführbaren Datei',
     editorDefault: "(Standard)",
     apiKey: "API-Schlüssel",
-    apiKeyHint: "DeepSeek-Schlüssel — gespeichert in ~/.reasonix/config.json (0600).",
+    apiKeyHint: "Xiaomi-MiMo-Schlüssel — gespeichert in ~/.reasonix/config.json (0600).",
     apiKeyNotSet: "(nicht gesetzt)",
     apiKeyCancel: "Abbrechen",
     apiKeySave: "Speichern",
@@ -239,7 +239,7 @@ export const de: typeof en = {
     appearanceSection: "Darstellung",
     workspaceSection: "Arbeitsbereich",
     behaviorSection: "Verhalten",
-    apiSection: "DeepSeek API",
+    apiSection: "Xiaomi MiMo API",
     qqSection: "QQ-Kanal",
     qqTitle: "QQ-Bot-Integration",
     qqConnected: "Verbunden",
@@ -370,7 +370,7 @@ export const de: typeof en = {
     lowDesc: "am schnellsten — minimales Reasoning",
     mediumDesc: "ausgewogen",
     highDesc: "Standard — sicher für vLLM / Azure",
-    maxDesc: "DeepSeek-Erweiterung; von stock OpenAI / vLLM abgelehnt",
+    maxDesc: "Legacy-No-op; Xiaomi MiMo akzeptiert low / medium / high",
   },
   checkpoint: {
     ...en.checkpoint,
@@ -458,7 +458,7 @@ export const de: typeof en = {
     warningLabel: "Warnung",
     dismissError: "Schließen",
     jumpToBottom: "Nach unten springen",
-    splashSubtitle: "DeepSeek-Agenten",
+    splashSubtitle: "Xiaomi-MiMo-Agenten",
     connecting: "Verbinde mit reasonix core...",
     startupFailedTitle: "Reasonix konnte nicht starten",
     startupFailedMessage:
@@ -514,7 +514,7 @@ export const de: typeof en = {
       ...en.app.setup,
       welcome: "Willkommen bei Reasonix",
       description:
-        "Die Ersteinrichtung erfordert einen DeepSeek-API-Schlüssel und ein Arbeitsbereichsverzeichnis. Der Schlüssel wird nur lokal gespeichert.",
+        "Die Ersteinrichtung erfordert einen Xiaomi-MiMo-API-Schlüssel und ein Arbeitsbereichsverzeichnis. Der Schlüssel wird nur lokal gespeichert.",
       workspace: "Arbeitsbereich",
       notSelected: "Nicht ausgewählt",
       choose: "Wählen…",

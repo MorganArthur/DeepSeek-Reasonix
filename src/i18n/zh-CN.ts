@@ -15,7 +15,7 @@ export const zhCN: TranslationSchema = {
     noTurns: "(暂无对话)",
   },
   cli: {
-    description: "DeepSeek 原生智能体框架 — 专为缓存命中和低成本令牌构建。",
+    description: "小米 MiMo 原生智能体框架 — 专为缓存命中和低成本令牌构建。",
     continue: "恢复最近使用的聊天会话，不显示选择器。",
     setup: "交互式向导 — API 密钥、MCP 服务器。随时重新运行以重新配置。",
     code: "代码编辑聊天 — 以 <dir>（默认：cwd）为根的文件系统工具，编码系统提示词，v4-flash 基线。",
@@ -40,7 +40,7 @@ export const zhCN: TranslationSchema = {
   },
   run: {
     missingApiKey:
-      "未设置 DEEPSEEK_API_KEY 且标准输入不是 TTY（无法交互式输入）。\n" +
+      "未设置 XIAOMI_API_KEY 且标准输入不是 TTY（无法交互式输入）。\n" +
       "请设置环境变量，或先运行 `reasonix chat` 交互一次以保存密钥。\n",
   },
   sessions: {
@@ -59,8 +59,8 @@ export const zhCN: TranslationSchema = {
   },
   ui: {
     welcome: "随时运行 `reasonix` 开始聊天 — 您的设置将被记住。",
-    taglineChat: "DeepSeek 原生智能体",
-    taglineCode: "DeepSeek 原生代码智能体",
+    taglineChat: "小米 MiMo 原生智能体",
+    taglineCode: "小米 MiMo 原生代码智能体",
     taglineSub: "缓存优先 · Flash 优先",
     startSessionHint: "输入消息以开始您的会话",
     inputPlaceholder: "输入任何内容... (输入 / 使用命令, @ 引用文件)",
@@ -192,7 +192,7 @@ export const zhCN: TranslationSchema = {
     newHint: "强制创建新会话（忽略 --session / --continue）",
     transcriptHint: "JSONL 转录稿的写入路径",
     budgetHint: "会话美元上限 — 80% 时警告，100% 时拒绝下一轮",
-    modelIdHint: "DeepSeek 模型 ID（例如 deepseek-v4-flash）",
+    modelIdHint: "小米 MiMo 模型 ID（例如 mimo-v2.5）",
     systemPromptHint: "覆盖默认系统提示词",
     effortHint: "推理强度 — low|medium|high|max",
     sessionNameHint: "会话名称（默认：'default'）",
@@ -240,7 +240,7 @@ export const zhCN: TranslationSchema = {
     mcpMaxPagesHint: "搜索时最多走多少页（默认 20）",
     jsonHintCatalog: "以 JSON 格式输出",
     jsonHintReport: "以 JSON 格式输出检查报告",
-    modelOverrideFlash: "覆盖模型（默认：deepseek-v4-flash）",
+    modelOverrideFlash: "覆盖模型（默认：mimo-v2.5）",
     skipConfirmHint: "跳过确认提示",
     yoloHint: "自动批准本次调用的计划检查点（等同于 editMode=yolo，但不修改配置文件）",
   },
@@ -257,8 +257,8 @@ export const zhCN: TranslationSchema = {
       description: "推理强度上限（low|medium|high|max）；high 是 vLLM/Azure 安全默认",
       argsHint: "<low|medium|high|max>",
     },
-    model: { description: "切换 DeepSeek 模型 ID", argsHint: "<id>" },
-    models: { description: "列出从 DeepSeek /models 获取的可用模型" },
+    model: { description: "切换小米 MiMo 模型 ID", argsHint: "<id>" },
+    models: { description: "列出从小米 MiMo /models 获取的可用模型" },
     theme: {
       description: "显示或持久化终端主题偏好。无参数时打开选择器。",
       argsHint: "[auto|dark|light|midnight|deep-blue|high-contrast]",
@@ -416,13 +416,13 @@ export const zhCN: TranslationSchema = {
     languageTitle: "选择语言",
     languageSubtitle: "已根据系统语言自动选中。之后可用 /language 切换。",
     welcomeTitle: "欢迎使用 Reasonix。",
-    apiKeyPrompt: "粘贴你的 DeepSeek API key 开始使用。",
-    apiKeyGetOne: "在此获取：https://platform.deepseek.com/api_keys",
+    apiKeyPrompt: "粘贴你的小米 MiMo API key 开始使用。",
+    apiKeyGetOne: "在此获取：https://platform.xiaomimimo.com/console/api-keys",
     apiKeySavedLocally: "保存在本地：{path}",
     apiKeyInputLabel: "key › ",
     apiKeyInvalid: "key 长度不足——请粘贴完整 token（16+ 字符，不含空格）。",
     apiKeyChecking: "正在检查 API key…",
-    apiKeyRejected: "DeepSeek 拒绝了这个 API key。请粘贴有效 key，或按 Esc 取消设置。",
+    apiKeyRejected: "小米 MiMo 拒绝了这个 API key。请粘贴有效 key，或按 Esc 取消设置。",
     apiKeyCheckFailed: "暂时无法验证 API key（{message}）。请检查网络后重试。",
     apiKeyPreview: "预览：{redacted}",
     themeTitle: "选择主题",
@@ -657,7 +657,7 @@ export const zhCN: TranslationSchema = {
     budgetExhausted:
       "会话预算已用完 — 已花费 ${spent} ≥ 上限 ${cap}。用 /budget <usd> 提高上限，/budget off 清除上限，或结束会话。",
     budget80Pct: "▲ 预算已用 80% — ${spent} / ${cap}。下一两轮可能就触顶。",
-    proArmed: "⇧ /pro 已装备 — 本轮使用 deepseek-v4-pro（一次性 · 本轮后自动解除）",
+    proArmed: "⇧ /pro 已装备 — 本轮使用 mimo-v2.5-pro（一次性 · 本轮后自动解除）",
     toolUploadStatus: "工具结果已上传 · 模型在生成下一条响应前思考中…",
     turnStartFoldStatus: "回合开始：上下文接近上限，正在压缩历史…",
     turnStartFolded:
@@ -678,26 +678,26 @@ export const zhCN: TranslationSchema = {
   },
   errors: {
     contextOverflow:
-      "上下文溢出（DeepSeek 400）：会话历史已达 {requested}，超出模型 prompt 上限（V4：1M tokens；旧版 chat/reasoner：131k）。通常是单个工具结果太大。Reasonix 默认将新工具结果限制在 8k tokens，并在会话加载时自动修复超大历史 — 重启常能清掉。如果仍然溢出，运行 /new 重新开始，或打开 /sessions 选中后按 [d] 删除该会话。",
+      "上下文溢出（小米 400）：会话历史已达 {requested}，超出模型 prompt 上限（mimo-v2.5 / mimo-v2.5-pro：1M tokens）。通常是单个工具结果太大。Reasonix 默认将新工具结果限制在 8k tokens，并在会话加载时自动修复超大历史 — 重启常能清掉。如果仍然溢出，运行 /new 重新开始，或打开 /sessions 选中后按 [d] 删除该会话。",
     contextOverflowTooMany: "tokens 数量过多",
     auth401:
-      "认证失败（DeepSeek 401）：{inner}。你的 API key 被拒绝。运行 `reasonix setup` 或 `export DEEPSEEK_API_KEY=sk-...` 修复。在 https://platform.deepseek.com/api_keys 获取 key。",
+      "认证失败（小米 401）：{inner}。你的 API key 被拒绝。运行 `reasonix setup` 或 `export XIAOMI_API_KEY=sk-...` 修复。在 https://platform.xiaomimimo.com/console/api-keys 获取 key。",
     balance402:
-      "余额不足（DeepSeek 402）：{inner}。在 https://platform.deepseek.com/top_up 充值 — 余额非零时面板顶栏会显示。",
-    badparam422: "参数错误（DeepSeek 422）：{inner}",
-    badrequest400: "请求错误（DeepSeek 400）：{inner}",
+      "Credits 不足（小米 402）：{inner}。前往 https://platform.xiaomimimo.com/console/billing 充值 — 小米 MiMo 采用 Credits / Token-Plan 计费（无账户余额 API），以 console 为准。",
+    badparam422: "参数错误（小米 422）：{inner}",
+    badrequest400: "请求错误（小米 400）：{inner}",
     concurrency429:
-      "DeepSeek 并发超限（429）：{inner}。账号在跑的请求超过上限（v4-pro 500、v4-flash 2500，账号下所有 API key 累加）。通常是同一账号开了多个 Reasonix 进程，或者并行 subagent 一次发太多。等几秒重试、减少并行，或在 https://platform.deepseek.com 申请扩容。",
+      "小米速率超限（429）：{inner}。小米 MiMo 平台上限是 RPM=100、TPM=10M（所有模型共享）。通常是并行 subagent 一次发太多，或者同一账号开了多个 Reasonix 进程。等几秒重试、减少并行，或在 config 中设置 `rateLimit.rpm: 90` 主动限流到上限以下。",
     deepseek5xxHead:
-      "DeepSeek 服务不可用（{status}） — 这是 DeepSeek 服务端问题，不是 Reasonix 故障。已按指数退避重试 4 次。",
+      "小米 MiMo 服务不可用（{status}） — 这是上游服务端问题，不是 Reasonix 故障。已按指数退避重试 4 次。",
     deepseek5xxReachable:
-      " DeepSeek 主 API 健康检查通过，但 /chat/completions 在挂 — 他们那边部分服务异常。",
+      " 小米主 API 的 /v1/models 健康检查通过，但 /chat/completions 在挂 — 他们那边部分服务异常。",
     deepseek5xxUnreachable:
-      " 无法从你的网络访问 DeepSeek API — 可能是 DS 整体故障，也可能是本地网络问题。",
+      " 无法从你的网络访问小米 MiMo API — 可能是上游整体故障，也可能是本地网络问题。",
     deepseek5xxActionNetwork:
-      " 建议：(1) 检查网络，(2) 等 30 秒后重试，(3) 查看状态页 https://status.deepseek.com。",
+      " 建议：(1) 检查网络，(2) 等 30 秒后重试，(3) 查看 console：https://platform.xiaomimimo.com。",
     deepseek5xxActionRetry:
-      " 建议：(1) 等 30 秒后重试，(2) 用 /model 切换模型，(3) 查看状态页 https://status.deepseek.com。",
+      " 建议：(1) 等 30 秒后重试，(2) 用 /model 切换模型，(3) 查看 console：https://platform.xiaomimimo.com。",
     upstream5xxHead:
       "上游服务不可用（{status}），目标地址 {host} — 你配置的 API 端点返回了服务器错误，不是 Reasonix 故障。已按指数退避重试 4 次。",
     upstream5xxActionRetry:
@@ -759,7 +759,7 @@ export const zhCN: TranslationSchema = {
       loopStarted:
         '▸ 循环已启动 — 每 {duration} 重新提交 "{prompt}"。输入任何内容（或 /loop stop）取消。',
       keysNeedsTui: "/keys 需要 TUI 上下文（postKeys 已连接）。",
-      aboutHeader: "Reasonix v{version} — 缓存优先的 DeepSeek 编码代理",
+      aboutHeader: "Reasonix v{version} — 缓存优先的小米 MiMo 编码代理",
       aboutWebsiteLabel: "官网",
       aboutRepoLabel: "仓库",
       aboutLicenseLabel: "协议",
@@ -896,13 +896,14 @@ export const zhCN: TranslationSchema = {
       cwdUsageNoCurrent: "用法：/cwd <path>   将工作区根目录切换到 <path>。",
     },
     model: {
-      modelHint: "尝试 deepseek-v4-flash 或 deepseek-v4-pro — 运行 /models 获取实时列表",
+      modelHint: "尝试 mimo-v2.5 或 mimo-v2.5-pro — 运行 /models 获取实时列表",
       modelUsage: "用法：/model <id>   （{hint}）",
       modelNotInCatalog:
         "model → {id}   （⚠ 不在获取的目录中：{list}。如果这是错误的，下次调用将返回 400 — 运行 /models 刷新。）",
       modelSet: "model → {id}",
       effortStatus: "effort → {current}   （可选：{list}）",
-      effortUsage: "用法：/effort <{list}>   （high 为安全默认；max 是 DeepSeek 扩展）",
+      effortUsage:
+        "用法：/effort <{list}>   （high 为安全默认；小米 MiMo 仅接受 low / medium / high）",
       effortUsageNoMax: "用法：/effort <{list}>",
       effortSet: "effort → {effort}",
       budgetNoCap:
@@ -1365,12 +1366,12 @@ export const zhCN: TranslationSchema = {
     catalogEmpty: "  ·  目录为空 — 使用已知备选",
     modelsAvailable: "  ·  {count} 个模型可用",
     effortHeader: "    强度  ·  reasoning_effort 上限",
-    modelsHeader: "    模型  ·  DeepSeek 兼容 ID",
+    modelsHeader: "    模型  ·  小米 MiMo ID",
     effortDesc: {
       low: "最快 — 极少推理",
       medium: "平衡",
       high: "默认 — vLLM / Azure 安全",
-      max: "DeepSeek 扩展；OpenAI / vLLM 会拒绝",
+      max: "（已移除）小米 MiMo 仅接受 low / medium / high — 保留为 no-op 防老 config 破坏 picker",
     },
     pickerFooter: "  ↑↓ 选择 · ⏎ 确认 · [r] 刷新 · Esc 取消",
     currentLabel: "  · 当前",

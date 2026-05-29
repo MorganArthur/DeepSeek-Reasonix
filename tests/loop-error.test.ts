@@ -30,16 +30,16 @@ describe("formatLoopError", () => {
     const out = formatLoopError(raw);
     expect(out).toMatch(/Authentication failed/);
     expect(out).toMatch(/reasonix setup/);
-    expect(out).toMatch(/DEEPSEEK_API_KEY/);
+    expect(out).toMatch(/XIAOMI_API_KEY/);
     // Inner error.message survives the unwrap
     expect(out).toContain("Your api key is invalid");
   });
 
-  it("402 → balance hint with top-up URL", () => {
+  it("402 → credits hint with billing URL", () => {
     const raw = new Error('DeepSeek 402: {"error":{"message":"Insufficient Balance"}}');
     const out = formatLoopError(raw);
-    expect(out).toMatch(/Out of balance/);
-    expect(out).toMatch(/top_up/);
+    expect(out).toMatch(/Credits exhausted/);
+    expect(out).toContain("console/billing");
     expect(out).toContain("Insufficient Balance");
   });
 
@@ -52,16 +52,16 @@ describe("formatLoopError", () => {
     expect(out).toContain("temperature");
   });
 
-  it("429 → concurrency-limit hint with cap numbers + remediation (#1522)", () => {
+  it("429 → Xiaomi rate-limit hint with cap numbers + remediation (#1522)", () => {
     const raw = new Error(
       'DeepSeek 429: {"error":{"message":"Too Many Requests, please reduce concurrency"}}',
     );
     const out = formatLoopError(raw);
-    expect(out).toMatch(/concurrency limit/);
-    expect(out).toMatch(/500/);
-    expect(out).toMatch(/2500/);
+    expect(out).toMatch(/rate limit/);
+    expect(out).toMatch(/RPM=100/);
+    expect(out).toMatch(/TPM=10M/);
     expect(out).toContain("reduce concurrency");
-    expect(out).toContain("platform.deepseek.com");
+    expect(out).toContain("rateLimit.rpm: 90");
   });
 
   it("400 (non-overflow) → extracts the inner error message, drops the JSON wrapping", () => {
@@ -86,35 +86,35 @@ describe("formatLoopError", () => {
     expect(out).toMatch(/too many tokens/);
   });
 
-  it("context-overflow message mentions both the 1M V4 limit and the legacy 131k", () => {
+  it("context-overflow message mentions the 1M MiMo limit", () => {
     const raw = new Error(
       'DeepSeek 400: {"error":{"message":"This model\'s maximum context length is 131072 tokens. However, you requested 200000 tokens."}}',
     );
     const out = formatLoopError(raw);
     expect(out).toMatch(/1M/);
-    expect(out).toMatch(/131k/);
+    expect(out).toMatch(/mimo-v2\.5/);
   });
 
-  it("503 with no probe → DS-side outage notice + retry hint, no probe-specific line", () => {
+  it("503 with no probe → Xiaomi outage notice + retry hint, no probe-specific line", () => {
     const raw = new Error('DeepSeek 503: {"error":{"message":"Service unavailable"}}');
     const out = formatLoopError(raw);
     expect(out).toMatch(/service unavailable \(503\)/);
-    expect(out).toMatch(/DeepSeek-side problem, not Reasonix/);
+    expect(out).toMatch(/upstream-side problem, not Reasonix/);
     expect(out).toMatch(/Already retried 4×/);
-    expect(out).toContain("status.deepseek.com");
+    expect(out).toContain("platform.xiaomimimo.com");
     expect(out).not.toMatch(/main API answered/);
     expect(out).not.toMatch(/unreachable from your network/);
   });
 
-  it("503 with reachable probe → tells user DS chat endpoint is sick but main API is up", () => {
+  it("503 with reachable probe → tells user Xiaomi chat endpoint is sick but main API is up", () => {
     const raw = new Error("DeepSeek 503: ");
     const out = formatLoopError(raw, { reachable: true });
-    expect(out).toMatch(/main API answered our health check/);
+    expect(out).toMatch(/main API answered our \/v1\/models health check/);
     expect(out).toMatch(/partial outage on their side/);
     expect(out).not.toMatch(/check your network/);
   });
 
-  it("503 with unreachable probe → tells user DS or their network is down, network-first hint", () => {
+  it("503 with unreachable probe → tells user Xiaomi or their network is down, network-first hint", () => {
     const raw = new Error("DeepSeek 503: ");
     const out = formatLoopError(raw, { reachable: false });
     expect(out).toMatch(/unreachable from your network/);
@@ -122,11 +122,11 @@ describe("formatLoopError", () => {
     expect(out).not.toMatch(/main API answered/);
   });
 
-  it("500/502/504 also remap to the DS-side outage notice", () => {
+  it("500/502/504 also remap to the Xiaomi outage notice", () => {
     for (const status of [500, 502, 504]) {
       const out = formatLoopError(new Error(`DeepSeek ${status}: `));
       expect(out).toMatch(new RegExp(`service unavailable \\(${status}\\)`));
-      expect(out).toMatch(/DeepSeek-side problem/);
+      expect(out).toMatch(/upstream-side problem/);
     }
   });
 
@@ -135,24 +135,24 @@ describe("formatLoopError", () => {
     expect(out).toMatch(/service unavailable \(500\)/);
   });
 
-  it("5xx from a non-DeepSeek host → generic upstream wording, no DS hint, no probe", () => {
+  it("5xx from a non-Xiaomi host → generic upstream wording, no Xiaomi hint, no probe", () => {
     const out = formatLoopError(new Error("DeepSeek 500: "), undefined, {
       upstreamHost: "http://localhost:11434/v1",
     });
     expect(out).toMatch(/Upstream service unavailable \(500\)/);
     expect(out).toContain("localhost:11434");
-    expect(out).not.toContain("status.deepseek.com");
-    expect(out).not.toMatch(/DeepSeek-side problem/);
+    expect(out).not.toContain("platform.xiaomimimo.com");
+    expect(out).not.toMatch(/Xiaomi MiMo service unavailable/);
     expect(out).not.toMatch(/main API answered/);
     expect(out).not.toMatch(/unreachable from your network/);
   });
 
-  it("5xx from api.deepseek.com → still gets the DS-specific wording (allow-list)", () => {
-    const out = formatLoopError(new Error("DeepSeek 503: "), undefined, {
-      upstreamHost: "https://api.deepseek.com",
+  it("5xx from api.xiaomimimo.com → still gets the upstream-specific wording (allow-list)", () => {
+    const out = formatLoopError(new Error("Xiaomi 503: "), undefined, {
+      upstreamHost: "https://api.xiaomimimo.com",
     });
-    expect(out).toMatch(/DeepSeek-side problem/);
-    expect(out).toContain("status.deepseek.com");
+    expect(out).toMatch(/Xiaomi MiMo service unavailable/);
+    expect(out).toContain("platform.xiaomimimo.com");
   });
 });
 
@@ -197,8 +197,8 @@ describe("formatLoopError — zh-CN runtime switch", () => {
     const out = formatLoopError(new Error("DeepSeek 503: "));
     expect(out).toContain("服务不可用");
     expect(out).toContain("503");
-    expect(out).toContain("DeepSeek 服务端问题");
-    expect(out).toContain("status.deepseek.com");
+    expect(out).toContain("上游服务端问题");
+    expect(out).toContain("platform.xiaomimimo.com");
   });
 
   it("non-DS host 5xx translates when language is zh-CN, omits DS-specific hints", () => {
@@ -209,8 +209,8 @@ describe("formatLoopError — zh-CN runtime switch", () => {
     expect(out).toContain("上游服务不可用");
     expect(out).toContain("502");
     expect(out).toContain("192.168.1.5:8080");
-    expect(out).not.toContain("status.deepseek.com");
-    expect(out).not.toContain("DeepSeek 服务端问题");
+    expect(out).not.toContain("platform.xiaomimimo.com");
+    expect(out).not.toContain("小米 MiMo 服务不可用");
   });
 
   it("401 auth error translates when language is zh-CN, preserves the inner DS message", () => {
@@ -377,45 +377,20 @@ describe("healLoadedMessages", () => {
 });
 
 describe("stripHallucinatedToolMarkup", () => {
-  it("removes a full DSML function_calls block (the R1 hallucination we saw live)", () => {
-    const input = [
-      "Let me look at the file structure.",
-      "",
-      '<｜DSML｜function_calls> <｜DSML｜invoke name="filesystem_edit_file">',
-      '  <｜DSML｜parameter name="path" string="true">F:.html</｜DSML｜parameter>',
-      '  <｜DSML｜parameter name="edits" string="false">[...]</｜DSML｜parameter>',
-      "</｜DSML｜invoke> </｜DSML｜function_calls>",
-      "",
-      "Saved.",
-    ].join("\n");
-    const out = stripHallucinatedToolMarkup(input);
-    expect(out).toContain("Let me look at the file structure.");
-    expect(out).toContain("Saved.");
-    expect(out).not.toContain("DSML");
-    expect(out).not.toContain("filesystem_edit_file");
+  // The DSML / <function_calls> stripping behaviour was a DeepSeek R1
+  // artifact. Xiaomi MiMo uses Qwen-style `<tool_call>` markers which the
+  // server itself parses into the structured `tool_calls` field — leaked
+  // pseudo-XML markup doesn't reach the client. The function is kept (as a
+  // trim-only no-op) for back-compat with all the callers in context-manager
+  // / loop / force-summary / index, so we just assert the no-op contract.
+  it("trims whitespace but otherwise returns the input unchanged", () => {
+    expect(stripHallucinatedToolMarkup("  hello  ")).toBe("hello");
+    expect(stripHallucinatedToolMarkup("plain prose")).toBe("plain prose");
+    expect(stripHallucinatedToolMarkup("")).toBe("");
   });
 
-  it("removes an Anthropic-style <function_calls> block", () => {
+  it("leaves any leftover markup intact (server handles tool-call parsing)", () => {
     const input = "Here is the plan.\n<function_calls>\n<tool>...</tool>\n</function_calls>\nDone.";
-    const out = stripHallucinatedToolMarkup(input);
-    expect(out).toContain("Here is the plan.");
-    expect(out).toContain("Done.");
-    expect(out).not.toContain("function_calls");
-  });
-
-  it("strips a truncated DSML opener that never gets closed", () => {
-    const input = 'Before the junk.\n<｜DSML｜function_calls> <｜DSML｜invoke name="x"> ...';
-    const out = stripHallucinatedToolMarkup(input);
-    expect(out).toBe("Before the junk.");
-  });
-
-  it("leaves plain prose completely alone", () => {
-    const input = "Just a normal summary with no markup anywhere.";
     expect(stripHallucinatedToolMarkup(input)).toBe(input);
-  });
-
-  it("returns empty string when ALL content was hallucinated markup", () => {
-    const input = "<｜DSML｜function_calls>garbage</｜DSML｜function_calls>";
-    expect(stripHallucinatedToolMarkup(input)).toBe("");
   });
 });

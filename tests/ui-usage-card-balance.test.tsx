@@ -18,7 +18,7 @@ const SESSION: SessionInfo = {
   id: "test",
   branch: "main",
   workspace: "/tmp",
-  model: "deepseek-chat",
+  model: "mimo-v2.5",
 };
 
 function baseCard(overrides: Partial<UsageCardData> = {}): UsageCardData {

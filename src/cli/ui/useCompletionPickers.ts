@@ -32,7 +32,7 @@ export interface UseCompletionPickersParams {
   mcpServers: McpServerSummary[] | undefined;
   /** Cross-session slash invocation counts — used to sort suggestions by frequency. */
   slashUsage?: Readonly<Record<string, number>>;
-  /** Filtered effort enum for the active endpoint — drops "max" on non-DeepSeek hosts (#1794). */
+  /** Effort enum for the active endpoint. Xiaomi MiMo strictly accepts only low/medium/high. */
   effortChoices: readonly ReasoningEffort[];
 }
 

@@ -28,7 +28,7 @@ describe("transcript writer / reader round-trip", () => {
     const stream = openTranscriptFile(path, {
       version: 1,
       source: "test",
-      model: "deepseek-chat",
+      model: "mimo-v2.5",
       task: "t01",
       mode: "reasonix",
       repeat: 1,
@@ -38,7 +38,7 @@ describe("transcript writer / reader round-trip", () => {
     // Build a realistic assistant_final event using SessionStats.
     const stats = new SessionStats();
     const usage = new Usage(1000, 100, 1100, 800, 200);
-    const turnStats = stats.record(1, "deepseek-chat", usage);
+    const turnStats = stats.record(1, "mimo-v2.5", usage);
 
     const assistantEv: LoopEvent = {
       turn: 1,
@@ -56,11 +56,11 @@ describe("transcript writer / reader round-trip", () => {
 
     writeRecord(
       stream,
-      recordFromLoopEvent(assistantEv, { model: "deepseek-chat", prefixHash: "abc123def456" }),
+      recordFromLoopEvent(assistantEv, { model: "mimo-v2.5", prefixHash: "abc123def456" }),
     );
     writeRecord(
       stream,
-      recordFromLoopEvent(toolEv, { model: "deepseek-chat", prefixHash: "abc123def456" }),
+      recordFromLoopEvent(toolEv, { model: "mimo-v2.5", prefixHash: "abc123def456" }),
     );
     await new Promise<void>((resolve) => stream.end(resolve));
 
@@ -77,7 +77,7 @@ describe("transcript writer / reader round-trip", () => {
     expect(a.content).toBe("Hello world.");
     expect(a.usage?.prompt_cache_hit_tokens).toBe(800);
     expect(a.cost).toBeGreaterThan(0);
-    expect(a.model).toBe("deepseek-chat");
+    expect(a.model).toBe("mimo-v2.5");
     expect(a.prefixHash).toBe("abc123def456");
 
     const t = records[1]!;

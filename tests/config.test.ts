@@ -208,14 +208,14 @@ describe("config", () => {
   });
 
   it("loadModel falls back to default when persisted id is unsupported on the official endpoint", () => {
-    // Regression: v3-era `deepseek-chat`/`deepseek-reasoner` lingering in
-    // config — or any other unsupported id — would be sent verbatim and
-    // make the first chat request 400 with "supported API model names are
-    // deepseek-v4-pro or deepseek-v4-flash, but you passed …".
-    writeConfig({ model: "deepseek-chat" }, path);
-    expect(loadModel(path)).toBe("deepseek-v4-flash");
-    writeConfig({ model: "deepseek-made-up" }, path);
-    expect(loadModel(path)).toBe("deepseek-v4-flash");
+    // Legacy provider ids are auto-migrated on read.
+    // Other unsupported / unknown ids are not migrated but fall back to
+    // DEFAULT_MODEL when no custom baseUrl is set, so the first chat request
+    // doesn't 400 with an "unknown model" error.
+    writeConfig({ model: "deepseek-chat" }, path); // legacy id, written as escape to survive sed sweeps
+    expect(loadModel(path)).toBe("mimo-v2.5");
+    writeConfig({ model: "mimo-made-up" }, path);
+    expect(loadModel(path)).toBe("mimo-v2.5");
   });
 
   it("loadModel passes through any persisted id when a custom baseUrl is set", () => {
@@ -223,9 +223,18 @@ describe("config", () => {
     expect(loadModel(path)).toBe("my-self-hosted-7b");
   });
 
-  it("loadModel keeps a supported v4 id on the official endpoint", () => {
-    writeConfig({ model: "deepseek-v4-pro" }, path);
-    expect(loadModel(path)).toBe("deepseek-v4-pro");
+  it("loadModel keeps a supported MiMo id on the official endpoint", () => {
+    writeConfig({ model: "mimo-v2.5-pro" }, path);
+    expect(loadModel(path)).toBe("mimo-v2.5-pro");
+  });
+
+  it("loadModel migrates legacy deepseek-v4-* ids on read", () => {
+    // Use string concatenation so global sed sweeps over `deepseek-v4-*` don't
+    // silently neuter this test by replacing the legacy id with its target.
+    writeConfig({ model: "deepseek-v4" + "-flash" }, path);
+    expect(loadModel(path)).toBe("mimo-v2.5");
+    writeConfig({ model: "deepseek-v4" + "-pro" }, path);
+    expect(loadModel(path)).toBe("mimo-v2.5-pro");
   });
 
   it("loadEndpoint: env tuple wins when env sets baseUrl", () => {
@@ -388,7 +397,7 @@ describe("config", () => {
     writeConfig(
       {
         apiKey: "sk-test123abcdefghijkl",
-        model: "deepseek-v4-pro",
+        model: "mimo-v2.5-pro",
         reasoningEffort: "medium",
         mcp: [
           "filesystem=npx -y @modelcontextprotocol/server-filesystem /tmp/safe",
@@ -400,7 +409,7 @@ describe("config", () => {
       path,
     );
     const loaded = readConfig(path);
-    expect(loaded.model).toBe("deepseek-v4-pro");
+    expect(loaded.model).toBe("mimo-v2.5-pro");
     expect(loaded.reasoningEffort).toBe("medium");
     expect(loaded.mcp).toHaveLength(2);
     expect(loaded.session).toBe("work");
@@ -611,11 +620,17 @@ describe("config", () => {
   });
 
   it("saveReasoningEffort + loadReasoningEffort round-trip every supported value", () => {
-    for (const e of ["low", "medium", "high", "max"] as const) {
+    for (const e of ["low", "medium", "high"] as const) {
       saveReasoningEffort(e, path);
       expect(loadReasoningEffort(path)).toBe(e);
       expect(readConfig(path).reasoningEffort).toBe(e);
     }
+  });
+
+  it("legacy reasoningEffort=max migrates to high on read (Xiaomi rejects 'max')", () => {
+    writeConfig({ reasoningEffort: "max" as never }, path);
+    expect(loadReasoningEffort(path)).toBe("high");
+    expect(readConfig(path).reasoningEffort).toBe("high");
   });
 
   it("loadReasoningEffort coerces unknown values back to the safe default", () => {

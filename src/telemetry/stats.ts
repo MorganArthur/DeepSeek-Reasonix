@@ -1,22 +1,29 @@
 import type { Usage } from "../client.js";
-import { loadPricingOverride } from "../config.js";
+import { DEFAULT_MODEL_FLASH, DEFAULT_MODEL_PRO, loadPricingOverride } from "../config.js";
 
-/** USD per 1M tokens; display currency conversion happens at the UI boundary. */
-export const DEEPSEEK_PRICING: Record<
-  string,
-  { inputCacheHit: number; inputCacheMiss: number; output: number }
-> = {
-  "deepseek-v4-flash": { inputCacheHit: 0.0028, inputCacheMiss: 0.14, output: 0.28 },
-  "deepseek-v4-pro": { inputCacheHit: 0.003625, inputCacheMiss: 0.435, output: 0.87 },
-  // Compat aliases — priced as v4-flash per the deprecation notice.
-  "deepseek-chat": { inputCacheHit: 0.0028, inputCacheMiss: 0.14, output: 0.28 },
-  "deepseek-reasoner": { inputCacheHit: 0.0028, inputCacheMiss: 0.14, output: 0.28 },
+export interface ModelPricing {
+  inputCacheHit: number;
+  inputCacheMiss: number;
+  output: number;
+}
+
+/** USD per 1M tokens; display-currency conversion happens at the UI boundary. */
+export const XIAOMI_PRICING: Record<string, ModelPricing> = {
+  "mimo-v2.5": { inputCacheHit: 0.008, inputCacheMiss: 0.08, output: 2.0 },
+  "mimo-v2.5-pro": { inputCacheHit: 0.02, inputCacheMiss: 0.2, output: 3.0 },
 };
 
-export type ModelPricing = (typeof DEEPSEEK_PRICING)[string];
+/** CNY per 1M tokens — used when `costCurrency: "CNY"`. */
+export const XIAOMI_PRICING_CNY: Record<string, ModelPricing> = {
+  "mimo-v2.5": { inputCacheHit: 0.056, inputCacheMiss: 0.56, output: 14.0 },
+  "mimo-v2.5-pro": { inputCacheHit: 0.14, inputCacheMiss: 1.4, output: 21.0 },
+};
+
+/** Legacy alias kept so older importers keep resolving. */
+export const DEEPSEEK_PRICING = XIAOMI_PRICING;
 
 export function pricingFor(model: string, path?: string): ModelPricing | undefined {
-  const defaults = DEEPSEEK_PRICING[model];
+  const defaults = XIAOMI_PRICING[model];
   const override = loadPricingOverride(path)[model];
   if (!override) return defaults;
   const pricing = { ...defaults, ...override };
@@ -33,13 +40,16 @@ export function pricingFor(model: string, path?: string): ModelPricing | undefin
 /** Reference Claude Sonnet 4.6 pricing (USD per 1M tokens). */
 export const CLAUDE_SONNET_PRICING = { input: 3.0, output: 15.0 };
 
-/** Prompt-side window only; completion caps live server-side and don't affect this gauge. */
-export const DEEPSEEK_CONTEXT_TOKENS: Record<string, number> = {
-  "deepseek-v4-flash": 1_000_000,
-  "deepseek-v4-pro": 1_000_000,
-  "deepseek-chat": 1_000_000,
-  "deepseek-reasoner": 1_000_000,
+/** Prompt-side context window per supported model (tokens). Completion caps
+ *  live server-side and don't affect this gauge. Both Xiaomi MiMo target
+ *  models advertise 1M token windows. */
+export const XIAOMI_CONTEXT_TOKENS: Record<string, number> = {
+  [DEFAULT_MODEL_FLASH]: 1_048_576,
+  [DEFAULT_MODEL_PRO]: 1_048_576,
 };
+
+/** Legacy alias — Day 3 callers should reference `XIAOMI_CONTEXT_TOKENS`. */
+export const DEEPSEEK_CONTEXT_TOKENS = XIAOMI_CONTEXT_TOKENS;
 
 /** Fallback when the caller's model id isn't in the table — safe lower bound. */
 export const DEFAULT_CONTEXT_TOKENS = 131_072;

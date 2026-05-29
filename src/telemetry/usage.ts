@@ -19,7 +19,7 @@ import { dirname, join } from "node:path";
 import type { Usage } from "../client.js";
 import {
   CLAUDE_SONNET_PRICING,
-  DEEPSEEK_PRICING,
+  XIAOMI_PRICING,
   cacheSavingsUsd,
   claudeEquivalentCost,
   costUsd,
@@ -370,4 +370,4 @@ export function formatLogSize(path: string = defaultUsageLogPath()): string {
 }
 
 /** Re-exports for downstream consumers that also want the pricing constants. */
-export { CLAUDE_SONNET_PRICING, DEEPSEEK_PRICING };
+export { CLAUDE_SONNET_PRICING, XIAOMI_PRICING };

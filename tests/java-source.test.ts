@@ -248,6 +248,17 @@ describe("ClassSourceFinder.defaultRepoPaths", () => {
       expect(typeof p).toBe("string");
     }
   });
+
+  it("does not scan default jar caches when repoPaths is explicitly empty", async () => {
+    const root = await tmpDir();
+    const spy = vi.spyOn(ClassSourceFinder, "defaultRepoPaths");
+
+    const finder = new ClassSourceFinder({ projectRoot: root, repoPaths: [] });
+    const result = await finder.findSource("com.example.Missing");
+
+    expect(result.found).toBe(false);
+    expect(spy).not.toHaveBeenCalled();
+  });
 });
 
 describe("ClassSourceFinder — project search", () => {

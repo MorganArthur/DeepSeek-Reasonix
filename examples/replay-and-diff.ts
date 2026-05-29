@@ -1,7 +1,7 @@
 /**
  * Library example: programmatic replay + diff.
  *
- * This example runs with no API key and no DeepSeek calls — it reads the
+ * This example runs with no API key and no Xiaomi MiMo calls — it reads the
  * reference transcripts committed at benchmarks/tau-bench/transcripts/ and
  * reconstructs the v0.1 cache-hit / cost numbers offline.
  *

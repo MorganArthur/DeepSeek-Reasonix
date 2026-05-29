@@ -19,7 +19,8 @@ export const de: TranslationSchema = {
   },
   cli: {
     ...EN.cli,
-    description: "DeepSeek-natives Agent-Framework, gebaut für Cache-Treffer und günstige Tokens.",
+    description:
+      "Xiaomi MiMo-natives Agent-Framework, gebaut für Cache-Treffer und günstige Tokens.",
     continue: "Die zuletzt verwendete Chat-Sitzung fortsetzen, ohne die Auswahl anzuzeigen.",
     setup: "Interaktiver Assistent für API-Schlüssel und MCP-Server. Jederzeit erneut ausführbar.",
     chat: "Interaktive Ink-TUI mit Live-Cache- und Kostenanzeige.",
@@ -47,7 +48,7 @@ export const de: TranslationSchema = {
   run: {
     ...EN.run,
     missingApiKey:
-      "DEEPSEEK_API_KEY ist nicht gesetzt und stdin ist kein TTY (Nachfrage nicht möglich).\n" +
+      "XIAOMI_API_KEY ist nicht gesetzt und stdin ist kein TTY (Nachfrage nicht möglich).\n" +
       "Setze die Umgebungsvariable oder starte einmal interaktiv `reasonix chat`, um einen Schlüssel zu speichern.\n",
   },
   sessions: {
@@ -77,7 +78,7 @@ export const de: TranslationSchema = {
     newHint: "Eine neue Sitzung erzwingen (--session / --continue ignorieren)",
     transcriptHint: "Pfad zum Speichern der JSONL-Ausgabe",
     budgetHint: "Sitzungs-USD-Obergrenze – warnt bei 80 %, verweigert den nächsten Zug bei 100 %",
-    modelIdHint: "DeepSeek-Modell-ID (z. B. deepseek-v4-flash)",
+    modelIdHint: "Xiaomi MiMo-Modell-ID (z. B. mimo-v2.5)",
     systemPromptHint: "den Standard-System-Prompt überschreiben",
     effortHint: "Reasoning-Effort – niedrig|mittel|hoch|maximal",
     sessionNameHint: "Sitzungsname (Standard: „default“)",
@@ -131,14 +132,14 @@ export const de: TranslationSchema = {
       "Begrenze die Anzahl der Seiten, die bei der Suche durchsucht werden sollen (Standard: 20)",
     jsonHintCatalog: "Ausgabe als JSON",
     jsonHintReport: "Gib den Inspektionsbericht als JSON aus",
-    modelOverrideFlash: "das Modell überschreiben (Standard: deepseek-v4-flash)",
+    modelOverrideFlash: "das Modell überschreiben (Standard: mimo-v2.5)",
     skipConfirmHint: "Die Bestätigungsabfrage überspringen",
     yoloHint:
       "Plan-Checkpoints für diesen Aufruf automatisch genehmigen (entspricht editMode=yolo, ohne die Konfiguration zu ändern)",
     welcome:
       "Starte jederzeit `reasonix`, um zu chatten – deine Einstellungen bleiben gespeichert.",
-    taglineChat: "DeepSeek-nativer Agent",
-    taglineCode: "DeepSeek-nativer Coding-Agent",
+    taglineChat: "Xiaomi MiMo-nativer Agent",
+    taglineCode: "Xiaomi MiMo-nativer Coding-Agent",
     taglineSub: "cache-first · flash-first",
     startSessionHint: "Tippe eine Nachricht, um deine Sitzung zu starten",
     inputPlaceholder: "Frag etwas... (tippe / für Befehle, @ für Dateien)",
@@ -191,11 +192,11 @@ export const de: TranslationSchema = {
     },
     model: {
       ...EN.slash.model,
-      description: "DeepSeek-Modell-ID wechseln",
+      description: "Xiaomi MiMo-Modell-ID wechseln",
     },
     models: {
       ...EN.slash.models,
-      description: "Verfügbare Modelle von DeepSeek /models abrufen",
+      description: "Verfügbare Modelle von Xiaomi MiMo /models abrufen",
     },
     language: {
       description: "Laufzeitsprache wechseln",
@@ -429,8 +430,8 @@ export const de: TranslationSchema = {
     languageTitle: "Sprache auswählen",
     languageSubtitle: "Aus der Systemsprache erkannt. Später mit /language wechselbar.",
     welcomeTitle: "Willkommen bei Reasonix.",
-    apiKeyPrompt: "Füge deinen DeepSeek-API-Schlüssel ein, um loszulegen.",
-    apiKeyGetOne: "Erhalte einen unter: https://platform.deepseek.com/api_keys",
+    apiKeyPrompt: "Füge deinen Xiaomi MiMo-API-Schlüssel ein, um loszulegen.",
+    apiKeyGetOne: "Erhalte einen unter: https://platform.xiaomimimo.com/console/api-keys",
     apiKeySavedLocally: "Lokal gespeichert unter {path}",
     apiKeyInputLabel: "Schlüssel > ",
     apiKeyPlaceholder: "sk-...",
@@ -438,7 +439,7 @@ export const de: TranslationSchema = {
       "Der Schlüssel wirkt zu kurz – füge den vollständigen Token ein (16+ Zeichen, keine Leerzeichen).",
     apiKeyChecking: "API-Schlüssel wird geprüft...",
     apiKeyRejected:
-      "DeepSeek hat diesen API-Schlüssel abgelehnt. Füge einen gültigen Schlüssel ein oder brich das Setup mit Esc ab.",
+      "Xiaomi MiMo hat diesen API-Schlüssel abgelehnt. Füge einen gültigen Schlüssel ein oder brich das Setup mit Esc ab.",
     apiKeyCheckFailed:
       "Konnte diesen API-Schlüssel gerade nicht verifizieren ({message}). Überprüfe deine Netzwerkverbindung oder versuche es erneut.",
     apiKeyPreview: "Vorschau: {redacted}",
@@ -701,7 +702,7 @@ export const de: TranslationSchema = {
     budget80Pct:
       "▲ Budget zu 80 % verbraucht — ${spent} von ${cap}. Der nächste oder übernächste Turn erreicht wahrscheinlich die Grenze.",
     proArmed:
-      "⇧ /pro aktiviert — dieser Turn läuft auf deepseek-v4-pro (einmalig · deaktiviert nach dem Turn)",
+      "⇧ /pro aktiviert — dieser Turn läuft auf mimo-v2.5-pro (einmalig · deaktiviert nach dem Turn)",
     toolUploadStatus: "Tool-Ergebnis hochgeladen – Modell denkt vor der nächsten Antwort...",
     turnStartFoldStatus: "Turn-Start: Kontext nähert sich Grenze, komprimiere Verlauf...",
     turnStartFolded:
@@ -725,26 +726,26 @@ export const de: TranslationSchema = {
   errors: {
     ...EN.errors,
     contextOverflow:
-      "Context-Überlauf (DeepSeek 400): Sitzungsverlauf ist {requested}, über dem Prompt-Limit des Modells (V4: 1M Tokens; legacy chat/reasoner: 131k). Meist ist ein einzelnes Tool-Ergebnis zu groß geworden. Reasonix begrenzt neue Tool-Ergebnisse auf 8k Tokens und heilt überdimensionierte Verläufe automatisch beim Sitzungsladen – ein Neustart behebt es oft. Falls es weiterhin überläuft, führe /new für einen frischen Start aus oder öffne /sessions und drücke [d], um diese Sitzung zu löschen.",
+      "Context-Überlauf (Xiaomi 400): Sitzungsverlauf ist {requested}, über dem Prompt-Limit des Modells (mimo-v2.5 / mimo-v2.5-pro: 1M Tokens). Meist ist ein einzelnes Tool-Ergebnis zu groß geworden. Reasonix begrenzt neue Tool-Ergebnisse auf 8k Tokens und heilt überdimensionierte Verläufe automatisch beim Sitzungsladen – ein Neustart behebt es oft. Falls es weiterhin überläuft, führe /new für einen frischen Start aus oder öffne /sessions und drücke [d], um diese Sitzung zu löschen.",
     contextOverflowTooMany: "Zu viele Tokens",
     auth401:
-      "Authentifizierung fehlgeschlagen (DeepSeek 401): {inner}. Dein API-Schlüssel wird abgewiesen. Behebe mit `reasonix setup` oder `export DEEPSEEK_API_KEY=sk-...`. Erhalte einen unter https://platform.deepseek.com/api_keys.",
+      "Authentifizierung fehlgeschlagen (Xiaomi 401): {inner}. Dein API-Schlüssel wird abgewiesen. Behebe mit `reasonix setup` oder `export XIAOMI_API_KEY=sk-...`. Erhalte einen unter https://platform.xiaomimimo.com/console/api-keys.",
     balance402:
-      "Kontoguthaben aufgebraucht (DeepSeek 402): {inner}. Lade auf unter https://platform.deepseek.com/top_up — der Panel-Header zeigt dein Guthaben, sobald es nicht Null ist.",
-    badparam422: "Ungültiger Parameter (DeepSeek 422): {inner}",
-    badrequest400: "Fehlerhafte Anfrage (DeepSeek 400): {inner}",
+      "Credits aufgebraucht (Xiaomi 402): {inner}. Lade auf unter https://platform.xiaomimimo.com/console/billing — Xiaomi MiMo nutzt das Credits / Token-Plan-Modell (keine Kontoguthaben-API), die Console ist die Quelle der Wahrheit.",
+    badparam422: "Ungültiger Parameter (Xiaomi 422): {inner}",
+    badrequest400: "Fehlerhafte Anfrage (Xiaomi 400): {inner}",
     concurrency429:
-      "DeepSeek-Gleichzeitigkeitslimit erreicht (429): {inner}. Das Konto hat zu viele gleichzeitige Anfragen (Grenze: 500 für v4-pro, 2500 für v4-flash, summiert über alle API-Schlüssel des Kontos). Meist läuft ein weiterer Reasonix-Prozess mit demselben Schlüssel oder ein paralleler Subagent-Fan-out hat überzogen. Warte einige Sekunden und wiederhole, reduziere die Parallelität oder beantrage eine höhere Grenze unter https://platform.deepseek.com.",
+      "Xiaomi-Ratenlimit erreicht (429): {inner}. Die plattformweite Obergrenze von Xiaomi MiMo ist RPM=100, TPM=10M (über alle Modelle hinweg). Meist hat ein paralleler Subagent-Fan-out überzogen oder ein anderer Reasonix-Prozess teilt sich denselben Schlüssel. Warte einige Sekunden und wiederhole, reduziere die Parallelität oder setze `rateLimit.rpm: 90` in der Config, um unter der Obergrenze zu bleiben.",
     deepseek5xxHead:
-      "DeepSeek-Dienst nicht verfügbar ({status}) — dies ist ein DeepSeek-seitiges Problem, nicht Reasonix. Bereits 4× mit Backoff wiederholt.",
+      "Xiaomi MiMo-Dienst nicht verfügbar ({status}) — dies ist ein Upstream-Problem, nicht Reasonix. Bereits 4× mit Backoff wiederholt.",
     deepseek5xxReachable:
-      " DeepSeek's Haupt-API hat auf unseren Health-Check geantwortet, aber /chat/completions schlägt fehl — partieller Ausfall auf ihrer Seite.",
+      " Xiaomis Haupt-API hat auf unseren /v1/models-Health-Check geantwortet, aber /chat/completions schlägt fehl — partieller Ausfall auf ihrer Seite.",
     deepseek5xxUnreachable:
-      " DeepSeek-API ist von deinem Netzwerk aus nicht erreichbar — könnte ein größerer DS-Ausfall oder ein lokales Netzwerkproblem sein.",
+      " Xiaomi MiMo-API ist von deinem Netzwerk aus nicht erreichbar — könnte ein Upstream-Ausfall oder ein lokales Netzwerkproblem sein.",
     deepseek5xxActionNetwork:
-      " Versuche: (1) Netzwerk prüfen, (2) 30s warten und wiederholen, (3) Statusseite: https://status.deepseek.com.",
+      " Versuche: (1) Netzwerk prüfen, (2) 30s warten und wiederholen, (3) Console: https://platform.xiaomimimo.com.",
     deepseek5xxActionRetry:
-      " Versuche: (1) 30s warten und wiederholen, (2) /model zum Modellwechsel, (3) Statusseite: https://status.deepseek.com.",
+      " Versuche: (1) 30s warten und wiederholen, (2) /model zum Modellwechsel, (3) Console: https://platform.xiaomimimo.com.",
     upstream5xxHead:
       "Upstream-Dienst nicht verfügbar ({status}) bei {host} — der konfigurierte API-Endpunkt hat einen Serverfehler zurückgegeben, kein Reasonix-Fehler. Bereits 4× mit Backoff wiederholt.",
     upstream5xxActionRetry:
@@ -824,7 +825,7 @@ export const de: TranslationSchema = {
       loopStarted:
         '▸ Loop gestartet — »{prompt}" wird alle {duration} erneut gesendet. Tippe etwas (oder /loop stop) zum Abbrechen.',
       keysNeedsTui: "/keys benötigt einen TUI-Kontext (postKeys angeschlossen).",
-      aboutHeader: "Reasonix v{version} — ein Cache-First-DeepSeek-Coding-Agent",
+      aboutHeader: "Reasonix v{version} — ein Cache-First-Xiaomi-MiMo-Coding-Agent",
       aboutWebsiteLabel: "Webseite",
       aboutRepoLabel: "GitHub ",
       aboutLicenseLabel: "Lizenz",
@@ -991,14 +992,14 @@ export const de: TranslationSchema = {
     model: {
       ...EN.handlers.model,
       modelHint:
-        "Versuche deepseek-v4-flash oder deepseek-v4-pro — führe /models aus, um die Live-Liste abzurufen",
+        "Versuche mimo-v2.5 oder mimo-v2.5-pro — führe /models aus, um die Live-Liste abzurufen",
       modelUsage: "Verwendung: /model <id>   ({hint})",
       modelNotInCatalog:
         "Modell → {id}   (⚠ nicht im abgerufenen Katalog: {list}. Falls das falsch ist, wird der nächste Aufruf 400 geben — führe /models zum Aktualisieren aus.)",
       modelSet: "Modell → {id}",
       effortStatus: "Effort → {current}   (Auswahl: {list})",
       effortUsage:
-        "Verwendung: /effort <{list}>   (high ist der sichere Standard; max ist eine DeepSeek-Erweiterung)",
+        "Verwendung: /effort <{list}>   (high ist der sichere Standard; Xiaomi MiMo akzeptiert ausschließlich low / medium / high)",
       effortUsageNoMax: "Verwendung: /effort <{list}>",
       effortSet: "Effort → {effort}",
       budgetNoCap:
@@ -1529,13 +1530,13 @@ export const de: TranslationSchema = {
     catalogEmpty: "  ·  Katalog leer — verwende bekannte Fallbacks",
     modelsAvailable: "  ·  {count} Modelle verfügbar",
     effortHeader: "    EFFORT  ·  Reasoning-Effort-Grenze",
-    modelsHeader: "    MODELLE  ·  DeepSeek-kompatible IDs",
+    modelsHeader: "    MODELLE  ·  Xiaomi MiMo IDs",
     effortDesc: {
       ...EN.modelPicker.effortDesc,
       low: "Am schnellsten — minimales Reasoning",
       medium: "ausgewogen",
       high: "Standard — sicher für vLLM / Azure",
-      max: "DeepSeek-Erweiterung; von stock OpenAI / vLLM abgelehnt",
+      max: "(entfernt) Xiaomi MiMo akzeptiert ausschließlich low / medium / high — als no-op beibehalten, damit alte Configs den Picker nicht brechen",
     },
     pickerFooter: "  ↑↓ auswählen  ·  ⏎ bestätigen  ·  [r] aktualisieren  ·  Esc abbrechen",
     currentLabel: "  · aktuell",

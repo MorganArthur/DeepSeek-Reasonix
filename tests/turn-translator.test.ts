@@ -93,11 +93,11 @@ describe("TurnTranslator", () => {
   it("forwards an explicit model id into start{Reasoning,Streaming} so /pro turns get the right badge (#403)", () => {
     const { log, calls } = makeMockLog();
     const t = new TurnTranslator(log);
-    t.flushBuffers("first reasoning", "first stream", "deepseek-v4-pro");
+    t.flushBuffers("first reasoning", "first stream", "mimo-v2.5-pro");
     const startReasoning = calls.find((c) => c.method === "startReasoning");
     const startStreaming = calls.find((c) => c.method === "startStreaming");
-    expect(startReasoning?.args[0]).toBe("deepseek-v4-pro");
-    expect(startStreaming?.args[0]).toBe("deepseek-v4-pro");
+    expect(startReasoning?.args[0]).toBe("mimo-v2.5-pro");
+    expect(startStreaming?.args[0]).toBe("mimo-v2.5-pro");
   });
 
   it("toolStart + toolEnd pair sends startTool then endTool with elapsedMs", () => {

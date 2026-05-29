@@ -1,4 +1,4 @@
-/** Tool-use example: register a calculator tool. Needs DEEPSEEK_API_KEY. */
+/** Tool-use example: register a calculator tool. Needs XIAOMI_API_KEY (or MIMO_API_KEY). */
 import {
   CacheFirstLoop,
   DeepSeekClient,

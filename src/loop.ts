@@ -1,5 +1,5 @@
 import { type DeepSeekClient, Usage } from "./client.js";
-import type { ReasoningEffort } from "./config.js";
+import { DEFAULT_MODEL_FLASH, type ReasoningEffort } from "./config.js";
 import type { PauseGate } from "./core/pause-gate.js";
 import { pauseGate as defaultPauseGate } from "./core/pause-gate.js";
 import { type HookPayload, type ResolvedHook, runHooks } from "./hooks.js";
@@ -106,7 +106,7 @@ export interface CacheFirstLoopOptions {
 export interface ReconfigurableOptions {
   model?: string;
   stream?: boolean;
-  /** V4 thinking mode only; deepseek-chat ignores. */
+  /** Honoured when the selected model supports thinking mode. */
   reasoningEffort?: ReasoningEffort;
 }
 
@@ -201,7 +201,7 @@ export class CacheFirstLoop {
     this.client = opts.client;
     this.prefix = opts.prefix;
     this.tools = opts.tools ?? new ToolRegistry();
-    this.model = opts.model ?? "deepseek-v4-flash";
+    this.model = opts.model ?? DEFAULT_MODEL_FLASH;
     this.reasoningEffort = opts.reasoningEffort ?? "high";
     this.budgetUsd =
       typeof opts.budgetUsd === "number" && opts.budgetUsd > 0 ? opts.budgetUsd : null;

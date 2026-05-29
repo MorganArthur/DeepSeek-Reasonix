@@ -485,24 +485,53 @@ export function costUsd(model: string, usage: Usage, path?: string): number {
 | Vocab size | **151,668**（基于 added_tokens 最大 ID，与 Qwen2.5 系列一致） |
 | 特殊 tokens | Qwen 全套：`<|im_start|>`、`<|im_end|>`、`<|endoftext|>`、`<tool_call>`、`</tool_call>`、`<think>`、`</think>` 等 |
 
-### 选定方案：路径 A（借 Qwen2.5 tokenizer.json）
+### 选定方案：从 `Qwen/Qwen3-0.6B` 借 `tokenizer.json`
+
+**为什么是 Qwen3 而非 Qwen2.5**：小米 MiMo 的 `tokenizer_config.json` 含 `<think>` `</think>` 特殊 token——这是 **Qwen3 才引入的**（Qwen2 / 2.5 没有）。其它 special token（`<|im_start|>`、`<tool_call>`、视觉/检测占位符等）三代通用。
+
+**关键澄清：Qwen tokenizer 不存在"代次过时"问题**：
+- Qwen 1 / 1.5 / 2 / 2.5 / 3 / 3.7 全部用同一个基础 tokenizer（vocab 151,643 + 各代加 special tokens）
+- `tokenizer_class: Qwen2Tokenizer` 是 Python 实现类名，跟模型版本无关——Qwen3 模型也用这个类
+- 类比：OpenAI `cl100k_base` 从 GPT-3.5 一直用到 GPT-4.5（2022→2025）
+- Tokenizer 是模型权重的"地址簿"，一旦确定就长期稳定，不会因新模型发布而过时
 
 **步骤**：
-1. 下载 `Qwen/Qwen2.5-0.5B-Instruct` 的 `tokenizer.json`（约 11 MB）
+1. 下载 `Qwen/Qwen3-0.6B` 的 `tokenizer.json`（约 11 MB）—— 含 `<think>`、`<tool_call>`、`<|im_start|>` 等完整 Qwen3-era special token
 2. gzip → `data/mimo-tokenizer.json.gz`
 3. 删除 `data/deepseek-tokenizer.json.gz`
-4. 改 `src/tokenizer.ts` 文件名常量 + `scripts/prepare-tokenizer.ts` 下载 URL + `package.json` files 字段
-5. **代码逻辑 0 改动**（现有 HF tokenizers 格式解析器兼容 Qwen2）
-6. `tests/tokenizer.test.ts` 用真实小米 tokenize 输出重算断言基线
+4. 改 `src/tokenizer.ts` 文件名常量（第 86/87/94/104 行 4 处）+ `scripts/prepare-tokenizer.ts` 下载 URL + `package.json` files 字段
+5. **代码逻辑 0 改动**（现有 HF tokenizers 格式解析器通用，遍历 `pre_tokenizer.pretokenizers` 数组不在乎几个 Split）
+6. `tests/tokenizer.test.ts` 用真实 mimo-v2.5 tokenize 输出重算断言基线
 
-**风险（已确认可接受）**：
-- Qwen2 vs MiMo 微调差异 → ±1-2% token 估算偏差
-- 不影响实际 API 请求（`prompt_tokens` 由服务端权威返回）
-- UI 上下文使用率仅是预估指标
+**预期偏差**（与小米官方 tokenizer 对照）：
+- 文本编码偏差预期 **≤1%**——Qwen3 tokenizer 与小米使用的 tokenizer 是同一个（小米基于 Qwen3 系继续训练，必然沿用同一份 vocab + merges）
+- 微小偏差来源仅来自 JS 解析器与官方 Rust `tokenizers` 库的实现细节（如 ByteLevel.use_regex 处理）
+- API 返回的 `prompt_tokens` 才是计费权威值，本地估算仅用于上下文使用率 UI / 压缩触发判定，<1% 偏差完全可接受
+
+**落地后第一天必跑的对齐验证**：
+```ts
+// 跑 20-30 个典型 sample（中文 / 英文 / 代码 / JSON / markdown）
+const sample = "你好，请帮我写一个 Python 函数计算斐波那契数列";
+const xiaomiActual = (await client.chat({
+  model: "mimo-v2.5",
+  messages: [{role: "user", content: sample}],
+  max_completion_tokens: 1
+})).usage.promptTokens - SYSTEM_PROMPT_BASELINE_TOKENS;
+const localEstimate = encode(sample).length;
+console.log(`|local - actual| / actual = ${Math.abs(xiaomiActual - localEstimate) / xiaomiActual}`);
+// 期望：每个 sample 偏差 < 1%；若某类高于 1%，针对性补充 special token
+```
 
 **未选路径**：
-- ~~路径 B（npm `@xenova/transformers`）~~ — bundle size 增加，无显著收益
-- ~~路径 C（字符近似）~~ — 5-10% 偏差太大，压缩触发判定会误判
+- ~~`Qwen/Qwen2.5-0.5B-Instruct`~~ — 缺 `<think>` 特殊 token，小米思考模式输出会被错误地按多 token 编码（每出现一次 `<think>` 都会被拆 2-4 tokens 而非 1 个 special token）
+- ~~`Qwen/Qwen3-VL-*`~~ — 含视觉/音频 token 不必要（咱们只对接纯文本的 v2.5 / v2.5-pro）
+- ~~npm `@xenova/transformers`~~ — bundle size 增加，无显著收益
+- ~~字符近似估算~~ — 5-10% 偏差太大，压缩触发判定会误判
+
+**理论依据**（为什么 Qwen3-0.6B 几乎就是小米的 tokenizer）：
+- 小米 MiMo 的 `tokenizer_config.json` 显示 vocab_size ≈ 151,668、特殊 token 集合包含 Qwen3-era 的 `<think>`、官方部署文档要求 `--reasoning-parser qwen3` —— 强证据指向 MiMo 基于 Qwen3 系列继续训练
+- "继续预训练 + SFT + RLHF" 的工程实践中 tokenizer 必须沿用 base 模型，否则整个 embedding 矩阵作废
+- 因此用 Qwen3 的 tokenizer.json 不是"近似替代"，而是**与小米使用的 tokenizer 高度一致**
 
 ---
 

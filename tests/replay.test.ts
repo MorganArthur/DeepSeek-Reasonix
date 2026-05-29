@@ -18,7 +18,7 @@ const mkAssistant = (
   turn,
   role: "assistant_final",
   content: `reply ${turn}`,
-  model: "deepseek-chat",
+  model: "mimo-v2.5",
   prefixHash,
   usage: {
     prompt_tokens: hit + miss,
@@ -47,7 +47,7 @@ describe("computeReplayStats", () => {
     expect(stats.cacheHitRatio).toBeCloseTo(0.925, 4);
     expect(stats.totalCostUsd).toBeCloseTo(0.00018, 6);
     expect(stats.prefixHashes).toEqual(["stable123"]);
-    expect(stats.models).toEqual(["deepseek-chat"]);
+    expect(stats.models).toEqual(["mimo-v2.5"]);
   });
 
   it("detects prefix churn when multiple hashes appear (baseline-style transcript)", () => {

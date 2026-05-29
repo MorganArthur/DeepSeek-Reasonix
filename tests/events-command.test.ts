@@ -34,7 +34,7 @@ describe("eventsCommand", () => {
       ev(1, "session.opened", { name: "demo", resumedFromTurn: 0 }),
       ev(2, "user.message", { text: "list src" }),
       ev(3, "model.turn.started", {
-        model: "deepseek-v4-flash",
+        model: "mimo-v2.5",
         reasoningEffort: "max",
         prefixHash: "abcd1234ef",
       }),
@@ -56,7 +56,7 @@ describe("eventsCommand", () => {
     expect(out).toContain("session.opened");
     expect(out).toContain("user.message");
     expect(out).toContain('"list src"');
-    expect(out).toContain("model=deepseek-v4-flash");
+    expect(out).toContain("model=mimo-v2.5");
     expect(out).toContain("prefix=abcd1234");
     expect(out).toContain("tc-1 list_directory");
     expect(out).toContain("tc-1 ok 8B"); // "App.tsx\n".length === 8

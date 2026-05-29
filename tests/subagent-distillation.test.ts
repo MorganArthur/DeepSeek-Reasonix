@@ -25,7 +25,7 @@ function fakeResult(opts: {
     toolIters: 0,
     elapsedMs: 0,
     costUsd: opts.costUsd ?? 0,
-    model: "deepseek-chat",
+    model: "mimo-v2.5",
     usage,
   };
 }

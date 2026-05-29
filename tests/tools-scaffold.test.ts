@@ -66,13 +66,13 @@ describe("create_skill", () => {
       body: "Use read_file + search_content.",
       run_as: "subagent",
       allowed_tools: ["read_file", "search_content"],
-      model: "deepseek-v4-pro",
+      model: "mimo-v2.5-pro",
     });
     expect(r.success).toBe(true);
     const content = readFileSync(r.path, "utf8");
     expect(content).toContain("runAs: subagent");
     expect(content).toContain("allowed-tools: read_file, search_content");
-    expect(content).toContain("model: deepseek-v4-pro");
+    expect(content).toContain("model: mimo-v2.5-pro");
   });
 
   it("rejects an invalid skill name", async () => {

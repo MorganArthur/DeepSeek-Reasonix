@@ -1,6 +1,7 @@
 /** Isolated child loop. Inherits parent registry minus spawn_subagent + submit_plan; no hooks; non-streaming. */
 
 import { type DeepSeekClient, Usage } from "../client.js";
+import { DEFAULT_MODEL_FLASH, DEFAULT_MODEL_PRO, SUPPORTED_OFFICIAL_MODELS } from "../config.js";
 import { CacheFirstLoop } from "../loop.js";
 import { applyProjectMemory } from "../memory/project.js";
 import { ImmutablePrefix } from "../memory/runtime.js";
@@ -113,11 +114,8 @@ function defaultSubagentSystem(modelId: string): string {
 }
 
 const DEFAULT_MAX_RESULT_CHARS = 8000;
-// Subagents default to flash — their work is read-and-synthesize
-// (explore, research), which doesn't need the 12× pro tier. Skill
-// frontmatter `model: deepseek-v4-pro` is the opt-in override for
-// skills that empirically benefit from the stronger model.
-const DEFAULT_SUBAGENT_MODEL = "deepseek-v4-flash";
+// Subagents default to flash; skill frontmatter can opt into the pro tier.
+const DEFAULT_SUBAGENT_MODEL = DEFAULT_MODEL_FLASH;
 const DEFAULT_SUBAGENT_EFFORT: import("../config.js").ReasoningEffort = "high";
 
 const SUBAGENT_TOOL_NAME = "spawn_subagent";
@@ -495,9 +493,8 @@ export function registerSubagentTool(
         },
         model: {
           type: "string",
-          enum: ["deepseek-v4-flash", "deepseek-v4-pro"],
-          description:
-            "Which DeepSeek model the subagent runs on. Default is 'deepseek-v4-flash' — cheap and fast, fine for explore/research-style subtasks. Override to 'deepseek-v4-pro' (~12× more expensive) when the subtask genuinely needs the stronger model: cross-file architecture, subtle bug hunts, anything where flash has empirically underperformed.",
+          enum: SUPPORTED_OFFICIAL_MODELS as readonly string[] as string[],
+          description: `Which Xiaomi MiMo model the subagent runs on. Default is '${DEFAULT_MODEL_FLASH}' — cheap and fast, fine for explore/research-style subtasks. Override to '${DEFAULT_MODEL_PRO}' when the subtask genuinely needs the stronger model: cross-file architecture, subtle bug hunts, anything where the flash tier has empirically underperformed.`,
         },
         resume_session: {
           type: "string",

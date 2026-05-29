@@ -1153,12 +1153,12 @@ describe("dashboard server: D-1 settings + auto-loop surface", () => {
       method: "POST",
       token: TOKEN,
       tokenInHeader: true,
-      body: { budgetUsd: 2.5, model: "deepseek-v4-pro" },
+      body: { budgetUsd: 2.5, model: "mimo-v2.5-pro" },
     });
     expect(r.status).toBe(200);
     expect(r.body.changed).toEqual(expect.arrayContaining(["budgetUsd", "model"]));
     expect(calls.budgetUsd).toEqual([2.5]);
-    expect(calls.model).toEqual(["deepseek-v4-pro"]);
+    expect(calls.model).toEqual(["mimo-v2.5-pro"]);
   });
 
   it("POST /api/settings persists and applies editMode", async () => {
@@ -1281,12 +1281,12 @@ describe("dashboard server: D-1 settings + auto-loop surface", () => {
   });
 
   it("GET /api/models returns the cached catalog + pricing + current model", async () => {
-    const base = await boot({ getModels: () => ["deepseek-v4-flash", "deepseek-v4-pro"] });
+    const base = await boot({ getModels: () => ["mimo-v2.5", "mimo-v2.5-pro"] });
     const r = await call(`${base}api/models`, { token: TOKEN });
     expect(r.status).toBe(200);
-    expect(r.body.models).toEqual(["deepseek-v4-flash", "deepseek-v4-pro"]);
-    expect(r.body.pricing["deepseek-v4-flash"]).toBeDefined();
-    expect(r.body.pricing["deepseek-v4-flash"].output).toBeGreaterThan(0);
+    expect(r.body.models).toEqual(["mimo-v2.5", "mimo-v2.5-pro"]);
+    expect(r.body.pricing["mimo-v2.5"]).toBeDefined();
+    expect(r.body.pricing["mimo-v2.5"].output).toBeGreaterThan(0);
   });
 
   it("GET /api/models returns null catalog when getModels is not wired", async () => {

@@ -29,18 +29,18 @@ function renderPicker(props: {
 describe("ModelPicker (#371)", () => {
   it("lists API models when the catalog has loaded", () => {
     const text = renderPicker({
-      models: ["deepseek-v4-flash", "deepseek-v4-pro", "deepseek-reasoner"],
-      current: "deepseek-v4-flash",
+      models: ["mimo-v2.5", "mimo-v2.5-pro", "mimo-v2.5"],
+      current: "mimo-v2.5",
     });
-    expect(text).toContain("deepseek-v4-flash");
-    expect(text).toContain("deepseek-v4-pro");
-    expect(text).toContain("deepseek-reasoner");
+    expect(text).toContain("mimo-v2.5");
+    expect(text).toContain("mimo-v2.5-pro");
+    expect(text).toContain("mimo-v2.5");
   });
 
   it("lists every reasoning_effort option in the EFFORT section", () => {
     const text = renderPicker({
-      models: ["deepseek-v4-flash"],
-      current: "deepseek-v4-flash",
+      models: ["mimo-v2.5"],
+      current: "mimo-v2.5",
     });
     expect(text).toContain("EFFORT");
     expect(text).toContain("low");
@@ -51,8 +51,8 @@ describe("ModelPicker (#371)", () => {
 
   it("hides `max` when the active endpoint is non-DeepSeek (#1794)", () => {
     const text = renderPicker({
-      models: ["deepseek-v4-flash"],
-      current: "deepseek-v4-flash",
+      models: ["mimo-v2.5"],
+      current: "mimo-v2.5",
       effortChoices: ["low", "medium", "high"],
     });
     expect(text).toContain("EFFORT");
@@ -64,8 +64,8 @@ describe("ModelPicker (#371)", () => {
 
   it("marks the active effort with `current`", () => {
     const text = renderPicker({
-      models: ["deepseek-v4-flash"],
-      current: "deepseek-v4-flash",
+      models: ["mimo-v2.5"],
+      current: "mimo-v2.5",
       currentEffort: "max",
     });
     expect(text).toMatch(/max[\s\S]*current/);
@@ -73,32 +73,32 @@ describe("ModelPicker (#371)", () => {
 
   it("marks the active model with `current`", () => {
     const text = renderPicker({
-      models: ["deepseek-v4-flash", "deepseek-v4-pro"],
-      current: "deepseek-v4-pro",
+      models: ["mimo-v2.5", "mimo-v2.5-pro"],
+      current: "mimo-v2.5-pro",
       currentEffort: "high",
     });
-    expect(text).toMatch(/deepseek-v4-pro[\s\S]*current/);
+    expect(text).toMatch(/mimo-v2.5-pro[\s\S]*current/);
   });
 
   it("shows loading hint when catalog is null", () => {
-    const text = renderPicker({ models: null, current: "deepseek-v4-flash" });
+    const text = renderPicker({ models: null, current: "mimo-v2.5" });
     expect(text).toContain("loading catalog");
   });
 
   it("falls back to the known DeepSeek ids when catalog is null so the picker isn't empty on first open", () => {
-    const text = renderPicker({ models: null, current: "deepseek-v4-flash" });
-    expect(text).toContain("deepseek-v4-flash");
-    expect(text).toContain("deepseek-v4-pro");
+    const text = renderPicker({ models: null, current: "mimo-v2.5" });
+    expect(text).toContain("mimo-v2.5");
+    expect(text).toContain("mimo-v2.5-pro");
   });
 
   it("shows the explicit empty hint when catalog loaded but is empty", () => {
-    const text = renderPicker({ models: [], current: "deepseek-v4-flash" });
+    const text = renderPicker({ models: [], current: "mimo-v2.5" });
     expect(text).toContain("catalog empty");
   });
 
   it("includes the current id in the list even when API didn't return it (handles stale catalog)", () => {
     const text = renderPicker({
-      models: ["deepseek-v4-flash"],
+      models: ["mimo-v2.5"],
       current: "deepseek-experimental-x",
     });
     expect(text).toContain("deepseek-experimental-x");
@@ -106,8 +106,8 @@ describe("ModelPicker (#371)", () => {
 
   it("renders the keybind hint footer", () => {
     const text = renderPicker({
-      models: ["deepseek-v4-flash"],
-      current: "deepseek-v4-flash",
+      models: ["mimo-v2.5"],
+      current: "mimo-v2.5",
     });
     expect(text).toContain("↑↓");
     expect(text).toContain("⏎");

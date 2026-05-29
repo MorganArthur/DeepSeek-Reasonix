@@ -18,14 +18,14 @@ describe("DeepSeekClient.listModels", () => {
       fetch: makeFetch(200, {
         object: "list",
         data: [
-          { id: "deepseek-chat", object: "model", owned_by: "deepseek" },
-          { id: "deepseek-reasoner", object: "model", owned_by: "deepseek" },
+          { id: "mimo-v2.5", object: "model", owned_by: "deepseek" },
+          { id: "mimo-v2.5", object: "model", owned_by: "deepseek" },
         ],
       }),
     });
     const list = await client.listModels();
     expect(list).not.toBeNull();
-    expect(list!.data.map((m) => m.id)).toEqual(["deepseek-chat", "deepseek-reasoner"]);
+    expect(list!.data.map((m) => m.id)).toEqual(["mimo-v2.5", "mimo-v2.5"]);
   });
 
   it("returns null on non-2xx (bad key / offline)", async () => {
@@ -90,8 +90,8 @@ describe("DeepSeekClient rateLimit", () => {
       rateLimit: { rpm: 30 },
     });
     try {
-      await client.chat({ model: "deepseek-chat", messages: [] });
-      const second = client.chat({ model: "deepseek-chat", messages: [] });
+      await client.chat({ model: "mimo-v2.5", messages: [] });
+      const second = client.chat({ model: "mimo-v2.5", messages: [] });
       await Promise.resolve();
       expect(spy).toHaveBeenCalledTimes(1);
       await vi.advanceTimersByTimeAsync(1999);
@@ -141,7 +141,7 @@ describe("DeepSeekClient request serialization", () => {
     });
 
     await client.chat({
-      model: "deepseek-chat",
+      model: "mimo-v2.5",
       messages: [{ role: "user", content: `bad ${String.fromCharCode(0xd800)} text` }],
     });
 

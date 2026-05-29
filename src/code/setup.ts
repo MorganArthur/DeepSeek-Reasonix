@@ -96,7 +96,7 @@ export async function buildCodeToolset(opts: CodeToolsetOpts): Promise<CodeTools
   if (loadJavaSourceEnabled()) {
     registerJavaSourceTool(tools, { projectRoot: opts.rootDir });
   }
-  // Lazy: constructing DeepSeekClient throws when DEEPSEEK_API_KEY is unset,
+  // Lazy: constructing DeepSeekClient throws when XIAOMI_API_KEY is unset,
   // which would kill `reasonix code` before the setup wizard can prompt for
   // one. Defer to first subagent dispatch — by then the user has either keyed
   // in or we error per-call instead of at boot.

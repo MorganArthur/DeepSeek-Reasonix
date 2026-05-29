@@ -1,14 +1,12 @@
-import type { ReasoningEffort } from "../../config.js";
-import { isDeepSeekHost } from "../../loop/errors.js";
+import { REASONING_EFFORT_VALUES, type ReasoningEffort } from "../../config.js";
 
-const ALL: readonly ReasoningEffort[] = ["low", "medium", "high", "max"];
-const STANDARD: readonly ReasoningEffort[] = ["low", "medium", "high"];
-
-/** `max` is a DeepSeek-only reasoning extension; non-DeepSeek hosts 400 on it (#1794). */
+/** Xiaomi MiMo strictly accepts only `low` / `medium` / `high` (Pydantic-validated;
+ *  sending `max` returns HTTP 400). Single-tenant single-provider, so there's no
+ *  longer a host-dependent branch — all callers get the same three choices. */
 export function effortChoicesForBaseUrl(
-  baseUrl: string | undefined | null,
+  _baseUrl: string | undefined | null,
 ): readonly ReasoningEffort[] {
-  return isDeepSeekHost(baseUrl) ? ALL : STANDARD;
+  return REASONING_EFFORT_VALUES;
 }
 
 export function effortArgsHintFor(choices: readonly ReasoningEffort[]): string {

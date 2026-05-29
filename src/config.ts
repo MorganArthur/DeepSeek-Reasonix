@@ -1,4 +1,5 @@
-/** Library reads only DEEPSEEK_API_KEY from env; the CLI bridges config.json → env var. */
+/** Library reads XIAOMI_API_KEY (preferred) / MIMO_API_KEY / DEEPSEEK_API_KEY (legacy) from env;
+ *  the CLI bridges config.json → env var. */
 
 import { randomBytes } from "node:crypto";
 import { mkdirSync, readFileSync } from "node:fs";
@@ -24,21 +25,27 @@ import {
 /** Single trust dial: review queues edits + gates shell; auto applies + gates shell; yolo skips both gates; plan blocks every non-readonly tool (write_file / edit_file / multi_edit / run_command) at dispatch. */
 export type EditMode = "review" | "auto" | "yolo" | "plan";
 
-export const DEFAULT_MODEL = "deepseek-v4-flash";
+/** Two-tier product semantics decoupled from model id strings, so a future
+ *  model rename (e.g. v3) needs only these constants to change. */
+export const DEFAULT_MODEL_FLASH = "mimo-v2.5"; // lightweight tier (was deepseek-v4-flash)
+export const DEFAULT_MODEL_PRO = "mimo-v2.5-pro"; // heavyweight tier (was deepseek-v4-pro)
 
-/** Models the official api.deepseek.com endpoint currently accepts. v3-era
- *  `deepseek-chat`/`deepseek-reasoner` are gone — sending them produces a 400. */
+export const DEFAULT_MODEL = DEFAULT_MODEL_FLASH;
+
+/** Official Xiaomi MiMo chat models surfaced in UI; other catalog entries remain available through custom ids. */
 export const SUPPORTED_OFFICIAL_MODELS: readonly string[] = [
-  "deepseek-v4-flash",
-  "deepseek-v4-pro",
+  DEFAULT_MODEL_FLASH,
+  DEFAULT_MODEL_PRO,
 ];
 
-export type ReasoningEffort = "low" | "medium" | "high" | "max";
+/** Xiaomi MiMo's reasoning_effort field accepts only these three values
+ *  (Pydantic-validated server-side; sending "max" returns HTTP 400). */
+export type ReasoningEffort = "low" | "medium" | "high";
 
-export const REASONING_EFFORT_VALUES: readonly ReasoningEffort[] = ["low", "medium", "high", "max"];
+export const REASONING_EFFORT_VALUES: readonly ReasoningEffort[] = ["low", "medium", "high"];
 
 export function isReasoningEffort(value: unknown): value is ReasoningEffort {
-  return value === "low" || value === "medium" || value === "high" || value === "max";
+  return value === "low" || value === "medium" || value === "high";
 }
 
 export type EngineeringLifecycleMode = "off" | "strict";
@@ -131,7 +138,7 @@ export interface PricingOverride {
 }
 
 export interface RateLimitConfig {
-  /** Client-side self-throttle in requests/minute — paces outbound chat calls with a min-interval timer. NOT a DeepSeek-enforced limit: DeepSeek's actual cap is concurrency, not RPM (500 for v4-pro, 2500 for v4-flash, account-wide), surfaced as HTTP 429. Set this only to be a polite neighbor on shared infra; single-user CLI rarely needs it. */
+  /** Client-side self-throttle in requests/minute — paces outbound chat calls with a min-interval timer. Xiaomi MiMo's documented platform-wide cap is RPM=100, TPM=10M (shared across all models). Default unset = no client throttle; set to ~90 to leave 10% headroom under Xiaomi's RPM ceiling on heavy workloads. */
   rpm?: number;
 }
 
@@ -140,9 +147,9 @@ export interface ProxyConfig {
   url?: string;
   /** Skip proxy detection entirely — equivalent to launching with `--no-proxy`. */
   disabled?: boolean;
-  /** Additional NO_PROXY patterns (curl syntax). Additive on top of env NO_PROXY and the default DeepSeek-bypass whitelist. */
+  /** Additional NO_PROXY patterns (curl syntax). Additive on top of env NO_PROXY and the default upstream-bypass whitelist (api.xiaomimimo.com). */
   noProxy?: string[];
-  /** When false, route api.deepseek.com / *.deepseek.com through the proxy too (issue #1497 — corporate firewalls that block direct egress). Default true preserves the clash/v2ray US-exit-IP 403 fix. Env `REASONIX_PROXY_DEEPSEEK_DIRECT` overrides. */
+  /** Route Xiaomi hosts directly by default; env REASONIX_PROXY_XIAOMI_DIRECT or legacy REASONIX_PROXY_DEEPSEEK_DIRECT overrides. */
   bypassDeepSeekDirect?: boolean;
 }
 
@@ -150,7 +157,7 @@ export interface ReasonixConfig {
   apiKey?: string;
   baseUrl?: string;
   lang?: LanguageCode;
-  /** Persisted DeepSeek model id — `/model <id>` and the dashboard model picker write through this. */
+  /** Persisted Xiaomi MiMo model id — `/model <id>` and the dashboard model picker write through this. */
   model?: string;
   editMode?: EditMode;
   editModeHintShown?: boolean;
@@ -269,7 +276,7 @@ export interface ReasonixConfig {
     customTypes?: CustomMemoryTypeConfig[];
   };
   pricingOverride?: Record<string, PricingOverride>;
-  /** Per-app proxy override. Layered on top of HTTPS_PROXY / NO_PROXY env vars + the default DeepSeek-bypass whitelist. */
+  /** Per-app proxy override. Layered on top of HTTPS_PROXY / NO_PROXY env vars + the default upstream-bypass whitelist (api.xiaomimimo.com). */
   proxy?: ProxyConfig;
   rateLimit?: RateLimitConfig;
   toolRateLimit?: ToolRateLimitConfig;
@@ -458,12 +465,27 @@ export function readConfig(path: string = defaultConfigPath()): ReasonixConfig {
       for (const segments of STRING_ARRAY_FIELDS) {
         sanitizeStringArrayField(cfg, segments, path);
       }
+      migrateLegacyConfigInPlace(cfg);
       return cfg as ReasonixConfig;
     }
   } catch {
     /* missing or malformed → empty config */
   }
   return {};
+}
+
+/** Migrate old DeepSeek model ids and reasoning effort values while reading config. Mutates cfg in place. */
+function migrateLegacyConfigInPlace(cfg: Record<string, unknown>): void {
+  if (cfg.model === "deepseek-v4-flash") {
+    cfg.model = DEFAULT_MODEL_FLASH;
+  } else if (cfg.model === "deepseek-v4-pro") {
+    cfg.model = DEFAULT_MODEL_PRO;
+  } else if (cfg.model === "deepseek-chat" || cfg.model === "deepseek-reasoner") {
+    cfg.model = DEFAULT_MODEL_FLASH;
+  }
+  if (cfg.reasoningEffort === "max") {
+    cfg.reasoningEffort = "high";
+  }
 }
 
 /** Whether the dashboard auto-starts. Default true; only false when explicitly set in config. */
@@ -659,24 +681,36 @@ export interface ResolvedEndpoint {
   apiKey: string | undefined;
 }
 
-// DEEPSEEK_BASE_URL is the original name; DEEPSEEK_API_BASE_URL is accepted as an
-// alias so users who copy the OPENAI_BASE_URL pattern land on a working name (#1876).
+// Env priority for base URL: XIAOMI_BASE_URL > XIAOMI_API_BASE_URL > MIMO_BASE_URL > legacy DEEPSEEK_BASE_URL / DEEPSEEK_API_BASE_URL.
+// The DeepSeek names are accepted only to keep old .env files working during the migration window.
 export function resolveBaseUrlEnv(): string | undefined {
-  return process.env.DEEPSEEK_BASE_URL || process.env.DEEPSEEK_API_BASE_URL || undefined;
+  return (
+    process.env.XIAOMI_BASE_URL ||
+    process.env.XIAOMI_API_BASE_URL ||
+    process.env.MIMO_BASE_URL ||
+    process.env.DEEPSEEK_BASE_URL ||
+    process.env.DEEPSEEK_API_BASE_URL ||
+    undefined
+  );
+}
+
+// Same precedence for the API key: XIAOMI_API_KEY > MIMO_API_KEY > DEEPSEEK_API_KEY.
+function resolveApiKeyEnv(): string | undefined {
+  return process.env.XIAOMI_API_KEY || process.env.MIMO_API_KEY || process.env.DEEPSEEK_API_KEY;
 }
 
 // (baseUrl, apiKey) is a tuple: whichever source defines baseUrl owns apiKey too,
-// so a stale env DEEPSEEK_API_KEY doesn't bleed into a custom config baseUrl (#1631).
+// so a stale env API key doesn't bleed into a custom config baseUrl (#1631).
 export function loadEndpoint(path: string = defaultConfigPath()): ResolvedEndpoint {
   const envBaseUrl = resolveBaseUrlEnv();
   if (envBaseUrl) {
-    return { baseUrl: envBaseUrl, apiKey: process.env.DEEPSEEK_API_KEY };
+    return { baseUrl: envBaseUrl, apiKey: resolveApiKeyEnv() };
   }
   const cfg = readConfig(path);
   if (cfg.baseUrl) {
     return { baseUrl: cfg.baseUrl, apiKey: cfg.apiKey };
   }
-  return { baseUrl: undefined, apiKey: process.env.DEEPSEEK_API_KEY ?? cfg.apiKey };
+  return { baseUrl: undefined, apiKey: resolveApiKeyEnv() ?? cfg.apiKey };
 }
 
 export function loadApiKey(path: string = defaultConfigPath()): string | undefined {
@@ -687,11 +721,19 @@ export function loadBaseUrl(path: string = defaultConfigPath()): string | undefi
   return loadEndpoint(path).baseUrl;
 }
 
-// Mirrors the resolved tuple into env so subprocess constructions see the same pair.
+// Mirrors the resolved tuple into env so subprocess constructions see the same
+// pair. Writes both the new (XIAOMI_*) and legacy (DEEPSEEK_*) names so any
+// not-yet-migrated subprocess that still reads the old names also works.
 export function bridgeEndpointEnv(path: string = defaultConfigPath()): void {
   const ep = loadEndpoint(path);
-  if (ep.apiKey) process.env.DEEPSEEK_API_KEY = ep.apiKey;
-  if (ep.baseUrl) process.env.DEEPSEEK_BASE_URL = ep.baseUrl;
+  if (ep.apiKey) {
+    process.env.XIAOMI_API_KEY = ep.apiKey;
+    process.env.DEEPSEEK_API_KEY = ep.apiKey;
+  }
+  if (ep.baseUrl) {
+    process.env.XIAOMI_BASE_URL = ep.baseUrl;
+    process.env.DEEPSEEK_BASE_URL = ep.baseUrl;
+  }
 }
 
 function isNonNegativeNumber(value: unknown): value is number {
@@ -1161,7 +1203,7 @@ export function mouseClipboardHintShown(path: string = defaultConfigPath()): boo
   return readConfig(path).mouseClipboardHintShown === true;
 }
 
-/** Unknown / missing fall back to "high" — the only value every OpenAI-compatible endpoint accepts (vLLM rejects "max"). */
+/** Unknown / missing fall back to "high" — the strongest of the three values Xiaomi MiMo accepts (low/medium/high). The legacy "max" value, if persisted by an older build, is normalised to "high" up-front by `migrateLegacyConfigInPlace`. */
 export function loadReasoningEffort(path: string = defaultConfigPath()): ReasoningEffort {
   const v = readConfig(path).reasoningEffort;
   return isReasoningEffort(v) ? v : "high";
@@ -1416,7 +1458,7 @@ export function markMouseClipboardHintShown(path: string = defaultConfigPath()):
   writeConfig(cfg, path);
 }
 
-/** Self-hosted DeepSeek-compatible endpoints may issue any token shape, so we only typo-guard here — the real auth check is the first API call against `baseUrl`. */
+/** Xiaomi MiMo keys are `sk-…` shaped but self-hosted / proxied OpenAI-compatible endpoints may issue any token shape, so we only typo-guard here — the real auth check is the first API call against `baseUrl`. */
 export function isPlausibleKey(key: string): boolean {
   const trimmed = key.trim();
   if (trimmed.length < 16) return false;

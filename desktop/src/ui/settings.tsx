@@ -962,7 +962,7 @@ function ApiKeySection({
   );
 }
 
-const KNOWN_MODELS = ["deepseek-v4-flash", "deepseek-v4-pro"] as const;
+const KNOWN_MODELS = ["mimo-v2.5", "mimo-v2.5-pro"] as const;
 
 const EFFORT_VALUES = ["low", "medium", "high", "max"] as const;
 type EffortValue = (typeof EFFORT_VALUES)[number];
@@ -1003,7 +1003,7 @@ function PageModels({
               className="field mono"
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
-              placeholder="deepseek-v4-flash"
+              placeholder="mimo-v2.5"
             />
             <button
               type="button"

@@ -19,10 +19,10 @@ export const ru: TranslationSchema = {
   },
   cli: {
     ...EN.cli,
-    description: "Фреймворк агента на DeepSeek — создан для кэш-попаданий и дешёвых токенов.",
+    description: "Фреймворк агента на Xiaomi MiMo — создан для кэш-попаданий и дешёвых токенов.",
     continue: "Возобновить последнюю использованную сессию без показа выбора.",
     setup: "Интерактивный мастер — API-ключ, MCP-серверы. Можно перезапустить в любое время.",
-    code: "Редактирование кода — файловые инструменты с корнем в <dir> (по умолч.: тек. папка), системный промпт для кода, v4-flash.",
+    code: "Редактирование кода — файловые инструменты с корнем в <dir> (по умолч.: тек. папка), системный промпт для кода, mimo-v2.5.",
     chat: "Интерактивная Ink TUI с панелью кэша и стоимости.",
     run: "Разовое выполнение задачи в неинтерактивном режиме, потоковый вывод.",
     stats: "Показать панель использования.",
@@ -47,8 +47,8 @@ export const ru: TranslationSchema = {
   run: {
     ...EN.run,
     missingApiKey:
-      "DEEPSEEK_API_KEY не задан и stdin не TTY (нельзя запросить).\n" +
-      "Установи переменную окружения или запусти `reasonix chat` один раз для сохранения ключа.\n",
+      "XIAOMI_API_KEY не задан и stdin не TTY (нельзя запросить).\n" +
+      "Установи переменную окружения (или MIMO_API_KEY), либо запусти `reasonix chat` один раз для сохранения ключа.\n",
   },
   sessions: {
     ...EN.sessions,
@@ -76,7 +76,7 @@ export const ru: TranslationSchema = {
     newHint: "принудительно начать новую сессию (игнорировать --session / --continue)",
     transcriptHint: "путь для записи JSONL-транскрипта",
     budgetHint: "лимит сессии в USD — предупреждение на 80%, отказ на 100%",
-    modelIdHint: "ID модели DeepSeek (напр. deepseek-v4-flash)",
+    modelIdHint: "ID модели Xiaomi MiMo (напр. mimo-v2.5)",
     systemPromptHint: "переопределить стандартный системный промпт",
     effortHint: "уровень рассуждений — низкий|средний|высокий|макс",
     sessionNameHint: "имя сессии (по умолч.: 'default')",
@@ -125,11 +125,11 @@ export const ru: TranslationSchema = {
     mcpMaxPagesHint: "максимум страниц при поиске (по умолч. 20)",
     jsonHintCatalog: "вывод в JSON",
     jsonHintReport: "вывести отчёт проверки в JSON",
-    modelOverrideFlash: "переопределить модель (по умолч.: deepseek-v4-flash)",
+    modelOverrideFlash: "переопределить модель (по умолч.: mimo-v2.5)",
     skipConfirmHint: "пропустить запрос подтверждения",
     welcome: "Запускай `reasonix` в любое время — настройки сохраняются.",
-    taglineChat: "Нативный агент DeepSeek",
-    taglineCode: "Нативный кодинг-агент DeepSeek",
+    taglineChat: "Нативный агент Xiaomi MiMo",
+    taglineCode: "Нативный кодинг-агент Xiaomi MiMo",
     taglineSub: "кэш-первый · flash-первый",
     startSessionHint: "напиши сообщение для начала сессии",
     inputPlaceholder: "Спроси что угодно... (/ для команд, @ для файлов)",
@@ -177,10 +177,10 @@ export const ru: TranslationSchema = {
     effort: {
       ...EN.slash.effort,
       description:
-        "лимит уровня рассуждений (low|medium|high|max); high — безопасное значение по умолч. для vLLM/Azure",
+        "лимит уровня рассуждений (low|medium|high); high — безопасное значение по умолч.; Xiaomi MiMo принимает только low / medium / high",
     },
-    model: { ...EN.slash.model, description: "сменить ID модели DeepSeek" },
-    models: { ...EN.slash.models, description: "список доступных моделей от DeepSeek /models" },
+    model: { ...EN.slash.model, description: "сменить ID модели Xiaomi MiMo" },
+    models: { ...EN.slash.models, description: "список доступных моделей от Xiaomi MiMo /models" },
     theme: {
       ...EN.slash.theme,
       argsHint: "[auto|dark|light|midnight|deep-blue|high-contrast]",
@@ -393,15 +393,15 @@ export const ru: TranslationSchema = {
     languageTitle: "Выберите язык",
     languageSubtitle: "Обнаружен из системной локали. Можно сменить позже через /language.",
     welcomeTitle: "Добро пожаловать в Reasonix.",
-    apiKeyPrompt: "Вставьте ваш DeepSeek API ключ для начала работы.",
-    apiKeyGetOne: "Получить: https://platform.deepseek.com/api_keys",
+    apiKeyPrompt: "Вставьте ваш Xiaomi MiMo API ключ для начала работы.",
+    apiKeyGetOne: "Получить: https://platform.xiaomimimo.com/console/api-keys",
     apiKeySavedLocally: "Сохранён локально: {path}",
     apiKeyInputLabel: "ключ › ",
     apiKeyPlaceholder: "sk-...",
     apiKeyInvalid: "Ключ слишком короткий — вставьте полный токен (16+ символов, без пробелов).",
     apiKeyChecking: "Проверка API ключа…",
     apiKeyRejected:
-      "DeepSeek отклонил этот API ключ. Вставьте корректный ключ или нажмите Esc для отмены.",
+      "Xiaomi MiMo отклонил этот API ключ. Вставьте корректный ключ или нажмите Esc для отмены.",
     apiKeyCheckFailed:
       "Не удалось проверить API ключ ({message}). Проверьте соединение или попробуйте снова.",
     apiKeyPreview: "предпросмотр: {redacted}",

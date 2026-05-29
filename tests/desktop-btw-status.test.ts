@@ -46,7 +46,7 @@ function makeState(): AppState {
     ready: true,
     needsSetup: false,
     busy: false,
-    model: "deepseek-v4-flash",
+    model: "mimo-v2.5",
     currentSession: "demo",
     messages: [],
     pendingConfirms: [],

@@ -1,5 +1,7 @@
 /** Shared prompt fragments — single source so house-style rules can't drift across agent/subagent/skill prompts. */
 
+import { DEFAULT_MODEL_FLASH, DEFAULT_MODEL_PRO } from "./config.js";
+
 /** Embedded literally — no interpolation, so prefix-cache hash stays stable across sessions. */
 export const TUI_FORMATTING_RULES = `Formatting (rendered in a TUI with a real markdown renderer):
 - Tabular data → GitHub-Flavored Markdown tables with ASCII pipes (\`| col | col |\` header + \`| --- | --- |\` separator). Never use Unicode box-drawing characters (│ ─ ┼ ┌ ┐ └ ┘ ├ ┤) — they look intentional but break terminal word-wrap and render as garbled columns at narrow widths.
@@ -10,12 +12,12 @@ export const TUI_FORMATTING_RULES = `Formatting (rendered in a TUI with a real m
 
 /** Pro is the top tier — escalation is a no-op for it; flash + others get the full ladder. */
 export function escalationContract(modelId: string): string {
-  if (modelId === "deepseek-v4-pro") {
+  if (modelId === DEFAULT_MODEL_PRO) {
     return `Cost-aware escalation note: you are running on \`${modelId}\` — the escalation tier. There is no higher tier to escalate to, so the \`<<<NEEDS_PRO>>>\` marker is a no-op for you; deliver the strongest answer you can directly. If asked which model you are, answer \`${modelId}\`.`;
   }
   return `Cost-aware escalation (you are running on \`${modelId}\`):
 
-If a task CLEARLY exceeds what this tier can do well — complex cross-file architecture refactors, subtle concurrency / security / correctness invariants you can't resolve with confidence, or a design trade-off you'd be guessing at — output the marker as the FIRST line of your response (nothing before it, not even whitespace on a separate line). This aborts the current call and retries this turn on deepseek-v4-pro, one shot.
+If a task CLEARLY exceeds what this tier can do well — complex cross-file architecture refactors, subtle concurrency / security / correctness invariants you can't resolve with confidence, or a design trade-off you'd be guessing at — output the marker as the FIRST line of your response (nothing before it, not even whitespace on a separate line). This aborts the current call and retries this turn on ${DEFAULT_MODEL_PRO}, one shot.
 
 Two accepted forms:
 - \`<<<NEEDS_PRO>>>\` — bare marker, no rationale.
@@ -25,7 +27,7 @@ Do NOT emit any other content in the same response when you request escalation. 
 }
 
 /** Backward-compat — pre-#582 callers (and the `CODE_SYSTEM_PROMPT` public-API const) keep the historical flash phrasing. */
-export const ESCALATION_CONTRACT = escalationContract("deepseek-v4-flash");
+export const ESCALATION_CONTRACT = escalationContract(DEFAULT_MODEL_FLASH);
 
 export const NEGATIVE_CLAIM_RULE = `Negative claims ("X is missing", "Y isn't implemented", "there's no Z") are the #1 hallucination shape. They feel safe to write because no citation seems possible — but that's exactly why you must NOT write them on instinct.
 

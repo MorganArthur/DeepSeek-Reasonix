@@ -397,20 +397,20 @@ describe("install_skill tool", () => {
       description: "research subagent",
       body: "You are a research subagent. Investigate and answer.",
       runAs: "subagent",
-      model: "deepseek-chat",
+      model: "mimo-v2.5",
       allowedTools: ["read_file", "search_content"],
     });
     const parsed = JSON.parse(out);
     expect(parsed.runAs).toBe("subagent");
     const raw = readFileSync(parsed.path, "utf8");
     expect(raw).toContain("runAs: subagent");
-    expect(raw).toContain("model: deepseek-chat");
+    expect(raw).toContain("model: mimo-v2.5");
     expect(raw).toContain("allowed-tools: read_file, search_content");
 
     const store = new SkillStore({ homeDir: home, projectRoot, disableBuiltins: true });
     const skill = store.read("deep-research");
     expect(skill?.runAs).toBe("subagent");
-    expect(skill?.model).toBe("deepseek-chat");
+    expect(skill?.model).toBe("mimo-v2.5");
     expect(skill?.allowedTools).toEqual(["read_file", "search_content"]);
   });
 
@@ -421,7 +421,7 @@ describe("install_skill tool", () => {
       name: "plain",
       description: "inline skill",
       body: "do the thing",
-      model: "deepseek-chat",
+      model: "mimo-v2.5",
       allowedTools: ["read_file"],
     });
     const raw = readFileSync(JSON.parse(out).path, "utf8");

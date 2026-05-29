@@ -1,6 +1,6 @@
 import { Box, Text, useStdout } from "ink";
 import React, { useState } from "react";
-import type { ReasoningEffort } from "../../config.js";
+import { type ReasoningEffort, SUPPORTED_OFFICIAL_MODELS } from "../../config.js";
 import { t } from "../../i18n/index.js";
 import { useKeystroke } from "./keystroke-context.js";
 import { PILL_MODEL, Pill, modelBadgeFor } from "./primitives/Pill.js";
@@ -17,7 +17,7 @@ export interface ModelPickerProps {
   /** Model id currently active in the loop — marked with the cursor on open. */
   current: string;
   currentEffort: ReasoningEffort;
-  /** Effort enum filtered for the active endpoint — drops "max" on non-DeepSeek hosts (#1794). */
+  /** Effort enum for the active endpoint. Xiaomi MiMo strictly accepts only low/medium/high — kept as a prop for back-compat with prior multi-host layouts. */
   effortChoices: ReadonlyArray<ReasoningEffort>;
   onChoose: (outcome: ModelPickerOutcome) => void;
   /** Triggers a refetch when the catalog is null/empty and the user presses [r]. */
@@ -193,4 +193,4 @@ function ModelRow({
   );
 }
 
-const FALLBACK_MODELS: ReadonlyArray<string> = ["deepseek-v4-flash", "deepseek-v4-pro"];
+const FALLBACK_MODELS: ReadonlyArray<string> = SUPPORTED_OFFICIAL_MODELS;

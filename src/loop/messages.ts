@@ -10,9 +10,10 @@ export function buildAssistantMessage(
 ): ChatMessage {
   const msg: ChatMessage = { role: "assistant", content };
   if (toolCalls.length > 0) msg.tool_calls = toolCalls;
-  // V4-era deepseek-chat returns reasoning_content even with thinking.type
-  // disabled, and the API rejects round-trips that drop it. Whitelist on
-  // model name is too brittle — preserve whenever the producer emitted any.
+  // Both Xiaomi MiMo target models return reasoning_content when thinking is
+  // enabled and require it round-tripped on follow-ups (the API rejects
+  // continuations that drop it). The model-name whitelist is too brittle —
+  // preserve whenever the producer emitted any reasoning_content at all.
   if (isThinkingModeModel(producingModel) || (reasoningContent && reasoningContent.length > 0)) {
     msg.reasoning_content = reasoningContent ?? "";
   }

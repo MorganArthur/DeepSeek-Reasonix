@@ -153,20 +153,20 @@ describe("handleSlash", () => {
   it("/status reflects current loop config", () => {
     const loop = makeLoop();
     const r = handleSlash("status", [], loop);
-    expect(r.info).toMatch(/model\s+deepseek-/);
+    expect(r.info).toMatch(/model\s+mimo-/);
     expect(r.info).toMatch(/effort=high/);
   });
 
   it("/model switches the model", () => {
     const loop = makeLoop();
-    handleSlash("model", ["deepseek-reasoner"], loop);
-    expect(loop.model).toBe("deepseek-reasoner");
+    handleSlash("model", ["mimo-v2.5"], loop);
+    expect(loop.model).toBe("mimo-v2.5");
   });
 
   it("/model soft-warns when id is not in the fetched catalog but still switches", () => {
     const loop = makeLoop();
     const r = handleSlash("model", ["deepseek-made-up"], loop, {
-      models: ["deepseek-chat", "deepseek-reasoner"],
+      models: ["mimo-v2.5", "mimo-v2.5"],
     });
     expect(loop.model).toBe("deepseek-made-up");
     expect(r.info).toMatch(/not in the fetched catalog/);
@@ -175,7 +175,7 @@ describe("handleSlash", () => {
   it("/model with no arg opens the unified picker (#371)", () => {
     const loop = makeLoop();
     const r = handleSlash("model", [], loop, {
-      models: ["deepseek-chat", "deepseek-reasoner"],
+      models: ["mimo-v2.5", "mimo-v2.5"],
     });
     expect(r.openModelPicker).toBe(true);
   });
@@ -183,7 +183,7 @@ describe("handleSlash", () => {
   it("/effort with no arg returns the current value", () => {
     const r = handleSlash("effort", [], makeLoop());
     expect(r.info).toMatch(/effort/);
-    expect(r.info).toMatch(/low.*medium.*high.*max/);
+    expect(r.info).toMatch(/low.*medium.*high/);
   });
 
   it("unknown commands return an unknown flag with hint", () => {
@@ -234,8 +234,8 @@ describe("handleSlash", () => {
     expect(posted).toMatch(/nothing to fold|folded/);
   });
 
-  it("/effort accepts each enum value", () => {
-    for (const e of ["low", "medium", "high", "max"] as const) {
+  it("/effort accepts each enum value (Xiaomi MiMo: low | medium | high)", () => {
+    for (const e of ["low", "medium", "high"] as const) {
       const loop = makeLoop();
       handleSlash("effort", [e], loop);
       expect(loop.reasoningEffort).toBe(e);
@@ -247,23 +247,23 @@ describe("handleSlash", () => {
     expect(r.info).toMatch(/usage/);
   });
 
-  it("/effort rejects `max` on non-DeepSeek endpoints (#1794)", () => {
+  it("/effort rejects `max` — Xiaomi MiMo never accepted it", () => {
     const client = new DeepSeekClient({
       apiKey: "sk-test",
-      baseUrl: "http://localhost:8080/v1",
+      baseUrl: "https://api.xiaomimimo.com/v1",
       fetch: vi.fn() as unknown as typeof fetch,
     });
     const loop = new CacheFirstLoop({ client, prefix: new ImmutablePrefix({ system: "s" }) });
     const r = handleSlash("effort", ["max"], loop);
     expect(r.info).toMatch(/usage/);
     expect(r.info).not.toMatch(/\bmax\b/);
-    expect(loop.reasoningEffort).not.toBe("max");
+    expect(loop.reasoningEffort).not.toBe("max" as never);
   });
 
-  it("/effort status on non-DeepSeek endpoint omits `max` from the list (#1794)", () => {
+  it("/effort status omits `max` from the list", () => {
     const client = new DeepSeekClient({
       apiKey: "sk-test",
-      baseUrl: "http://localhost:8080/v1",
+      baseUrl: "https://api.xiaomimimo.com/v1",
       fetch: vi.fn() as unknown as typeof fetch,
     });
     const loop = new CacheFirstLoop({ client, prefix: new ImmutablePrefix({ system: "s" }) });
@@ -428,7 +428,7 @@ describe("handleSlash", () => {
       const ctx = detectSlashArgContext("/effort hi");
       expect(ctx).not.toBeNull();
       expect(ctx!.kind).toBe("picker");
-      expect(ctx!.spec.argCompleter).toEqual(["low", "medium", "high", "max"]);
+      expect(ctx!.spec.argCompleter).toEqual(["low", "medium", "high"]);
       expect(ctx!.partial).toBe("hi");
       expect(ctx!.partialOffset).toBe("/effort ".length);
     });
@@ -875,7 +875,7 @@ describe("handleSlash", () => {
       mcpSpecs: ["filesystem=npx -y @scope/fs /tmp", "mem=npx -y @scope/mem"],
       pendingEditCount: 3,
     });
-    expect(r.info).toMatch(/model\s+deepseek-/);
+    expect(r.info).toMatch(/model\s+mimo-/);
     // ctx row now includes a tiny [██░░░░] char bar between the label
     // and the count — match the count itself loosely.
     expect(r.info).toMatch(/ctx\s+\S+\s+\d+\.?\d*K?\/\d+K/);

@@ -20,6 +20,15 @@ function hasMaxDepth(): boolean {
   return captured.some((m) => /Maximum update depth/.test(m));
 }
 
+async function waitUntil(predicate: () => boolean, timeoutMs = 1000): Promise<boolean> {
+  const start = Date.now();
+  while (Date.now() - start < timeoutMs) {
+    if (predicate()) return true;
+    await new Promise((res) => setTimeout(res, 10));
+  }
+  return predicate();
+}
+
 afterEach(() => {
   restoreErrors();
   vi.useRealTimers();
@@ -46,12 +55,6 @@ describe("Ink update-depth repro candidates", () => {
   });
 
   it("useBoxMetrics: rendering from own measurement never converges", async () => {
-    // Whether React's nested-update guard fires depends on event-loop timing
-    // (a Linux runner doesn't trip what Windows trips in the same wall clock).
-    // The deterministic property is render count: stable layouts converge in
-    // 2–3 renders, the broken pattern compounds without bound. Counting is
-    // the loop-detection signal; the React error is just one possible
-    // downstream symptom.
     captureErrors();
     let stableRenders = 0;
     function Stable() {
@@ -66,12 +69,16 @@ describe("Ink update-depth repro candidates", () => {
       );
     }
     let oscRenders = 0;
+    let lastExtra: boolean | null = null;
+    let transitions = 0;
     function Oscillator() {
       const ref = React.useRef(null!);
       const m = useBoxMetrics(ref);
       oscRenders++;
       // height 0/even → 1 child → measure=1 (odd); odd → 2 children → measure=2 (even).
       const extra = m.height % 2 === 1;
+      if (lastExtra !== null && lastExtra !== extra) transitions++;
+      lastExtra = extra;
       return (
         <Box ref={ref} flexDirection="column">
           <Text>a</Text>
@@ -80,18 +87,14 @@ describe("Ink update-depth repro candidates", () => {
       );
     }
     const a = render(<Stable />);
-    await new Promise((res) => setTimeout(res, 80));
+    await waitUntil(() => stableRenders >= 2);
     a.unmount();
     const b = render(<Oscillator />);
-    await new Promise((res) => setTimeout(res, 80));
+    const observedLoop = await waitUntil(() => transitions >= 4 || hasMaxDepth(), 2000);
     b.unmount();
-    // Stable converges in a handful of renders. The broken pattern compounds
-    // — even a slow CI runner clears ~20 cycles in 80ms; local Node does
-    // hundreds. The thresholds are deliberately loose to stay robust across
-    // runner speeds; the property under test is "doesn't converge", not a
-    // specific count.
     expect(stableRenders).toBeLessThan(10);
-    expect(oscRenders).toBeGreaterThan(15);
+    expect(oscRenders).toBeGreaterThan(stableRenders);
+    expect(observedLoop).toBe(true);
   });
 
   it("useAnimationFrame: many subscribers with short interval does not loop alone", async () => {

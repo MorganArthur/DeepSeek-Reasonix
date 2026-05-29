@@ -8,7 +8,7 @@ import type { LoopEvent } from "../src/loop.js";
 import { ImmutablePrefix } from "../src/memory/runtime.js";
 
 const ctx: EventizeContext = {
-  model: "deepseek-v4-flash",
+  model: "mimo-v2.5",
   reasoningEffort: "max",
   prefixHash: "test",
 };

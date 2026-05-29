@@ -55,7 +55,7 @@ describe("ContextManager fold preserves reasoning_content for thinking-mode (#10
     const loop = new CacheFirstLoop({
       client,
       prefix: new ImmutablePrefix({ system: "s" }),
-      model: "deepseek-v4-flash",
+      model: "mimo-v2.5",
       stream: false,
     });
     seedTurns(loop, 6);
@@ -75,7 +75,7 @@ describe("ContextManager fold preserves reasoning_content for thinking-mode (#10
     const loop = new CacheFirstLoop({
       client,
       prefix: new ImmutablePrefix({ system: "s" }),
-      model: "deepseek-v4-flash",
+      model: "mimo-v2.5",
       stream: false,
     });
     seedTurns(loop, 6);
@@ -88,11 +88,15 @@ describe("ContextManager fold preserves reasoning_content for thinking-mode (#10
   });
 
   it("omits reasoning_content for non-thinking-mode session models when summarizer returned none", async () => {
+    // gpt-4 is not in our target set — isThinkingModeModel → false, so the
+    // healing pass doesn't stamp an empty reasoning_content on the synthesized
+    // fold summary, and the request payload stays slimmer for non-MiMo
+    // sessions that don't require the round-trip invariant.
     const client = makeClient([{ content: "earlier turns happened." }]);
     const loop = new CacheFirstLoop({
       client,
       prefix: new ImmutablePrefix({ system: "s" }),
-      model: "deepseek-chat",
+      model: "gpt-4",
       stream: false,
     });
     seedTurns(loop, 6);

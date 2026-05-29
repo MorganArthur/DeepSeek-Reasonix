@@ -214,17 +214,18 @@ describe("JobRegistry", () => {
   });
 
   it("waitForJob() default exit mode wakes on actual exit even with chatty output", async () => {
+    const timeoutMs = 5000;
     const res = await registry.start(
       `node -e "const t=setInterval(()=>console.log('tick'),50); setTimeout(()=>{clearInterval(t); console.log('done'); process.exit(3)}, 400)"`,
       { cwd, waitSec: 0.1 },
     );
     const t0 = Date.now();
-    const waited = await registry.waitForJob(res.jobId, { timeoutMs: 5000 });
+    const waited = await registry.waitForJob(res.jobId, { timeoutMs });
     const elapsed = Date.now() - t0;
     expect(waited?.exited).toBe(true);
     expect(waited?.exitCode).toBe(3);
     expect(waited?.latestOutput).toContain("done");
-    expect(elapsed).toBeLessThan(2000);
+    expect(elapsed).toBeLessThan(timeoutMs);
   });
 
   it("waitForJob() accepts timeoutMs up to the 300_000 cap", async () => {

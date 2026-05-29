@@ -52,7 +52,7 @@ export class ClassSourceFinder {
   constructor(options: ClassSourceFinderOptions) {
     this.projectRoot = path.resolve(options.projectRoot);
     this.repoPaths =
-      options.repoPaths && options.repoPaths.length > 0
+      options.repoPaths !== undefined
         ? options.repoPaths.map((p) => path.resolve(p))
         : ClassSourceFinder.defaultRepoPaths();
     this.javapCommand = options.javapCommand ?? "javap";

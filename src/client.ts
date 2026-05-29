@@ -24,6 +24,8 @@ export class Usage {
       typeof u.prompt_tokens === "number" ||
       typeof u.completion_tokens === "number" ||
       typeof u.total_tokens === "number" ||
+      u.prompt_tokens_details !== undefined ||
+      u.completion_tokens_details !== undefined ||
       typeof u.prompt_cache_hit_tokens === "number" ||
       typeof u.prompt_cache_miss_tokens === "number" ||
       typeof u.prompt_eval_count === "number" ||
@@ -35,7 +37,10 @@ export class Usage {
     const u = raw ?? {};
     const promptTokens = u.prompt_tokens ?? u.prompt_eval_count ?? 0;
     const completionTokens = u.completion_tokens ?? u.eval_count ?? 0;
-    const cacheHitTokens = u.prompt_cache_hit_tokens ?? 0;
+    // Xiaomi MiMo and other OpenAI-compatible providers return cache hits as
+    // `prompt_tokens_details.cached_tokens`; legacy DeepSeek transcripts use
+    // the flat `prompt_cache_hit_tokens`. Read nested first, fall back to flat.
+    const cacheHitTokens = u.prompt_tokens_details?.cached_tokens ?? u.prompt_cache_hit_tokens ?? 0;
     const cacheMissTokens =
       u.prompt_cache_miss_tokens ?? Math.max(0, promptTokens - cacheHitTokens);
     return new Usage(
@@ -98,6 +103,7 @@ export interface ModelList {
   data: ModelInfo[];
 }
 
+/** Options for the Xiaomi MiMo chat client; legacy type name kept to avoid a broad caller rename. */
 export interface DeepSeekClientOptions {
   apiKey?: string;
   baseUrl?: string;
@@ -108,8 +114,10 @@ export interface DeepSeekClientOptions {
   retry?: RetryOptions;
 }
 
-// DeepSeek's strict JSON parser rejects lone UTF-16 surrogate escapes
-// (`\ud800`, `\udc00`) even though JavaScript can carry them in strings.
+// Strict JSON parsers (both DeepSeek and Xiaomi MiMo) reject lone UTF-16
+// surrogate escapes (`\ud800`, `\udc00`) even though JavaScript can carry them
+// in strings. Keep the sanitizer regardless of provider — it's harmless and
+// covers an edge-case input class for any strict-JSON upstream.
 function replaceLoneSurrogates(value: string): string {
   let out = "";
   let last = 0;
@@ -161,27 +169,31 @@ export class DeepSeekClient {
   private nextChatRequestAt = 0;
 
   constructor(opts: DeepSeekClientOptions = {}) {
-    const apiKey = opts.apiKey ?? process.env.DEEPSEEK_API_KEY;
+    // env priority: XIAOMI_API_KEY > MIMO_API_KEY > DEEPSEEK_API_KEY (legacy
+    // fallback so existing user environments keep working through the
+    // migration window — drop after one release).
+    const apiKey =
+      opts.apiKey ??
+      process.env.XIAOMI_API_KEY ??
+      process.env.MIMO_API_KEY ??
+      process.env.DEEPSEEK_API_KEY;
     if (!apiKey) {
       throw new Error(
-        "DEEPSEEK_API_KEY is not set. Put it in .env or pass apiKey to DeepSeekClient.",
+        "XIAOMI_API_KEY is not set. Put it in .env (or set MIMO_API_KEY) or pass apiKey to the client.",
       );
     }
     this.apiKey = apiKey;
-    let url = opts.baseUrl ?? resolveBaseUrlEnv() ?? "https://api.deepseek.com";
+    let url = opts.baseUrl ?? resolveBaseUrlEnv() ?? "https://api.xiaomimimo.com/v1";
     // Manual trim — `/\/+$/` is O(n²) on slash-heavy non-matches per CodeQL js/polynomial-redos.
     while (url.endsWith("/")) url = url.slice(0, -1);
     this.baseUrl = url;
-    // 11 min. DeepSeek's load-balancer may keep a connection open for
-    // up to 10 minutes while the request waits in queue (non-streaming
-    // sends empty lines, streaming sends `:` SSE keep-alive comments —
-    // both are invisible to our parsers, so neither surfaces until the
-    // real response starts). Timing out at the legacy 2-min default
-    // killed queued requests prematurely, burned the queue slot on
-    // retry, and could loop through the whole queue repeatedly.
-    // Setting 11 min lets the server's own 10-min cap close the
-    // connection first (clean EOF → natural retry), and our timer
-    // is a safety net for genuinely hung sockets.
+    // 11 min upstream timeout. Inherited from DeepSeek's queue behavior (LB
+    // could hold a connection open up to 10 min while queued — keep-alive
+    // frames are invisible to our parsers, so neither surfaces until the
+    // real response starts). The 11-min cap lets the server's own 10-min
+    // ceiling close the socket first (clean EOF → natural retry), and our
+    // timer is a safety net for genuinely hung sockets. Xiaomi MiMo's queue
+    // behavior is similar enough that we retain the same headroom.
     this.timeoutMs = opts.timeoutMs ?? 660_000;
     this._fetch = opts.fetch ?? globalThis.fetch.bind(globalThis);
     this.retry = opts.retry ?? {};
@@ -214,18 +226,24 @@ export class DeepSeekClient {
       messages: opts.messages,
       stream,
     };
+    // Streaming requires include_usage to receive the final-frame usage
+    // (Xiaomi MiMo emits usage in a trailing `choices: []` chunk only when
+    // this is set — without it the session loses prompt_tokens visibility,
+    // breaking cost / context-usage UI).
+    if (stream) payload.stream_options = { include_usage: true };
     if (opts.tools?.length) payload.tools = opts.tools;
     if (opts.temperature !== undefined) payload.temperature = opts.temperature;
-    if (opts.maxTokens !== undefined) payload.max_tokens = opts.maxTokens;
+    // Xiaomi MiMo accepts both `max_tokens` (legacy) and `max_completion_tokens`
+    // (OpenAI o-series naming, documented preferred). Use the new name.
+    if (opts.maxTokens !== undefined) payload.max_completion_tokens = opts.maxTokens;
     if (opts.responseFormat) payload.response_format = opts.responseFormat;
-    // V4 thinking-mode toggle: lives under `extra_body.thinking.type` per
-    // DeepSeek's docs. Docs also note that in thinking mode `temperature`,
-    // `top_p`, `presence_penalty`, `frequency_penalty` are silently
-    // ignored — we don't strip them here because the server's explicit
-    // "setting won't report an error" contract means leaving them in is
-    // safe and keeps the request payload diffable against OpenAI tooling.
-    if (opts.thinking && !this._isAzureEndpoint()) {
-      payload.extra_body = { thinking: { type: opts.thinking } };
+    // Xiaomi MiMo thinking-mode toggle: top-level `thinking.type` (not nested
+    // under `extra_body` like DeepSeek V4). In thinking mode the server
+    // silently ignores `temperature` / `top_p` / `presence_penalty` /
+    // `frequency_penalty` — we don't strip them here because leaving them in
+    // is safe and keeps the request payload diffable against OpenAI tooling.
+    if (opts.thinking) {
+      payload.thinking = { type: opts.thinking };
     }
     if (opts.reasoningEffort) {
       payload.reasoning_effort = opts.reasoningEffort;
@@ -233,33 +251,9 @@ export class DeepSeekClient {
     return payload;
   }
 
-  /** Azure OpenAI-compatible endpoints do not accept DeepSeek's proprietary
-   *  `extra_body.thinking` field (they reject the request with 400).  We still
-   *  send `reasoning_effort`, which Azure *does* support. */
-  private _isAzureEndpoint(): boolean {
-    try {
-      const host = new URL(this.baseUrl).hostname;
-      return host === "azure.com" || host.endsWith(".azure.com");
-    } catch {
-      return false;
-    }
-  }
-
-  /** Returns null on failure so callers can degrade — session must keep working without balance UI. */
-  async getBalance(opts: { signal?: AbortSignal } = {}): Promise<UserBalance | null> {
-    try {
-      const resp = await this._fetch(`${this.baseUrl}/user/balance`, {
-        method: "GET",
-        headers: { Authorization: `Bearer ${this.apiKey}` },
-        signal: opts.signal,
-      });
-      if (!resp.ok) return null;
-      const data = (await resp.json()) as UserBalance;
-      if (!data || !Array.isArray(data.balance_infos)) return null;
-      return data;
-    } catch {
-      return null;
-    }
+  /** Xiaomi MiMo has no balance API; return null so balance/status probes degrade gracefully. */
+  async getBalance(_opts: { signal?: AbortSignal } = {}): Promise<UserBalance | null> {
+    return null;
   }
 
   /** Returns null on failure — callers fall back to a hardcoded model hint. */
@@ -282,7 +276,7 @@ export class DeepSeekClient {
   async chat(opts: ChatRequestOptions): Promise<ChatResponse> {
     const ctrl = new AbortController();
     const timer = setTimeout(
-      () => ctrl.abort(new Error(`DeepSeek request timed out after ${this.timeoutMs}ms`)),
+      () => ctrl.abort(new Error(`Xiaomi request timed out after ${this.timeoutMs}ms`)),
       this.timeoutMs,
     );
     // Combine — `opts.signal ?? ctrl.signal` orphans the timer when the
@@ -306,7 +300,7 @@ export class DeepSeekClient {
         { ...this.retry, signal },
       );
       if (!resp.ok) {
-        throw new Error(`DeepSeek ${resp.status}: ${await resp.text()}`);
+        throw new Error(`Xiaomi ${resp.status}: ${await resp.text()}`);
       }
       const data: any = await resp.json();
       const choice = data.choices?.[0]?.message ?? {};
@@ -325,7 +319,7 @@ export class DeepSeekClient {
   async *stream(opts: ChatRequestOptions): AsyncGenerator<StreamChunk> {
     const ctrl = new AbortController();
     const timer = setTimeout(
-      () => ctrl.abort(new Error(`DeepSeek stream timed out after ${this.timeoutMs}ms`)),
+      () => ctrl.abort(new Error(`Xiaomi stream timed out after ${this.timeoutMs}ms`)),
       this.timeoutMs,
     );
     // Combine — `opts.signal ?? ctrl.signal` orphans the timer when the
@@ -360,7 +354,7 @@ export class DeepSeekClient {
     }
     if (!resp.ok || !resp.body) {
       clearTimeout(timer);
-      throw new Error(`DeepSeek ${resp.status}: ${await resp.text().catch(() => "")}`);
+      throw new Error(`Xiaomi ${resp.status}: ${await resp.text().catch(() => "")}`);
     }
 
     const queue: StreamChunk[] = [];

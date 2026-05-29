@@ -12,6 +12,7 @@ import {
 import { accessSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, isAbsolute, join, resolve } from "node:path";
+import { DEFAULT_MODEL_FLASH, DEFAULT_MODEL_PRO } from "./config.js";
 import { parseFrontmatter } from "./frontmatter.js";
 import { t } from "./i18n/index.js";
 import { NEGATIVE_CLAIM_RULE, TUI_FORMATTING_RULES } from "./prompt-fragments.js";
@@ -93,9 +94,9 @@ function parseAllowedTools(raw: string | undefined): readonly string[] | undefin
   return names.length > 0 ? Object.freeze(names) : undefined;
 }
 
-/** flash/pro preset → concrete deepseek model id. Kept local so this file doesn't import the CLI preset bundle. */
+/** flash/pro preset → concrete Xiaomi MiMo model id. Kept local so this file doesn't import the CLI preset bundle. */
 function subagentModelForPreset(preset: "flash" | "pro"): string {
-  return preset === "pro" ? "deepseek-v4-pro" : "deepseek-v4-flash";
+  return preset === "pro" ? DEFAULT_MODEL_PRO : DEFAULT_MODEL_FLASH;
 }
 
 export class SkillStore {
@@ -288,7 +289,12 @@ export class SkillStore {
       path,
       allowedTools: parseAllowedTools(data["allowed-tools"]),
       runAs: parseRunAs(data.runAs, data.context, data.agent),
-      model: data.model?.startsWith("deepseek-") ? data.model : undefined,
+      // Accept either Xiaomi MiMo ids (current) or legacy DeepSeek ids
+      // (so old skill frontmatter keeps loading through the migration).
+      model:
+        data.model && (data.model.startsWith("mimo-") || data.model.startsWith("deepseek-"))
+          ? data.model
+          : undefined,
     };
   }
 }

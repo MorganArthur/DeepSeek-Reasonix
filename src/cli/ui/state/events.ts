@@ -134,7 +134,7 @@ const sessionModelChange = z.object({
 
 const sessionEffortChange = z.object({
   type: z.literal("session.effort.change"),
-  reasoningEffort: z.enum(["low", "medium", "high", "max"]),
+  reasoningEffort: z.enum(["low", "medium", "high"]),
 });
 
 const mcpLoading = z.object({

@@ -1,18 +1,21 @@
 import type { DeepSeekClient } from "../client.js";
 import { t } from "../i18n/index.js";
 
-export interface DeepSeekProbeResult {
+export interface XiaomiProbeResult {
   reachable: boolean;
 }
 
+/** Backwards-compatible alias — older imports use the legacy DS name. */
+export type DeepSeekProbeResult = XiaomiProbeResult;
+
 export interface FormatLoopErrorOptions {
-  /** baseUrl of the upstream that just failed — picks DS vs generic wording. */
+  /** baseUrl of the upstream that just failed — picks Xiaomi-specific vs generic wording. */
   upstreamHost?: string;
 }
 
 export function formatLoopError(
   err: Error,
-  probe?: DeepSeekProbeResult,
+  probe?: XiaomiProbeResult,
   opts?: FormatLoopErrorOptions,
 ): string {
   const msg = err.message ?? "";
@@ -24,11 +27,14 @@ export function formatLoopError(
     return t("errors.contextOverflow", { requested });
   }
 
-  const m = /^DeepSeek (\d{3}):\s*([\s\S]*)$/.exec(msg);
+  // Match either the new Xiaomi prefix (current client.ts) or the legacy
+  // DeepSeek prefix (kept for replayed transcripts and not-yet-migrated
+  // callers). Both surface as HTTP status codes here.
+  const m = /^(?:Xiaomi|DeepSeek) (\d{3}):\s*([\s\S]*)$/.exec(msg);
   if (!m) return msg;
   const status = m[1] ?? "";
   const body = m[2] ?? "";
-  const inner = extractDeepSeekErrorMessage(body);
+  const inner = extractXiaomiErrorMessage(body);
 
   if (status === "401") return t("errors.auth401", { inner });
   if (status === "402") return t("errors.balance402", { inner });
@@ -41,13 +47,12 @@ export function formatLoopError(
 
 export function is5xxError(err: unknown): boolean {
   if (!(err instanceof Error)) return false;
-  const m = /^DeepSeek (5\d{2}):/.exec(err.message ?? "");
-  return m !== null;
+  return /^(?:Xiaomi|DeepSeek) (5\d{2}):/.test(err.message ?? "");
 }
 
 export function is4xxError(err: unknown): boolean {
   if (!(err instanceof Error)) return false;
-  return /^DeepSeek (4\d{2}):/.test(err.message ?? "");
+  return /^(?:Xiaomi|DeepSeek) (4\d{2}):/.test(err.message ?? "");
 }
 
 /** Read structured metadata off thrown errors without resorting to `as any`. */
@@ -58,24 +63,32 @@ export function errorMeta(err: unknown): { code?: string; phase?: string } {
   return { code, phase };
 }
 
-export async function probeDeepSeekReachable(
+/** Probe upstream reachability using `/v1/models` for 5xx classification. */
+export async function probeXiaomiReachable(
   client: DeepSeekClient,
   timeoutMs = 1500,
-): Promise<DeepSeekProbeResult> {
-  const balance = await client.getBalance({ signal: AbortSignal.timeout(timeoutMs) });
-  return { reachable: balance !== null };
+): Promise<XiaomiProbeResult> {
+  const models = await client.listModels({ signal: AbortSignal.timeout(timeoutMs) });
+  return { reachable: models !== null };
 }
 
-/** Allow-list — only api.deepseek.com gets DS-specific 5xx wording + balance probe. */
-export function isDeepSeekHost(baseUrl: string | undefined | null): boolean {
+/** Legacy alias — older callers (and any not-yet-migrated tools) import
+ *  `probeDeepSeekReachable`. Routes to the new Xiaomi probe. */
+export const probeDeepSeekReachable = probeXiaomiReachable;
+
+/** Allow-list — only api.xiaomimimo.com gets Xiaomi-specific 5xx wording + reachability probe. */
+export function isXiaomiHost(baseUrl: string | undefined | null): boolean {
   if (!baseUrl) return false;
   try {
     const host = new URL(baseUrl).hostname.toLowerCase();
-    return host === "api.deepseek.com";
+    return host === "api.xiaomimimo.com" || host.endsWith(".xiaomimimo.com");
   } catch {
     return false;
   }
 }
+
+/** Legacy alias — older callers (e.g. loop.ts) import `isDeepSeekHost`. */
+export const isDeepSeekHost = isXiaomiHost;
 
 function is5xxStatus(status: string): boolean {
   return status === "500" || status === "502" || status === "503" || status === "504";
@@ -83,16 +96,19 @@ function is5xxStatus(status: string): boolean {
 
 function format5xx(
   status: string,
-  probe: DeepSeekProbeResult | undefined,
+  probe: XiaomiProbeResult | undefined,
   upstreamHost: string | undefined,
 ): string {
-  if (upstreamHost !== undefined && !isDeepSeekHost(upstreamHost)) {
+  if (upstreamHost !== undefined && !isXiaomiHost(upstreamHost)) {
     return formatUpstream5xx(status, upstreamHost);
   }
-  return formatDeepSeek5xx(status, probe);
+  return formatXiaomi5xx(status, probe);
 }
 
-function formatDeepSeek5xx(status: string, probe?: DeepSeekProbeResult): string {
+function formatXiaomi5xx(status: string, probe?: XiaomiProbeResult): string {
+  // i18n keys still named `deepseek5xx*` for now — Day 5 renames the keys
+  // across all 4 language files. The actual displayed text in those keys
+  // can be updated independently of the key name.
   const head = t("errors.deepseek5xxHead", { status });
   const probeNote =
     probe === undefined
@@ -131,18 +147,32 @@ export function errorLabelFor(reason: "aborted" | "context-guard" | "stuck"): st
   return t("errors.labelStuck");
 }
 
-function extractDeepSeekErrorMessage(body: string): string {
+/** Extract a human-readable message from Xiaomi's OpenAI-shaped error body. */
+function extractXiaomiErrorMessage(body: string): string {
   const trimmed = body.trim();
   if (!trimmed) return t("errors.innerNoMessage");
   try {
     const parsed = JSON.parse(trimmed);
     if (parsed && typeof parsed === "object") {
       const obj = parsed as { error?: { message?: unknown }; message?: unknown };
-      if (obj.error && typeof obj.error.message === "string") return obj.error.message;
-      if (typeof obj.message === "string") return obj.message;
+      let raw: string | undefined;
+      if (obj.error && typeof obj.error.message === "string") {
+        raw = obj.error.message;
+      } else if (typeof obj.message === "string") {
+        raw = obj.message;
+      }
+      if (raw !== undefined) {
+        // Pydantic raw repr → try to lift just the human-readable `msg` field.
+        // First match wins — most 400s contain a single validation failure.
+        const pydantic = /'msg':\s*"([^"]+)"/.exec(raw);
+        return pydantic ? pydantic[1]! : raw;
+      }
     }
   } catch {
     /* not JSON — fall through */
   }
   return trimmed;
 }
+
+/** Legacy alias retained so any not-yet-migrated importer keeps working. */
+export const extractDeepSeekErrorMessage = extractXiaomiErrorMessage;

@@ -1036,9 +1036,9 @@ describe("CacheFirstLoop - configure() method", () => {
       prefix: new ImmutablePrefix({ system: "s" }),
       stream: false,
     });
-    expect(loop.model).toBe("deepseek-v4-flash");
-    loop.configure({ model: "deepseek-v4-pro" });
-    expect(loop.model).toBe("deepseek-v4-pro");
+    expect(loop.model).toBe("mimo-v2.5");
+    loop.configure({ model: "mimo-v2.5-pro" });
+    expect(loop.model).toBe("mimo-v2.5-pro");
   });
 
   it("updates stream preference via configure", () => {
@@ -1118,7 +1118,7 @@ describe("CacheFirstLoop - setBudget / clearLog / retryLastUser", () => {
     expect(loop.log.length).toBeGreaterThan(0);
     loop.scratch.notes = ["stale note"];
     loop.scratch.reasoning = "stale reasoning";
-    loop.stats.record(1, "deepseek-chat", new Usage(1000, 100, 1100, 800, 200));
+    loop.stats.record(1, "mimo-v2.5", new Usage(1000, 100, 1100, 800, 200));
     expect(loop.stats.summary().totalCostUsd).toBeGreaterThan(0);
 
     const { dropped } = loop.clearLog();

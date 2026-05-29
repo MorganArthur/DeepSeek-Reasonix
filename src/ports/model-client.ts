@@ -1,4 +1,4 @@
-/** Port: streaming chat model. Adapters: DeepSeek today; pluggable later. */
+/** Port: streaming chat model. Adapter: Xiaomi MiMo (OpenAI-compatible); pluggable later. */
 
 import type { ChatRequestOptions, RawUsage } from "../types.js";
 

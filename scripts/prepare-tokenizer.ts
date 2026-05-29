@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** Regenerate `data/deepseek-tokenizer.json.gz` — keeps only encode-side fields, gzipped (7.5MB → ~1.7MB). */
+/** Regenerate `data/mimo-tokenizer.json.gz` from a HuggingFace `tokenizer.json`. */
 
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -18,6 +18,6 @@ const slim = {
   model: { type: raw.model.type, vocab: raw.model.vocab, merges: raw.model.merges },
 };
 const gz = gzipSync(Buffer.from(JSON.stringify(slim)), { level: 9 });
-const outPath = join(process.cwd(), "data", "deepseek-tokenizer.json.gz");
+const outPath = join(process.cwd(), "data", "mimo-tokenizer.json.gz");
 writeFileSync(outPath, gz);
 process.stdout.write(`wrote ${outPath} (${(gz.length / 1024).toFixed(1)} KB)\n`);

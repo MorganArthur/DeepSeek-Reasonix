@@ -2301,7 +2301,7 @@ export async function desktopCommand(opts: DesktopOptions): Promise<void> {
     if (msg.cmd === "skill_run") {
       if (!tab.runtime) {
         emit(
-          { type: "$error", message: "Not configured yet — paste your DeepSeek API key first." },
+          { type: "$error", message: "Not configured yet — paste your Xiaomi MiMo API key first." },
           tab.id,
         );
         return;
@@ -2754,7 +2754,7 @@ export async function desktopCommand(opts: DesktopOptions): Promise<void> {
     if (msg.cmd === "user_input") {
       if (!tab.runtime) {
         emit(
-          { type: "$error", message: "Not configured yet — paste your DeepSeek API key first." },
+          { type: "$error", message: "Not configured yet — paste your Xiaomi MiMo API key first." },
           tab.id,
         );
         return;

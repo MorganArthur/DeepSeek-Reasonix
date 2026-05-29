@@ -1,6 +1,6 @@
 # Reasonix — working knowledge
 
-TypeScript project. DeepSeek-native coding agent, cache-first loop.
+TypeScript project. Xiaomi MiMo-native coding agent, cache-first loop.
 MIT-licensed. Node ≥22 required.
 
 ## Stack
@@ -34,7 +34,7 @@ MIT-licensed. Node ≥22 required.
 | `examples/` | `basic-chat.ts`, `mcp-server-demo.ts`, etc. |
 | `benchmarks/` | Harvest + tau-bench harnesses |
 | `dashboard/` | Compiled dashboard SPA assets |
-| `data/` | Tokenizer data (`deepseek-tokenizer.json.gz`) |
+| `data/` | Tokenizer data (`mimo-tokenizer.json.gz`) |
 | `dist/` | Build output — **do not edit** |
 | `.github/` | CI + issue / PR templates |
 

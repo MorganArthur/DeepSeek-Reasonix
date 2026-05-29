@@ -29,14 +29,14 @@ describe("acp --transcript", () => {
     const stream = openTranscriptFile(path, {
       version: 1,
       source: "reasonix acp",
-      model: "deepseek-chat",
+      model: "mimo-v2.5",
       startedAt: "2026-05-13T00:00:00Z",
     });
 
-    const ctx = { model: "deepseek-chat", prefixHash: "acp-prefix-hash" };
+    const ctx = { model: "mimo-v2.5", prefixHash: "acp-prefix-hash" };
     const stats = new SessionStats();
     const usage = new Usage(1200, 80, 1280, 1100, 100);
-    const turnStats = stats.record(1, "deepseek-chat", usage);
+    const turnStats = stats.record(1, "mimo-v2.5", usage);
 
     const events: LoopEvent[] = [
       { turn: 1, role: "assistant_delta", content: "Writing" },
@@ -61,7 +61,7 @@ describe("acp --transcript", () => {
     expect(meta).not.toBeNull();
     expect(meta?.source).toBe("reasonix acp");
     expect(meta?.version).toBe(1);
-    expect(meta?.model).toBe("deepseek-chat");
+    expect(meta?.model).toBe("mimo-v2.5");
 
     expect(records).toHaveLength(4);
     expect(records.map((r) => r.role)).toEqual([
@@ -79,7 +79,7 @@ describe("acp --transcript", () => {
     expect(finalRec?.usage?.total_tokens).toBe(1280);
     expect(finalRec?.usage?.prompt_cache_hit_tokens).toBe(1100);
     expect(finalRec?.cost).toBeGreaterThan(0);
-    expect(finalRec?.model).toBe("deepseek-chat");
+    expect(finalRec?.model).toBe("mimo-v2.5");
     expect(finalRec?.prefixHash).toBe("acp-prefix-hash");
   });
 
@@ -91,7 +91,7 @@ describe("acp --transcript", () => {
       startedAt: "2026-05-13T00:00:00Z",
     });
 
-    const ctx = { model: "deepseek-chat", prefixHash: "h" };
+    const ctx = { model: "mimo-v2.5", prefixHash: "h" };
     const turn1: LoopEvent = { turn: 1, role: "assistant_final", content: "first" };
     const turn2: LoopEvent = { turn: 2, role: "assistant_final", content: "second" };
 

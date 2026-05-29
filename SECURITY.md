@@ -27,8 +27,8 @@ Only the latest published minor of `reasonix` on npm is actively maintained. If 
 **Out of scope:**
 
 - Third-party MCP servers attached via `--mcp` (report to those projects)
-- Misconfiguration of the user's own DeepSeek API key, environment, or shell profile
-- Vulnerabilities in upstream Node.js or in the DeepSeek API itself
+- Misconfiguration of the user's own Xiaomi MiMo API key, environment, or shell profile
+- Vulnerabilities in upstream Node.js or in the Xiaomi MiMo API itself
 - Denial-of-service via deliberately oversized prompts or tool inputs (Reasonix is a single-user CLI; there's no multi-tenant boundary to defend)
 
 ## Hardening notes

@@ -1,26 +1,18 @@
-/** True when the model emits reasoning_content and requires it round-tripped on follow-ups. */
+import { DEFAULT_MODEL_FLASH, DEFAULT_MODEL_PRO } from "../config.js";
+
+/** True when the model emits reasoning_content and requires round-tripping. */
 export function isThinkingModeModel(model: string): boolean {
-  if (model.includes("reasoner")) return true;
-  if (model === "deepseek-v4-flash" || model === "deepseek-v4-pro") return true;
-  return false;
+  return model === DEFAULT_MODEL_FLASH || model === DEFAULT_MODEL_PRO;
 }
 
-/** Pins extra_body.thinking.type; `undefined` lets third-party endpoints skip the field. */
+/** Pin `thinking.type` for known thinking-capable models; return undefined to
+ *  let third-party / self-hosted endpoints skip the field entirely. */
 export function thinkingModeForModel(model: string): "enabled" | "disabled" | undefined {
-  if (model === "deepseek-chat") return "disabled";
-  if (model.includes("reasoner")) return "enabled";
-  if (model === "deepseek-v4-flash" || model === "deepseek-v4-pro") return "enabled";
+  if (isThinkingModeModel(model)) return "enabled";
   return undefined;
 }
 
-/** Strip hallucinated tool-call envelopes — `tools: undefined` doesn't always force prose. */
+/** No-op for Xiaomi MiMo: upstream resolves tool-call markup into structured fields before streaming. */
 export function stripHallucinatedToolMarkup(s: string): string {
-  let out = s;
-  // DeepSeek's DSML envelope (full-width "｜" is the form R1 emits in practice).
-  out = out.replace(/<｜DSML｜function_calls>[\s\S]*?<\/?｜DSML｜function_calls>/g, "");
-  out = out.replace(/<\|DSML\|function_calls>[\s\S]*?<\/?\|DSML\|function_calls>/g, "");
-  out = out.replace(/<function_calls>[\s\S]*?<\/function_calls>/g, "");
-  // Lone unpaired DSML opener left over after R1 truncates mid-call.
-  out = out.replace(/<｜DSML｜[\s\S]*$/g, "");
-  return out.trim();
+  return s.trim();
 }

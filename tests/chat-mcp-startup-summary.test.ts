@@ -206,7 +206,7 @@ async function captureStartupState(opts?: {
   setLanguageRuntime(opts?.lang ?? "EN");
 
   await chatCommand({
-    model: "deepseek-chat",
+    model: "mimo-v2.5",
     system: "s",
     mcp: opts?.mcp ?? ["fs=npx -y @scope/fs /tmp"],
     seedTools: new ToolRegistry(),

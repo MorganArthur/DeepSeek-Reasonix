@@ -1,6 +1,6 @@
 // Node's built-in fetch ignores HTTPS_PROXY env vars — undici's ProxyAgent has to
 // be wired in explicitly. A custom dispatcher routes around the proxy for hosts
-// matched by NO_PROXY (curl-style) so DeepSeek API stays direct while user-set
+// matched by NO_PROXY (curl-style) so Xiaomi MiMo API stays direct while user-set
 // HTTPS_PROXY still routes everything else through the user's proxy.
 
 import { Agent, type Dispatcher, ProxyAgent, setGlobalDispatcher } from "undici";
@@ -21,14 +21,17 @@ const NO_PROXY_ENV_KEYS = ["NO_PROXY", "no_proxy"] as const;
 // `reasonix doctor` reachability checks; non-negotiable.
 const LOOPBACK_NO_PROXY = ["localhost", "127.0.0.1", "::1"] as const;
 
-// DeepSeek's API origin is in CN; routing it through a user's clash/v2ray
-// (typically a US-exit pool) lands on shared abuse IPs that DeepSeek 403s.
-// Opt-out via `proxy.bypassDeepSeekDirect: false` (config) or
+// Xiaomi MiMo's API origin is in CN; routing it through a user's clash/v2ray
+// (typically a US-exit pool) can land on shared abuse IPs that the upstream
+// 403s. This default-direct treatment is inherited from the DeepSeek era
+// (issue #1497) and applies equally to api.xiaomimimo.com.
+// Opt-out via `proxy.bypassDeepSeekDirect: false` (config field name preserved
+// for back-compat) or `REASONIX_PROXY_XIAOMI_DIRECT=0` /
 // `REASONIX_PROXY_DEEPSEEK_DIRECT=0` (env) for corporate firewalls that block
-// direct egress and require the proxy to reach api.deepseek.com (issue #1497).
-const DEEPSEEK_NO_PROXY = ["api.deepseek.com", "*.deepseek.com"] as const;
+// direct egress and require the proxy to reach api.xiaomimimo.com.
+const XIAOMI_NO_PROXY = ["api.xiaomimimo.com", "*.xiaomimimo.com"] as const;
 
-export const DEFAULT_NO_PROXY = [...DEEPSEEK_NO_PROXY, ...LOOPBACK_NO_PROXY] as const;
+export const DEFAULT_NO_PROXY = [...XIAOMI_NO_PROXY, ...LOOPBACK_NO_PROXY] as const;
 
 export function detectProxyUrl(env: NodeJS.ProcessEnv = process.env): string | null {
   for (const key of PROXY_ENV_KEYS) {
@@ -169,7 +172,7 @@ export interface InstallProxyOptions {
   url?: string;
   /** Additional NO_PROXY patterns layered on top of defaults + env. Sourced from `cfg.proxy.noProxy` / `REASONIX_NO_PROXY`. */
   extraNoProxy?: readonly string[];
-  /** When false, route api.deepseek.com / *.deepseek.com through the proxy too (issue #1497). Default true preserves the clash/v2ray US-exit-IP 403 fix. */
+  /** When false, route api.xiaomimimo.com / *.xiaomimimo.com through the proxy too (corporate firewalls that block direct egress; behavior inherited from DeepSeek-era issue #1497). Default true preserves the clash/v2ray US-exit-IP 403 fix. Field name retained for back-compat with persisted configs. */
   bypassDeepSeekDirect?: boolean;
 }
 
@@ -191,12 +194,12 @@ export interface ResolvedNoProxy {
   all: NoProxyPattern[];
 }
 
-/** Env `REASONIX_PROXY_DEEPSEEK_DIRECT` (1/0/true/false/yes/no/on/off) overrides config when set; defaults true. Per issue #1497, corporate firewalls need the env knob since they often can't edit `~/.reasonix/config.json` ergonomically. */
+/** Resolve the direct-Xiaomi proxy bypass env/config setting. */
 export function resolveBypassDeepSeekDirect(
   env: NodeJS.ProcessEnv,
   configValue: boolean | undefined,
 ): boolean {
-  const raw = env.REASONIX_PROXY_DEEPSEEK_DIRECT;
+  const raw = env.REASONIX_PROXY_XIAOMI_DIRECT ?? env.REASONIX_PROXY_DEEPSEEK_DIRECT;
   if (typeof raw === "string") {
     const trimmed = raw.trim().toLowerCase();
     if (trimmed === "0" || trimmed === "false" || trimmed === "no" || trimmed === "off") {
@@ -215,9 +218,9 @@ export function resolveNoProxy(
   env: NodeJS.ProcessEnv = process.env,
   opts: { extraNoProxy?: readonly string[]; bypassDeepSeekDirect?: boolean } = {},
 ): ResolvedNoProxy {
-  const wantsDeepSeekDirect = resolveBypassDeepSeekDirect(env, opts.bypassDeepSeekDirect);
-  const defaultHosts = wantsDeepSeekDirect
-    ? [...DEEPSEEK_NO_PROXY, ...LOOPBACK_NO_PROXY]
+  const wantsUpstreamDirect = resolveBypassDeepSeekDirect(env, opts.bypassDeepSeekDirect);
+  const defaultHosts = wantsUpstreamDirect
+    ? [...XIAOMI_NO_PROXY, ...LOOPBACK_NO_PROXY]
     : LOOPBACK_NO_PROXY;
   const defaults = parseNoProxy(defaultHosts.join(","));
   const envSystem = parseNoProxy(detectNoProxyRaw(env));

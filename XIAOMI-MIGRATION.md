@@ -244,21 +244,25 @@ export function costUsd(model: string, usage: Usage, path?: string): number {
 
 #### B4. 分词器：`src/tokenizer.ts` + `data/*.json.gz` + `scripts/prepare-tokenizer.ts`
 
-**已确认**：小米 MiMo 基于 **Qwen2Tokenizer**（vocab ~151,668）。HF 仓库 `XiaomiMiMo/MiMo-V2-Flash` **未提供完整 `tokenizer.json`**，但 Qwen2.5 系列的 tokenizer 与之 100% 兼容（同一基础 vocab + 同一套 special tokens）。
+**已确认**：小米 MiMo 大概率基于 **Qwen3 系列继续训练**（继续预训练必然沿用 base tokenizer）。HF 仓库 `XiaomiMiMo/MiMo-V2-Flash` 未提供完整 `tokenizer.json`，但从 `Qwen/Qwen3-0.6B` 借 `tokenizer.json` 应与小米使用的 tokenizer 高度一致（vocab + merges + 包括 `<think>` 在内的全部 special tokens）。
 
-**改造方案（路径 A — 借 Qwen2.5 tokenizer.json）**：
+> **关于"Qwen2 是否过时"**：Qwen 1/1.5/2/2.5/3/3.7 全部沿用同一个基础 tokenizer（vocab 151,643 + 各代加 special tokens）。`tokenizer_class: Qwen2Tokenizer` 是 Python 实现类名，不代表是 Qwen2 那代模型独有。类比 OpenAI cl100k_base 从 GPT-3.5 用到 GPT-4.5。
 
-1. 下载 `Qwen/Qwen2.5-0.5B-Instruct` 的 `tokenizer.json`（HuggingFace，约 11 MB）
-2. gzip 压缩 → 放到 `data/mimo-tokenizer.json.gz`
+**改造方案（借 `Qwen/Qwen3-0.6B` 的 tokenizer.json）**：
+
+1. 下载 `Qwen/Qwen3-0.6B` 的 `tokenizer.json`（HuggingFace，约 11 MB）—— **必须用 Qwen3 而非 Qwen2.5**，因为小米思考模式输出 `<think>` `</think>` 是 Qwen3 才引入的特殊 token
+2. gzip 压缩 → `data/mimo-tokenizer.json.gz`
 3. 删除 `data/deepseek-tokenizer.json.gz`
-4. `scripts/prepare-tokenizer.ts` 改拉取 URL 指向 Qwen2.5 HF
+4. `scripts/prepare-tokenizer.ts` 改拉取 URL 指向 `Qwen/Qwen3-0.6B`
 5. `package.json` 第 21 行 `"data/deepseek-tokenizer.json.gz"` → `"data/mimo-tokenizer.json.gz"`
-6. `src/tokenizer.ts` 第 80 行附近的文件名常量 `deepseek-tokenizer.json.gz` 改名
-7. **代码逻辑 0 改动** — 现有 `src/tokenizer.ts` 的 HF tokenizers 格式解析器（model.vocab / model.merges / added_tokens / pre_tokenizer.pretokenizers）兼容 Qwen2
+6. `src/tokenizer.ts` 第 80 行附近的文件名常量 `deepseek-tokenizer.json.gz` 改名（共 4 处：第 86/87/94/104 行）
+7. **代码逻辑 0 改动** — 现有 `src/tokenizer.ts` 的 HF tokenizers 格式解析器（遍历 `pre_tokenizer.pretokenizers` 数组）兼容 Qwen 的 1×Split+1×ByteLevel 结构
 
-**与 DS 的差异**：Qwen 的 chat template 与 DeepSeek 不同（`<|im_start|>role\ncontent<|im_end|>` vs DS 的 `<｜begin▁of▁sentence｜>`），但 **token 计数只看文本不看模板**，编码器层面可直接复用。
+**与 DS 的差异**：Qwen 的 chat template 用 `<|im_start|>role\ncontent<|im_end|>`，DS 用 `<｜begin▁of▁sentence｜>`。**token 计数只看文本不看模板**，编码器层面可直接复用。
 
-**测试基线重算**（`tests/tokenizer.test.ts` 17 处断言会失败）：用真实小米模型 tokenize 几句典型文本（中文 / 英文 / 代码 / mixed）拿到 ground truth，更新断言。整体偏差预期 ±1-2%（足以让 UI 上下文使用率提示稍微不准，但 API 返回的实际 `prompt_tokens` 才是权威值，会回填校正）。
+**预期偏差 ≤1%**——Qwen3 tokenizer 与小米实际使用的同源，微小偏差仅来自 JS 解析器与官方 Rust 实现的细节差异；API 返回的 `prompt_tokens` 是计费权威值，本地估算仅用于上下文使用率 UI / 压缩触发判定，<1% 偏差完全可接受。
+
+**测试基线重算**（`tests/tokenizer.test.ts` 17 处断言会失败）：用真实 mimo-v2.5 tokenize 几句典型文本（中文 / 英文 / 代码 / JSON / markdown）拿到 ground truth，更新断言。落地第一天跑对齐验证脚本，详见 `XIAOMI-API-CONFIRMATION.md` §Q13。
 
 #### B5. `src/loop/errors.ts` — 错误处理
 

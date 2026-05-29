@@ -13,36 +13,28 @@ import { ToolRegistry } from "../src/tools.js";
 import type { ChatMessage } from "../src/types.js";
 
 describe("isThinkingModeModel", () => {
-  it("deepseek-reasoner → true (legacy R1 alias)", () => {
-    expect(isThinkingModeModel("deepseek-reasoner")).toBe(true);
+  it("mimo-v2.5 → true (both target models support thinking, Day 1 curl-verified)", () => {
+    expect(isThinkingModeModel("mimo-v2.5")).toBe(true);
   });
-  it("deepseek-v4-flash → true (default thinking)", () => {
-    expect(isThinkingModeModel("deepseek-v4-flash")).toBe(true);
+  it("mimo-v2.5-pro → true", () => {
+    expect(isThinkingModeModel("mimo-v2.5-pro")).toBe(true);
   });
-  it("deepseek-v4-pro → true (default thinking)", () => {
-    expect(isThinkingModeModel("deepseek-v4-pro")).toBe(true);
-  });
-  it("deepseek-chat → false (non-thinking compat alias)", () => {
-    expect(isThinkingModeModel("deepseek-chat")).toBe(false);
-  });
-  it("unknown models → false (safe default)", () => {
+  it("unknown / unsupported models → false (safe default; we don't send `thinking` for them)", () => {
     expect(isThinkingModeModel("gpt-4")).toBe(false);
+    expect(isThinkingModeModel("mimo-v2-flash")).toBe(false);
     expect(isThinkingModeModel("")).toBe(false);
   });
 });
 
 describe("thinkingModeForModel", () => {
-  it("chat → disabled, reasoner → enabled (compat aliases pin the mode)", () => {
-    expect(thinkingModeForModel("deepseek-chat")).toBe("disabled");
-    expect(thinkingModeForModel("deepseek-reasoner")).toBe("enabled");
+  it("both Xiaomi MiMo target models → enabled", () => {
+    expect(thinkingModeForModel("mimo-v2.5")).toBe("enabled");
+    expect(thinkingModeForModel("mimo-v2.5-pro")).toBe("enabled");
   });
-  it("v4 models → enabled (docs default)", () => {
-    expect(thinkingModeForModel("deepseek-v4-flash")).toBe("enabled");
-    expect(thinkingModeForModel("deepseek-v4-pro")).toBe("enabled");
-  });
-  it("unknown models → undefined (let server decide)", () => {
+  it("unknown models → undefined (let server decide; don't pin the field)", () => {
     expect(thinkingModeForModel("gpt-4")).toBeUndefined();
     expect(thinkingModeForModel("anthropic-claude")).toBeUndefined();
+    expect(thinkingModeForModel("mimo-v2-flash")).toBeUndefined();
   });
 });
 
@@ -57,13 +49,13 @@ function capturingFetch(responses: FakeResponseShape[]): {
   fetch: typeof fetch;
   bodies: Array<{
     messages: ChatMessage[];
-    extra_body?: { thinking?: { type?: string } };
+    thinking?: { type?: string };
     reasoning_effort?: string;
   }>;
 } {
   const bodies: Array<{
     messages: ChatMessage[];
-    extra_body?: { thinking?: { type?: string } };
+    thinking?: { type?: string };
     reasoning_effort?: string;
   }> = [];
   let i = 0;
@@ -71,7 +63,7 @@ function capturingFetch(responses: FakeResponseShape[]): {
     const body = init?.body ? JSON.parse(init.body) : {};
     bodies.push({
       messages: body.messages,
-      extra_body: body.extra_body,
+      thinking: body.thinking,
       reasoning_effort: body.reasoning_effort,
     });
     const resp = responses[i++] ?? responses[responses.length - 1]!;
@@ -112,28 +104,27 @@ describe("stampMissingReasoningForThinkingMode (session-load heal)", () => {
       { role: "user", content: "again" },
       { role: "assistant", content: "b", reasoning_content: "kept" },
     ];
-    const { messages, stampedCount } = stampMissingReasoningForThinkingMode(
-      msgs,
-      "deepseek-reasoner",
-    );
+    const { messages, stampedCount } = stampMissingReasoningForThinkingMode(msgs, "mimo-v2.5");
     expect(stampedCount).toBe(1);
     expect(messages[1]!.reasoning_content).toBe("");
     expect(messages[3]!.reasoning_content).toBe("kept");
   });
 
-  it("no-ops on non-thinking-mode sessions (deepseek-chat stays clean)", () => {
+  it("no-ops on non-thinking-mode sessions (unsupported / third-party models stay clean)", () => {
     const msgs: ChatMessage[] = [
       { role: "user", content: "hi" },
       { role: "assistant", content: "hello" },
     ];
-    const { messages, stampedCount } = stampMissingReasoningForThinkingMode(msgs, "deepseek-chat");
+    // gpt-4 is not in our supported list — isThinkingModeModel returns false,
+    // so stamping is skipped.
+    const { messages, stampedCount } = stampMissingReasoningForThinkingMode(msgs, "gpt-4");
     expect(stampedCount).toBe(0);
     expect(Object.hasOwn(messages[1]!, "reasoning_content")).toBe(false);
   });
 
   it("preserves existing empty-string reasoning_content without double-stamping", () => {
     const msgs: ChatMessage[] = [{ role: "assistant", content: "hi", reasoning_content: "" }];
-    const { stampedCount } = stampMissingReasoningForThinkingMode(msgs, "deepseek-v4-pro");
+    const { stampedCount } = stampMissingReasoningForThinkingMode(msgs, "mimo-v2.5-pro");
     expect(stampedCount).toBe(0);
   });
 });
@@ -170,7 +161,7 @@ describe("R1 reasoning_content round-trip", () => {
       client,
       prefix: new ImmutablePrefix({ system: "s", toolSpecs: tools.specs() }),
       tools,
-      model: "deepseek-reasoner",
+      model: "mimo-v2.5",
       stream: false,
     });
 
@@ -203,7 +194,7 @@ describe("R1 reasoning_content round-trip", () => {
     const loop = new CacheFirstLoop({
       client,
       prefix: new ImmutablePrefix({ system: "s" }),
-      model: "deepseek-reasoner",
+      model: "mimo-v2.5",
       stream: false,
     });
 
@@ -248,7 +239,7 @@ describe("R1 reasoning_content round-trip", () => {
       client,
       prefix: new ImmutablePrefix({ system: "s", toolSpecs: tools.specs() }),
       tools,
-      model: "deepseek-v4-pro",
+      model: "mimo-v2.5-pro",
       stream: false,
     });
 
@@ -286,7 +277,7 @@ describe("R1 reasoning_content round-trip", () => {
     const loop = new CacheFirstLoop({
       client,
       prefix: new ImmutablePrefix({ system: "s" }),
-      model: "deepseek-v4-flash",
+      model: "mimo-v2.5",
       stream: false,
     });
     for await (const _ev of loop.step("hello")) {
@@ -302,10 +293,11 @@ describe("R1 reasoning_content round-trip", () => {
     expect(Object.hasOwn(assistant!, "reasoning_content")).toBe(false);
   });
 
-  it("does NOT stamp reasoning_content on a deepseek-chat turn that returned null", async () => {
-    // Mirror image: non-thinking-mode sessions must stay clean —
-    // sending an empty string here would still be valid per the API
-    // but would needlessly churn the prefix cache across V3 calls.
+  it("does NOT stamp reasoning_content on a non-thinking-model turn that returned null", async () => {
+    // Mirror image: non-thinking-mode sessions must stay clean — sending an
+    // empty string for a model that doesn't use thinking would needlessly
+    // churn the prefix cache. `gpt-4` is not in the Xiaomi MiMo target set so
+    // `isThinkingModeModel` returns false and the stamping pass skips it.
     const { fetch: fakeFetch, bodies } = capturingFetch([
       { content: "hi", reasoning_content: undefined },
       { content: "bye" },
@@ -314,7 +306,7 @@ describe("R1 reasoning_content round-trip", () => {
     const loop = new CacheFirstLoop({
       client,
       prefix: new ImmutablePrefix({ system: "s" }),
-      model: "deepseek-chat",
+      model: "gpt-4",
       stream: false,
     });
     for await (const _ev of loop.step("hello")) {
@@ -329,9 +321,9 @@ describe("R1 reasoning_content round-trip", () => {
     expect(Object.hasOwn(assistant!, "reasoning_content")).toBe(false);
   });
 
-  it("omits stale plain deepseek-chat reasoning_content on the next user request", async () => {
-    // V4-era deepseek-chat can surface reasoning_content even with thinking
-    // disabled. Once the turn is a plain historical assistant message,
+  it("omits stale plain mimo-v2.5 reasoning_content on the next user request", async () => {
+    // Some legacy transcripts can surface reasoning_content even with thinking disabled.
+    // Once the turn is a plain historical assistant message,
     // carrying that body forward just grows the next request.
     const { fetch: fakeFetch, bodies } = capturingFetch([
       { content: "ok", reasoning_content: "v4-chat reasoning leaked" },
@@ -341,7 +333,7 @@ describe("R1 reasoning_content round-trip", () => {
     const loop = new CacheFirstLoop({
       client,
       prefix: new ImmutablePrefix({ system: "s" }),
-      model: "deepseek-chat",
+      model: "mimo-v2.5",
       stream: false,
     });
     for await (const _ev of loop.step("hello")) {
@@ -355,40 +347,41 @@ describe("R1 reasoning_content round-trip", () => {
     expect(Object.hasOwn(assistant!, "reasoning_content")).toBe(false);
   });
 
-  it("pins thinking=enabled for v4-pro and sends the configured reasoning_effort", async () => {
+  it("pins thinking=enabled on the wire for mimo-v2.5-pro and sends the configured reasoning_effort", async () => {
     const { fetch: fakeFetch, bodies } = capturingFetch([{ content: "done" }]);
     const client = new DeepSeekClient({ apiKey: "sk-test", fetch: fakeFetch });
     const loop = new CacheFirstLoop({
       client,
       prefix: new ImmutablePrefix({ system: "s" }),
-      model: "deepseek-v4-pro",
+      model: "mimo-v2.5-pro",
       stream: false,
-      reasoningEffort: "max",
+      reasoningEffort: "high",
     });
     for await (const _ev of loop.step("hello")) {
       /* drain */
     }
-    expect(bodies[0]!.extra_body?.thinking?.type).toBe("enabled");
-    expect(bodies[0]!.reasoning_effort).toBe("max");
-  });
-
-  it("pins thinking=disabled for deepseek-chat (non-thinking compat alias)", async () => {
-    const { fetch: fakeFetch, bodies } = capturingFetch([{ content: "done" }]);
-    const client = new DeepSeekClient({ apiKey: "sk-test", fetch: fakeFetch });
-    const loop = new CacheFirstLoop({
-      client,
-      prefix: new ImmutablePrefix({ system: "s" }),
-      model: "deepseek-chat",
-      stream: false,
-    });
-    for await (const _ev of loop.step("hello")) {
-      /* drain */
-    }
-    expect(bodies[0]!.extra_body?.thinking?.type).toBe("disabled");
+    // Xiaomi MiMo wants `thinking` at the top level, not nested under extra_body.
+    expect(bodies[0]!.thinking?.type).toBe("enabled");
     expect(bodies[0]!.reasoning_effort).toBe("high");
   });
 
-  it("omits thinking entirely for unknown models (let the server decide)", async () => {
+  it("pins thinking=enabled on the wire for mimo-v2.5 (flash tier still supports thinking)", async () => {
+    const { fetch: fakeFetch, bodies } = capturingFetch([{ content: "done" }]);
+    const client = new DeepSeekClient({ apiKey: "sk-test", fetch: fakeFetch });
+    const loop = new CacheFirstLoop({
+      client,
+      prefix: new ImmutablePrefix({ system: "s" }),
+      model: "mimo-v2.5",
+      stream: false,
+    });
+    for await (const _ev of loop.step("hello")) {
+      /* drain */
+    }
+    expect(bodies[0]!.thinking?.type).toBe("enabled");
+    expect(bodies[0]!.reasoning_effort).toBe("high");
+  });
+
+  it("omits `thinking` entirely for unknown / non-target models (let the server decide)", async () => {
     const { fetch: fakeFetch, bodies } = capturingFetch([{ content: "done" }]);
     const client = new DeepSeekClient({ apiKey: "sk-test", fetch: fakeFetch });
     const loop = new CacheFirstLoop({
@@ -400,7 +393,7 @@ describe("R1 reasoning_content round-trip", () => {
     for await (const _ev of loop.step("hello")) {
       /* drain */
     }
-    expect(bodies[0]!.extra_body).toBeUndefined();
+    expect(bodies[0]!.thinking).toBeUndefined();
     expect(bodies[0]!.reasoning_effort).toBe("high");
   });
 
@@ -414,7 +407,7 @@ describe("R1 reasoning_content round-trip", () => {
     const loop = new CacheFirstLoop({
       client,
       prefix: new ImmutablePrefix({ system: "s" }),
-      model: "deepseek-v4-pro",
+      model: "mimo-v2.5-pro",
       stream: false,
     });
     for await (const _ev of loop.step("hello")) {

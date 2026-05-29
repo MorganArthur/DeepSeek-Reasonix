@@ -17,7 +17,7 @@ const session: SessionInfo = {
   id: "test-session",
   branch: "main",
   workspace: "/tmp/repo",
-  model: "deepseek-chat",
+  model: "mimo-v2.5",
 };
 
 function run(events: AgentEvent[], from: AgentState = initialState(session)): AgentState {
@@ -51,36 +51,36 @@ describe("ui reducer", () => {
   it("snapshots the producing model on reasoning.start so mid-turn escalation doesn't relabel it", () => {
     const s = run([{ type: "reasoning.start", id: "r1" }]);
     const card = s.cards[0] as ReasoningCard;
-    expect(card.model).toBe("deepseek-chat");
+    expect(card.model).toBe("mimo-v2.5");
   });
 
   it("reasoning.start carrying an explicit model overrides the session snapshot (#403 /pro armed turn)", () => {
-    const s = run([{ type: "reasoning.start", id: "r1", model: "deepseek-v4-pro" }]);
+    const s = run([{ type: "reasoning.start", id: "r1", model: "mimo-v2.5-pro" }]);
     const card = s.cards[0] as ReasoningCard;
-    expect(card.model).toBe("deepseek-v4-pro");
-    expect(s.session.model).toBe("deepseek-chat");
+    expect(card.model).toBe("mimo-v2.5-pro");
+    expect(s.session.model).toBe("mimo-v2.5");
   });
 
   it("streaming.start carrying an explicit model overrides the session snapshot (#403 /pro armed turn)", () => {
-    const s = run([{ type: "streaming.start", id: "s1", model: "deepseek-v4-pro" }]);
+    const s = run([{ type: "streaming.start", id: "s1", model: "mimo-v2.5-pro" }]);
     const card = s.cards[0] as StreamingCard;
-    expect(card.model).toBe("deepseek-v4-pro");
-    expect(s.session.model).toBe("deepseek-chat");
+    expect(card.model).toBe("mimo-v2.5-pro");
+    expect(s.session.model).toBe("mimo-v2.5");
   });
 
   it("session.model.change updates the active model so the next card snapshots it (#372)", () => {
     const s = run([
-      { type: "session.model.change", model: "deepseek-v4-pro" },
+      { type: "session.model.change", model: "mimo-v2.5-pro" },
       { type: "streaming.start", id: "s1" },
     ]);
     const card = s.cards[0] as StreamingCard;
-    expect(card.model).toBe("deepseek-v4-pro");
-    expect(s.session.model).toBe("deepseek-v4-pro");
+    expect(card.model).toBe("mimo-v2.5-pro");
+    expect(s.session.model).toBe("mimo-v2.5-pro");
   });
 
   it("session.model.change is a no-op when the model id is unchanged (referential identity preserved)", () => {
     const before = run([{ type: "user.submit", text: "x" }]);
-    const after = reduce(before, { type: "session.model.change", model: "deepseek-chat" });
+    const after = reduce(before, { type: "session.model.change", model: "mimo-v2.5" });
     expect(after).toBe(before);
   });
 
@@ -88,10 +88,10 @@ describe("ui reducer", () => {
     const s = run([
       { type: "streaming.start", id: "s1" },
       { type: "streaming.chunk", id: "s1", text: "answer on flash" },
-      { type: "session.model.change", model: "deepseek-v4-pro" },
+      { type: "session.model.change", model: "mimo-v2.5-pro" },
     ]);
     const card = s.cards[0] as StreamingCard;
-    expect(card.model).toBe("deepseek-chat");
+    expect(card.model).toBe("mimo-v2.5");
   });
 
   it("streams response chunks into a single streaming card", () => {

@@ -5,7 +5,7 @@ import type { ChatMessage } from "../src/types.js";
 
 function fakeLoop(messages: ChatMessage[]): CacheFirstLoop {
   return {
-    model: "deepseek-v4-flash",
+    model: "mimo-v2.5",
     prefix: { system: "system", toolSpecs: [] },
     log: { toMessages: () => messages },
   } as unknown as CacheFirstLoop;

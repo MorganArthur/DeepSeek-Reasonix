@@ -84,7 +84,7 @@ describe("DeepSeekClient.stream() timeout with caller signal (issue #1535)", () 
     const callerCtrl = new AbortController();
     const consume = async () => {
       for await (const _chunk of client.stream({
-        model: "deepseek-chat",
+        model: "mimo-v2.5",
         messages: [{ role: "user", content: "hi" }],
         signal: callerCtrl.signal,
       })) {
@@ -108,7 +108,7 @@ describe("DeepSeekClient.stream() timeout with caller signal (issue #1535)", () 
     const callerCtrl = new AbortController();
     const consume = async () => {
       for await (const _chunk of client.stream({
-        model: "deepseek-chat",
+        model: "mimo-v2.5",
         messages: [{ role: "user", content: "hi" }],
         signal: callerCtrl.signal,
       })) {
@@ -134,7 +134,7 @@ describe("DeepSeekClient.chat() timeout with caller signal", () => {
     const callerCtrl = new AbortController();
     await expect(
       client.chat({
-        model: "deepseek-chat",
+        model: "mimo-v2.5",
         messages: [{ role: "user", content: "hi" }],
         signal: callerCtrl.signal,
       }),

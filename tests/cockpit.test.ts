@@ -28,7 +28,7 @@ function record(opts: {
   return JSON.stringify({
     ts: opts.ts,
     session: null,
-    model: opts.model ?? "deepseek-v4-flash",
+    model: opts.model ?? "mimo-v2.5",
     promptTokens: opts.prompt ?? 1000,
     completionTokens: opts.completion ?? 200,
     cacheHitTokens: opts.hit ?? 800,

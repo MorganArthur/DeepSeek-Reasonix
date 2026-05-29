@@ -18,7 +18,7 @@ const FIXTURE = {
   nodeVersion: "v22.10.0",
   locale: "zh-CN",
   theme: "midnight",
-  model: "deepseek-v4-flash",
+  model: "mimo-v2.5",
   reasoningEffort: "high",
   editMode: "auto",
   planMode: false,
@@ -38,7 +38,7 @@ describe("buildFeedbackDiagnostic", () => {
     expect(out).toContain("**Node**: v22.10.0");
     expect(out).toContain("**Locale**: zh-CN");
     expect(out).toContain("**Theme**: midnight");
-    expect(out).toContain("**Model**: deepseek-v4-flash · effort=high");
+    expect(out).toContain("**Model**: mimo-v2.5 · effort=high");
     expect(out).toContain("**Mode**: edit=auto · plan=off");
     expect(out).toContain("**MCP**: 3 server(s)");
     expect(out).toContain("**Session**: code-reasonix");
@@ -89,7 +89,7 @@ describe("buildFeedbackDiagnostic", () => {
       osRelease: "6.6.0",
       nodeVersion: "v22.10.0",
       locale: "EN",
-      model: "deepseek-v4-flash",
+      model: "mimo-v2.5",
     });
     expect(out).toContain("**Reasonix**: 0.34.1");
     expect(out).not.toContain("(latest");

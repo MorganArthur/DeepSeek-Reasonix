@@ -3,7 +3,7 @@
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { homedir } from "node:os";
 import { join, resolve } from "node:path";
-import { DeepSeekClient, pickPrimaryBalance } from "../../client.js";
+import { DeepSeekClient } from "../../client.js";
 import {
   defaultConfigPath,
   loadEndpoint,
@@ -55,7 +55,7 @@ export async function runDoctorChecks(projectRoot: string): Promise<DoctorCheck[
 }
 
 /** Probe hosts used to show users what's going through the proxy vs. direct. Cheap (no I/O), purely a routing simulation against the same NO_PROXY patterns the dispatcher uses. */
-const PROXY_PROBE_HOSTS = ["api.deepseek.com", "github.com", "api.github.com"] as const;
+const PROXY_PROBE_HOSTS = ["api.xiaomimimo.com", "github.com", "api.github.com"] as const;
 
 function checkProxy(): Check[] {
   const cfg = loadProxyConfig();
@@ -145,13 +145,20 @@ function fmtBytes(n: number): string {
 }
 
 async function checkApiKey(): Promise<Check> {
-  const fromEnv = process.env.DEEPSEEK_API_KEY;
-  if (fromEnv) {
+  // env priority: XIAOMI_API_KEY > MIMO_API_KEY > legacy DEEPSEEK_API_KEY.
+  const envSource = process.env.XIAOMI_API_KEY
+    ? "XIAOMI_API_KEY"
+    : process.env.MIMO_API_KEY
+      ? "MIMO_API_KEY"
+      : process.env.DEEPSEEK_API_KEY
+        ? "DEEPSEEK_API_KEY (deprecated; rename to XIAOMI_API_KEY)"
+        : null;
+  if (envSource) {
     return {
       id: "api-key",
       label: "api key      ",
       level: "ok",
-      detail: "set via env DEEPSEEK_API_KEY",
+      detail: `set via env ${envSource}`,
     };
   }
   try {
@@ -172,7 +179,7 @@ async function checkApiKey(): Promise<Check> {
     label: "api key      ",
     level: "fail",
     detail:
-      "not set — `reasonix setup` to save one, or export DEEPSEEK_API_KEY. Get a key at https://platform.deepseek.com/api_keys",
+      "not set — `reasonix setup` to save one, or export XIAOMI_API_KEY. Get a key at https://platform.xiaomimimo.com/console/api-keys",
   };
 }
 
@@ -210,7 +217,11 @@ async function checkConfig(): Promise<Check> {
 }
 
 async function checkApiReach(): Promise<Check> {
-  const key = process.env.DEEPSEEK_API_KEY ?? readConfig().apiKey;
+  const key =
+    process.env.XIAOMI_API_KEY ??
+    process.env.MIMO_API_KEY ??
+    process.env.DEEPSEEK_API_KEY ??
+    readConfig().apiKey;
   if (!key) {
     return {
       id: "api-reach",
@@ -220,37 +231,31 @@ async function checkApiReach(): Promise<Check> {
     };
   }
   try {
+    // Xiaomi MiMo has no balance API, so reachability is probed via /v1/models
+    // (an authenticated GET that doubles as an auth + connectivity check).
     const client = new DeepSeekClient({ apiKey: key, baseUrl: loadEndpoint().baseUrl });
     const ctl = new AbortController();
     const timer = setTimeout(() => ctl.abort(), 8_000);
-    let balance: Awaited<ReturnType<DeepSeekClient["getBalance"]>>;
+    let models: Awaited<ReturnType<DeepSeekClient["listModels"]>>;
     try {
-      balance = await client.getBalance({ signal: ctl.signal });
+      models = await client.listModels({ signal: ctl.signal });
     } finally {
       clearTimeout(timer);
     }
-    if (!balance) {
+    if (!models) {
       return {
         id: "api-reach",
         label: "api reach    ",
         level: "fail",
-        detail: "/user/balance returned null — auth failed or network blocked",
+        detail: "/v1/models returned null — auth failed or network blocked",
       };
     }
-    const summary = summarizeBalances(balance.balance_infos);
-    if (!balance.is_available) {
-      return {
-        id: "api-reach",
-        label: "api reach    ",
-        level: "warn",
-        detail: `account flagged not-available${summary ? ` (${summary})` : ""} — top up or check your dashboard`,
-      };
-    }
+    const count = models.data.length;
     return {
       id: "api-reach",
       label: "api reach    ",
       level: "ok",
-      detail: summary ? `/user/balance ok — ${summary}` : "/user/balance ok",
+      detail: `/v1/models ok — ${count} model${count === 1 ? "" : "s"} available`,
     };
   } catch (err) {
     return {
@@ -260,17 +265,6 @@ async function checkApiReach(): Promise<Check> {
       detail: `${(err as Error).message}`,
     };
   }
-}
-
-function summarizeBalances(
-  infos: ReadonlyArray<{ currency: string; total_balance: string }>,
-): string {
-  if (infos.length === 0) return "";
-  const primary = pickPrimaryBalance(infos);
-  if (infos.length === 1 || !primary)
-    return primary ? `${primary.total_balance} ${primary.currency}` : "";
-  const rest = infos.filter((i) => i !== primary).map((i) => `${i.total_balance} ${i.currency}`);
-  return `${primary.total_balance} ${primary.currency} + ${rest.join(" + ")}`;
 }
 
 async function checkTokenizer(): Promise<Check> {
@@ -296,7 +290,7 @@ async function checkTokenizer(): Promise<Check> {
     label: "tokenizer    ",
     level: "warn",
     detail:
-      "data/deepseek-tokenizer.json.gz not found — token counts will fall back to char heuristics",
+      "tokenizer data file (data/*-tokenizer.json.gz) not found — token counts will fall back to char heuristics",
   };
 }
 

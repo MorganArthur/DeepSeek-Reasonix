@@ -475,11 +475,10 @@ function ApiKeyStep({
   );
 }
 
-// Hit `/models` instead of DeepSeek's `/user/balance`: the OpenAI-compat
-// listing endpoint exists on every provider that pretends to be OpenAI
-// (DeepSeek, DashScope/Tongyi, Moonshot, Zhipu, …), and 401/403 there
-// still means "key bad" the same way.
-export async function validateDeepSeekApiKey(
+// Hit `/v1/models` — Xiaomi MiMo's OpenAI-compatible listing endpoint
+// confirmed available (Day 1 curl probe). 401/403 there is still the
+// canonical "key is bad" signal across every OpenAI-shaped provider.
+export async function validateXiaomiApiKey(
   apiKey: string,
   opts: {
     baseUrl?: string;
@@ -488,7 +487,7 @@ export async function validateDeepSeekApiKey(
   } = {},
 ): Promise<ApiKeyValidationResult> {
   const fetchImpl = opts.fetch ?? globalThis.fetch.bind(globalThis);
-  let baseUrl = opts.baseUrl ?? loadBaseUrl() ?? "https://api.deepseek.com";
+  let baseUrl = opts.baseUrl ?? loadBaseUrl() ?? "https://api.xiaomimimo.com/v1";
   while (baseUrl.endsWith("/")) baseUrl = baseUrl.slice(0, -1);
 
   const ctrl = new AbortController();
@@ -508,6 +507,10 @@ export async function validateDeepSeekApiKey(
     clearTimeout(timer);
   }
 }
+
+/** Legacy alias retained so existing imports of `validateDeepSeekApiKey`
+ *  (the default `validateApiKey` prop on the wizard) keep resolving. */
+export const validateDeepSeekApiKey = validateXiaomiApiKey;
 
 function McpArgsStep({
   entry,

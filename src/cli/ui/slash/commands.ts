@@ -72,16 +72,16 @@ export const SLASH_COMMANDS: readonly SlashCommandSpec[] = [
     cmd: "model",
     group: "setup",
     argsHint: "<id>",
-    summary: "switch DeepSeek model id. Bare opens picker.",
+    summary: "switch Xiaomi MiMo model id. Bare opens picker.",
     argCompleter: "models",
   },
   {
     cmd: "effort",
     group: "setup",
-    argsHint: "<low|medium|high|max>",
+    argsHint: "<low|medium|high>",
     summary:
-      "reasoning_effort cap — high is the safe default (vLLM/Azure compatible); max is a DeepSeek extension.",
-    argCompleter: ["low", "medium", "high", "max"],
+      "reasoning_effort cap — Xiaomi MiMo strictly accepts only low / medium / high (Pydantic-validated; sending 'max' returns HTTP 400).",
+    argCompleter: ["low", "medium", "high"],
   },
   {
     cmd: "language",

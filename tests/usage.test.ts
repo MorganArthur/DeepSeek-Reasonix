@@ -40,7 +40,7 @@ describe("appendUsage + readUsageLog", () => {
   it("round-trips a single record", () => {
     const record = appendUsage({
       session: "default",
-      model: "deepseek-reasoner",
+      model: "mimo-v2.5",
       usage: usage(),
       now: 1_700_000_000_000,
       path,
@@ -60,7 +60,7 @@ describe("appendUsage + readUsageLog", () => {
   });
 
   it("tolerates a malformed trailing line (skips it)", () => {
-    appendUsage({ session: null, model: "deepseek-chat", usage: usage(), path });
+    appendUsage({ session: null, model: "mimo-v2.5", usage: usage(), path });
     mkdirSync(dirname(path), { recursive: true });
     appendFileSync(path, "{ not valid json\n", "utf8");
     const loaded = readUsageLog(path);
@@ -69,7 +69,7 @@ describe("appendUsage + readUsageLog", () => {
 
   it("creates the parent directory if missing", () => {
     const deep = join(dir, "a", "b", "usage.jsonl");
-    appendUsage({ session: null, model: "deepseek-chat", usage: usage(), path: deep });
+    appendUsage({ session: null, model: "mimo-v2.5", usage: usage(), path: deep });
     expect(readUsageLog(deep)).toHaveLength(1);
   });
 
@@ -87,7 +87,7 @@ describe("appendUsage + readUsageLog", () => {
         JSON.stringify({
           ts: TWO_YEARS_AGO + i,
           session: "old",
-          model: "deepseek-v4-flash",
+          model: "mimo-v2.5",
           promptTokens: 100,
           completionTokens: 20,
           cacheHitTokens: 80,
@@ -100,7 +100,7 @@ describe("appendUsage + readUsageLog", () => {
         JSON.stringify({
           ts: RECENT + i,
           session: "new",
-          model: "deepseek-v4-flash",
+          model: "mimo-v2.5",
           promptTokens: 100,
           completionTokens: 20,
           cacheHitTokens: 80,
@@ -113,7 +113,7 @@ describe("appendUsage + readUsageLog", () => {
     appendFileSync(path, `${lines.join("\n")}\n`, "utf8");
     // Trigger compaction by appending one fresh record — appendUsage
     // checks size after writing.
-    appendUsage({ session: "trigger", model: "deepseek-v4-flash", usage: usage(), path });
+    appendUsage({ session: "trigger", model: "mimo-v2.5", usage: usage(), path });
     const records = readUsageLog(path);
     // Old records must be gone, recent records preserved, plus the
     // fresh trigger record.
@@ -131,7 +131,7 @@ describe("appendUsage + readUsageLog", () => {
     expect(() =>
       appendUsage({
         session: null,
-        model: "deepseek-chat",
+        model: "mimo-v2.5",
         usage: usage(),
         path: join(blocker, "usage.jsonl"),
       }),
@@ -146,7 +146,7 @@ describe("aggregateUsage", () => {
   function rec(partial: Partial<UsageRecord> & { ts: number }): UsageRecord {
     return {
       session: null,
-      model: "deepseek-reasoner",
+      model: "mimo-v2.5",
       promptTokens: 100,
       completionTokens: 20,
       cacheHitTokens: 80,
@@ -205,14 +205,18 @@ describe("aggregateUsage", () => {
   });
 
   it("byModel + bySession sort descending and group nulls under (ephemeral)", () => {
+    // Three flash turns vs one pro turn — byModel should sort flash first
+    // (more turns). bySession: session "a" has two flash turns, session "b"
+    // has one flash turn, the null-session pro turn rolls up under
+    // "(ephemeral)".
     const records = [
-      rec({ ts: NOW - 60_000, model: "deepseek-chat", session: "a" }),
-      rec({ ts: NOW - 60_000, model: "deepseek-reasoner", session: "a" }),
-      rec({ ts: NOW - 60_000, model: "deepseek-reasoner", session: "b" }),
-      rec({ ts: NOW - 60_000, model: "deepseek-reasoner", session: null }),
+      rec({ ts: NOW - 60_000, model: "mimo-v2.5", session: "a" }),
+      rec({ ts: NOW - 60_000, model: "mimo-v2.5", session: "a" }),
+      rec({ ts: NOW - 60_000, model: "mimo-v2.5", session: "b" }),
+      rec({ ts: NOW - 60_000, model: "mimo-v2.5-pro", session: null }),
     ];
     const agg = aggregateUsage(records, { now: NOW });
-    expect(agg.byModel[0]?.model).toBe("deepseek-reasoner");
+    expect(agg.byModel[0]?.model).toBe("mimo-v2.5");
     expect(agg.byModel[0]?.turns).toBe(3);
     expect(agg.bySession[0]?.session).toBe("a");
     expect(agg.bySession.find((s) => s.session === "(ephemeral)")?.turns).toBe(1);
@@ -231,7 +235,7 @@ describe("bucket helpers", () => {
         {
           ts: 1_700_000_000_000,
           session: null,
-          model: "deepseek-chat",
+          model: "mimo-v2.5",
           promptTokens: 100,
           completionTokens: 0,
           cacheHitTokens: 80,
@@ -257,7 +261,7 @@ describe("bucket helpers", () => {
         {
           ts: 1_700_000_000_000,
           session: null,
-          model: "deepseek-chat",
+          model: "mimo-v2.5",
           promptTokens: 0,
           completionTokens: 0,
           cacheHitTokens: 0,
@@ -280,7 +284,7 @@ describe("bucket helpers", () => {
         {
           ts: 1_700_000_000_000,
           session: null,
-          model: "deepseek-chat",
+          model: "mimo-v2.5",
           promptTokens: 1000,
           completionTokens: 0,
           cacheHitTokens: 1000,
@@ -291,7 +295,7 @@ describe("bucket helpers", () => {
         {
           ts: 1_700_000_000_000 - 60_000,
           session: null,
-          model: "deepseek-chat",
+          model: "mimo-v2.5",
           promptTokens: 500,
           completionTokens: 0,
           cacheHitTokens: 500,
@@ -312,7 +316,7 @@ describe("bucket helpers", () => {
         {
           ts: 1_700_000_000_000,
           session: null,
-          model: "deepseek-chat",
+          model: "mimo-v2.5",
           promptTokens: 1500,
           completionTokens: 0,
           cacheHitTokens: 1500,
@@ -332,7 +336,7 @@ describe("bucket helpers", () => {
         {
           ts: 1_700_000_000_000,
           session: null,
-          model: "deepseek-chat",
+          model: "mimo-v2.5",
           promptTokens: 100,
           completionTokens: 0,
           cacheHitTokens: 0,
@@ -354,7 +358,7 @@ describe("renderDashboard", () => {
         {
           ts: 1_700_000_000_000,
           session: "s",
-          model: "deepseek-reasoner",
+          model: "mimo-v2.5",
           promptTokens: 1,
           completionTokens: 1,
           cacheHitTokens: 1,
@@ -384,7 +388,7 @@ describe("renderDashboard", () => {
         {
           ts: 1_700_000_000_000,
           session: "s",
-          model: "deepseek-chat",
+          model: "mimo-v2.5",
           promptTokens: 500,
           completionTokens: 60,
           cacheHitTokens: 400,
@@ -402,7 +406,7 @@ describe("renderDashboard", () => {
         {
           ts: 1_700_000_000_000,
           session: "s",
-          model: "deepseek-chat",
+          model: "mimo-v2.5",
           promptTokens: 200,
           completionTokens: 30,
           cacheHitTokens: 100,
@@ -435,7 +439,7 @@ describe("renderDashboard", () => {
         {
           ts: 1_700_000_000_000,
           session: null,
-          model: "deepseek-chat",
+          model: "mimo-v2.5",
           promptTokens: 10,
           completionTokens: 2,
           cacheHitTokens: 0,
@@ -457,7 +461,7 @@ describe("renderDashboard", () => {
         {
           ts: 1_700_000_000_000 - 60_000,
           session: "s",
-          model: "deepseek-chat",
+          model: "mimo-v2.5",
           promptTokens: 0,
           completionTokens: 0,
           cacheHitTokens: 0,
@@ -480,7 +484,7 @@ describe("renderDashboard", () => {
         {
           ts: 1_700_000_000_000 - 365 * 24 * 60 * 60 * 1000,
           session: null,
-          model: "deepseek-chat",
+          model: "mimo-v2.5",
           promptTokens: 1,
           completionTokens: 1,
           cacheHitTokens: 1,

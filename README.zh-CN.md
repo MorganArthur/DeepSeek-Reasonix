@@ -7,9 +7,9 @@
   &nbsp;·&nbsp;
   <strong>简体中文</strong>
   &nbsp;·&nbsp;
-  <a href="https://esengine.github.io/DeepSeek-Reasonix/">官方网站</a>
+  <a href="https://esengine.github.io/reasonix/">官方网站</a>
   &nbsp;·&nbsp;
-  <a href="https://esengine.github.io/DeepSeek-Reasonix/configuration.html?lang=zh">配置指南</a>
+  <a href="https://esengine.github.io/reasonix/configuration.html?lang=zh">配置指南</a>
   &nbsp;·&nbsp;
   <a href="./docs/ARCHITECTURE.md">架构文档</a>
   &nbsp;·&nbsp;
@@ -25,7 +25,7 @@
   <a href="https://www.npmjs.com/package/reasonix"><img src="https://img.shields.io/npm/dm/reasonix.svg?style=flat-square&color=3fb950&labelColor=161b22&label=downloads" alt="downloads"/></a>
   <a href="./package.json"><img src="https://img.shields.io/node/v/reasonix.svg?style=flat-square&color=5fa04e&labelColor=161b22&logo=nodedotjs&logoColor=white" alt="node"/></a>
   <a href="https://github.com/esengine/reasonix/stargazers"><img src="https://img.shields.io/github/stars/esengine/reasonix.svg?style=flat-square&color=dbab09&labelColor=161b22&logo=github&logoColor=white" alt="GitHub stars"/></a>
-  <a href="https://atomgit.com/esengine/DeepSeek-Reasonix"><img src="https://atomgit.com/esengine/DeepSeek-Reasonix/star/badge.svg" alt="AtomGit stars"/></a>
+  <a href="https://atomgit.com/esengine/reasonix"><img src="https://atomgit.com/esengine/reasonix/star/badge.svg" alt="AtomGit stars"/></a>
   <a href="https://github.com/esengine/reasonix/graphs/contributors"><img src="https://img.shields.io/github/contributors/esengine/reasonix.svg?style=flat-square&color=bc8cff&labelColor=161b22&logo=github&logoColor=white" alt="contributors"/></a>
   <a href="https://github.com/esengine/reasonix/discussions"><img src="https://img.shields.io/github/discussions/esengine/reasonix.svg?style=flat-square&color=58a6ff&labelColor=161b22&logo=github&logoColor=white" alt="Discussions"/></a>
   <a href="https://discord.gg/XF78rEME2D"><img src="https://img.shields.io/badge/discord-join-5865F2.svg?style=flat-square&labelColor=161b22&logo=discord&logoColor=white" alt="Discord"/></a>
@@ -39,7 +39,7 @@
 
 <br/>
 
-<h3 align="center">DeepSeek 原生的终端 AI 编程代理。</h3>
+<h3 align="center">小米 MiMo 原生的终端 AI 编程代理。</h3>
 <p align="center">围绕前缀缓存稳定性设计 —— 长会话下 token 成本始终低位运行，可以一直开着。</p>
 
 <br/>
@@ -51,7 +51,7 @@
 <br/>
 
 > [!TIP]
-> **缓存稳定不是开关，而是循环要围绕设计的不变量。** 这就是 Reasonix 只支持 DeepSeek 的根本原因 —— 每一层都为 DeepSeek 字节稳定的前缀缓存机制调过。
+> **缓存稳定不是开关，而是循环要围绕设计的不变量。** 这就是 Reasonix 只支持小米 MiMo 的根本原因 —— 每一层都围绕 MiMo 可缓存的 OpenAI 兼容聊天 API 调过。
 
 > [!IMPORTANT]
 > **加入社区 · Community** — 中英双语 Discord，频道包括 `#求助` / `#help`、`#分享` / `#showcase`、`#想法反馈`、贡献者专属 PR 协调区。在群内绑定 GitHub 后自动识别贡献者身份。→ **<https://discord.gg/XF78rEME2D>**
@@ -62,10 +62,10 @@
 
 ~~~bash
 cd my-project
-npx reasonix code   # 首次运行粘贴 DeepSeek API Key，之后会记住
+npx reasonix code   # 首次运行粘贴小米 MiMo API Key，之后会记住
 ~~~
 
-要求 Node ≥ 22。在 macOS · Linux · Windows（PowerShell · Git Bash · Windows Terminal）都跑得顺。[去拿 DeepSeek API Key →](https://platform.deepseek.com/api_keys) · 完整 flag 看 `reasonix code --help`。
+要求 Node ≥ 22。在 macOS · Linux · Windows（PowerShell · Git Bash · Windows Terminal）都跑得顺。[去拿小米 MiMo API Key →](https://platform.xiaomimimo.com/console/api-keys) · 完整 flag 看 `reasonix code --help`。
 
 `npx` 是推荐路径 —— 不用全局安装，每次都拿最新版。如果你天天用、想把 `reasonix` 装到 `PATH`，跑一次 `reasonix update`。
 
@@ -77,7 +77,7 @@ npx reasonix code   # 首次运行粘贴 DeepSeek API Key，之后会记住
 | `reasonix doctor` | 体检：Node 版本、API Key、MCP 接线。 |
 | `reasonix update` | 升级 Reasonix 本身。 |
 
-其他子命令（`replay` · `diff` · `events` · `stats` · `index` · `mcp` · `prune-sessions`）在 `reasonix --help` 和 [CLI 参考](https://esengine.github.io/DeepSeek-Reasonix/#cli)。
+其他子命令（`replay` · `diff` · `events` · `stats` · `index` · `mcp` · `prune-sessions`）在 `reasonix --help` 和 [CLI 参考](https://esengine.github.io/reasonix/#cli)。
 
 ### QQ 通道
 
@@ -127,17 +127,17 @@ npx reasonix code --dir /path/to/project
 
 一个全局 JSON 文件 `~/.reasonix/config.json`，加上项目级 `<project>/.reasonix/` 下的覆盖。完整的双语参考 —— 每一个 key、每一条斜杠命令、skills / memory / hooks 在磁盘上的形状 —— 都在这里：
 
-> 📘 **[配置指南](https://esengine.github.io/DeepSeek-Reasonix/configuration.html?lang=zh)** · [English](https://esengine.github.io/DeepSeek-Reasonix/configuration.html)
+> 📘 **[配置指南](https://esengine.github.io/reasonix/configuration.html?lang=zh)** · [English](https://esengine.github.io/reasonix/configuration.html)
 
 | 主题 | 速读 |
 |---|---|
-| [MCP 服务器](https://esengine.github.io/DeepSeek-Reasonix/configuration.html?lang=zh#mcp) | stdio · SSE · Streamable HTTP。`config.json` 和 `--mcp` 共用同一种 spec 格式。 |
-| [Skills](https://esengine.github.io/DeepSeek-Reasonix/configuration.html?lang=zh#skills) | 模型可以调用的 markdown 剧本。`inline` 或 `subagent` 两种模式。 |
-| [Memory](https://esengine.github.io/DeepSeek-Reasonix/configuration.html?lang=zh#memory) | 用户私有的知识，钉进前缀。`user` / `feedback` / `project` / `reference` 四类。 |
-| [Hooks](https://esengine.github.io/DeepSeek-Reasonix/configuration.html?lang=zh#hooks) | 生命周期事件触发的 shell 命令。`PreToolUse`（拦截）· `PostToolUse` · `UserPromptSubmit` · `Stop`。 |
-| [权限](https://esengine.github.io/DeepSeek-Reasonix/configuration.html?lang=zh#permissions) | 按工作区的 shell 白名单，精确前缀匹配。 |
-| [Web 搜索](https://esengine.github.io/DeepSeek-Reasonix/configuration.html?lang=zh#search) | 默认 Mojeek；用 `/search-engine` 可切到自托管的 SearXNG 或 Metaso。 |
-| [语义索引](https://esengine.github.io/DeepSeek-Reasonix/configuration.html?lang=zh#index) | `reasonix index` —— 本地 Ollama，或任何 OpenAI 兼容的 embedding 接口。 |
+| [MCP 服务器](https://esengine.github.io/reasonix/configuration.html?lang=zh#mcp) | stdio · SSE · Streamable HTTP。`config.json` 和 `--mcp` 共用同一种 spec 格式。 |
+| [Skills](https://esengine.github.io/reasonix/configuration.html?lang=zh#skills) | 模型可以调用的 markdown 剧本。`inline` 或 `subagent` 两种模式。 |
+| [Memory](https://esengine.github.io/reasonix/configuration.html?lang=zh#memory) | 用户私有的知识，钉进前缀。`user` / `feedback` / `project` / `reference` 四类。 |
+| [Hooks](https://esengine.github.io/reasonix/configuration.html?lang=zh#hooks) | 生命周期事件触发的 shell 命令。`PreToolUse`（拦截）· `PostToolUse` · `UserPromptSubmit` · `Stop`。 |
+| [权限](https://esengine.github.io/reasonix/configuration.html?lang=zh#permissions) | 按工作区的 shell 白名单，精确前缀匹配。 |
+| [Web 搜索](https://esengine.github.io/reasonix/configuration.html?lang=zh#search) | 默认 Mojeek；用 `/search-engine` 可切到自托管的 SearXNG 或 Metaso。 |
+| [语义索引](https://esengine.github.io/reasonix/configuration.html?lang=zh#index) | `reasonix index` —— 本地 Ollama，或任何 OpenAI 兼容的 embedding 接口。 |
 
 <br/>
 
@@ -165,10 +165,10 @@ npx reasonix code --dir /path/to/project
 
 |                            | Reasonix          | Claude Code       | Cursor              | Aider              |
 |----------------------------|-------------------|-------------------|---------------------|--------------------|
-| 后端                       | DeepSeek          | Anthropic         | OpenAI / Anthropic  | 任意（OpenRouter） |
+| 后端                       | 小米 MiMo          | Anthropic         | OpenAI / Anthropic  | 任意（OpenRouter） |
 | 协议                       | **MIT**           | 闭源              | 闭源                | Apache 2           |
 | 单任务成本                 | **低**            | 高                | 订阅 + 用量         | 不一               |
-| DeepSeek 前缀缓存          | **专门工程化**    | 不适用            | 不适用              | 偶发命中           |
+| 小米 MiMo 前缀缓存         | **专门工程化**    | 不适用            | 不适用              | 偶发命中           |
 | 内嵌 web 仪表盘            | 支持              | —                 | 不适用 (IDE)        | —                  |
 | 持久化的工作区会话         | 支持              | 部分              | 不适用              | —                  |
 | 计划模式 · MCP · Hooks     | 支持              | 支持              | 支持                | 部分               |
@@ -184,7 +184,7 @@ npx reasonix code --dir /path/to/project
 - [**CLI 参考**](./docs/CLI-REFERENCE.md) —— 每个 shell 子命令、每个 slash 命令、每个快捷键
 - [**QQ 连接指南**](./docs/qq-connect.zh-CN.md) —— CLI 首次连接流程、桌面端入口和 QQ 开放平台凭据
 - [**基准测试**](./benchmarks/) —— τ-bench-lite harness、transcript、成本方法论
-- [**官方网站**](https://esengine.github.io/DeepSeek-Reasonix/) —— 入门、Dashboard 设计稿、TUI 设计稿
+- [**官方网站**](https://esengine.github.io/reasonix/) —— 入门、Dashboard 设计稿、TUI 设计稿
 - [**贡献指南**](./CONTRIBUTING.md) —— 注释规则、错误处理、用现成库不手写
 - [**行为准则**](./CODE_OF_CONDUCT.md) · [**安全策略**](./SECURITY.md)
 
@@ -200,7 +200,7 @@ npx reasonix code --dir /path/to/project
 **正在征集意见的 Discussions：**
 
 - [#20 · CLI / TUI 设计](https://github.com/esengine/reasonix/discussions/20) —— 哪里坏了、哪里少东西、哪里你会怎么改？
-- [#21 · Dashboard 设计](https://github.com/esengine/reasonix/discussions/21) —— 对着[设计稿](https://esengine.github.io/DeepSeek-Reasonix/design/agent-dashboard.html)拍砖
+- [#21 · Dashboard 设计](https://github.com/esengine/reasonix/discussions/21) —— 对着[设计稿](https://esengine.github.io/reasonix/design/agent-dashboard.html)拍砖
 - [#22 · 未来功能愿望单](https://github.com/esengine/reasonix/discussions/22) —— 你希望 Reasonix 长出什么功能？
 
 **正在使用 Reasonix，愿意让更多人了解它？** 欢迎将相关博客、文章、截图、演讲或视频发布到 [**Show and tell**](https://github.com/esengine/reasonix/discussions/categories/show-and-tell)。项目没有营销预算，新用户主要通过社区口碑找到这里。持续参与传播的用户将获得下方这枚徽章，颁发后会展示在贡献者墙旁：
@@ -220,20 +220,20 @@ npx reasonix code --dir /path/to/project
 > [!IMPORTANT]
 > Reasonix 是有立场的。有些事它故意 *不做* —— 列在这里方便你为自己的工作挑对工具。
 
-- **多供应商灵活性。** 故意只做 DeepSeek。绑死一个后端是 feature，不是限制。
+- **多供应商灵活性。** 故意只做小米 MiMo。绑死一个后端是 feature，不是限制。
 - **IDE 集成。** 终端优先。diff 在 `git diff`，文件树在 `ls`。仪表盘是 TUI 的伴生，不是 Cursor 的替代。
-- **追最难的 reasoning 榜单。** Claude Opus 在某些榜单上还是赢家。DeepSeek 在编程任务上有竞争力；如果你的工作是"解一个 PhD 级证明"而不是"修个 auth bug"，先用 Claude。
-- **完全离线 / 永远免费。** Reasonix 需要付费的 DeepSeek API Key。要离线 / 零成本，看 Aider + Ollama 或 [Continue](https://continue.dev)。
+- **追最难的 reasoning 榜单。** Claude Opus 在某些榜单上还是赢家。小米 MiMo 是当前编码工作流的目标后端；如果你的工作是"解一个 PhD 级证明"而不是"修个 auth bug"，先用 Claude。
+- **完全离线 / 永远免费。** Reasonix 需要付费的小米 MiMo API Key。要离线 / 零成本，看 Aider + Ollama 或 [Continue](https://continue.dev)。
 
 <br/>
 
 ## Star 趋势
 
-<a href="https://www.star-history.com/?repos=esengine%2FDeepSeek-Reasonix&type=date&legend=top-left">
+<a href="https://www.star-history.com/?repos=esengine%2Freasonix&type=date&legend=top-left">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=esengine/DeepSeek-Reasonix&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=esengine/DeepSeek-Reasonix&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=esengine/DeepSeek-Reasonix&type=date&legend=top-left" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=esengine/reasonix&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=esengine/reasonix&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=esengine/reasonix&type=date&legend=top-left" />
  </picture>
 </a>
 
@@ -256,7 +256,7 @@ npx reasonix code --dir /path/to/project
 
 下面这些朋友的工作塑造了 Reasonix 今天的样子 —— 综合 commit 数和代码量两个维度。
 **按字母顺序排列，排名不分先后。** 完整贡献者列表在
-[GitHub](https://github.com/esengine/DeepSeek-Reasonix/graphs/contributors)。
+[GitHub](https://github.com/esengine/reasonix/graphs/contributors)。
 
 - [**ctharvey**](https://github.com/ctharvey)
 - [**dimasd-angga**](https://github.com/dimasd-angga)（Dimas D. Angga）
@@ -272,8 +272,8 @@ npx reasonix code --dir /path/to/project
 （见 [`docs/brand/`](./docs/brand/)），以及 [AIGC Link](https://xhslink.com/m/80ngts127cA) 在小红书上的推广。
 
 <p align="center">
-  <a href="https://github.com/esengine/DeepSeek-Reasonix/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=esengine/DeepSeek-Reasonix&max=100&columns=12" alt="esengine/DeepSeek-Reasonix 贡献者" width="860"/>
+  <a href="https://github.com/esengine/reasonix/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=esengine/reasonix&max=100&columns=12" alt="esengine/reasonix 贡献者" width="860"/>
   </a>
 </p>
 
@@ -284,5 +284,5 @@ npx reasonix code --dir /path/to/project
 <p align="center">
   <sub>MIT —— 见 <a href="./LICENSE">LICENSE</a></sub>
   <br/>
-  <sub>由 <a href="https://github.com/esengine/DeepSeek-Reasonix/graphs/contributors">esengine/DeepSeek-Reasonix</a> 社区共建</sub>
+  <sub>由 <a href="https://github.com/esengine/reasonix/graphs/contributors">esengine/reasonix</a> 社区共建</sub>
 </p>

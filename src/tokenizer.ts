@@ -1,4 +1,4 @@
-/** Encode-only DeepSeek V4 tokenizer port. Applies V4 chat template so token count tracks API `prompt_tokens`. */
+/** Encode-only BPE tokenizer port for Xiaomi MiMo using the shared Qwen-family tokenizer. */
 
 import { existsSync, readFileSync } from "node:fs";
 import { createRequire } from "node:module";
@@ -39,7 +39,10 @@ interface TokenizerData {
   model: {
     type: "BPE";
     vocab: Record<string, number>;
-    merges: string[];
+    /** Two accepted shapes — HF tokenizers <0.14 emits "L R" strings;
+     *  HF tokenizers ≥0.14 (Qwen3-era) emits [L, R] tuples. We accept
+     *  both at load time and normalise to "L R" keys internally. */
+    merges: ReadonlyArray<string | readonly [string, string]>;
   };
 }
 
@@ -83,15 +86,15 @@ export function resolveDataPath(): string {
   const candidates: string[] = [];
   try {
     const here = dirname(fileURLToPath(import.meta.url));
-    candidates.push(join(here, "..", "data", "deepseek-tokenizer.json.gz"));
-    candidates.push(join(here, "..", "..", "data", "deepseek-tokenizer.json.gz"));
+    candidates.push(join(here, "..", "data", "mimo-tokenizer.json.gz"));
+    candidates.push(join(here, "..", "..", "data", "mimo-tokenizer.json.gz"));
   } catch {
     /* import.meta.url unavailable — skip to the package resolution step. */
   }
   try {
     const req = createRequire(import.meta.url);
     candidates.push(
-      join(dirname(req.resolve("reasonix/package.json")), "data", "deepseek-tokenizer.json.gz"),
+      join(dirname(req.resolve("reasonix/package.json")), "data", "mimo-tokenizer.json.gz"),
     );
   } catch {
     /* Not installed as `reasonix/` — the earlier candidates still may hit. */
@@ -101,7 +104,7 @@ export function resolveDataPath(): string {
   }
   // Nothing exists — return the first candidate anyway so readFileSync
   // surfaces a concrete path in the ENOENT message (better than silent miss).
-  return candidates[0] ?? join(process.cwd(), "data", "deepseek-tokenizer.json.gz");
+  return candidates[0] ?? join(process.cwd(), "data", "mimo-tokenizer.json.gz");
 }
 
 function loadTokenizer(): LoadedTokenizer {
@@ -112,16 +115,21 @@ function loadTokenizer(): LoadedTokenizer {
 
   const mergeRank = new Map<string, number>();
   for (let i = 0; i < data.model.merges.length; i++) {
-    mergeRank.set(data.model.merges[i]!, i);
+    const entry = data.model.merges[i]!;
+    const key = typeof entry === "string" ? entry : `${entry[0]} ${entry[1]}`;
+    mergeRank.set(key, i);
   }
 
   const splitRegexes: RegExp[] = [];
   for (const p of data.pre_tokenizer.pretokenizers) {
     if (p.type === "Split") {
-      // All three Split rules use Isolated — matches become their own
+      // Split rules use behavior:"Isolated" — matches become their own
       // pre-tokens and so do the in-between stretches. The ByteLevel
-      // stage in the Sequence does no extra splitting here
-      // (use_regex:false), so our 3 Split regexes are the whole story.
+      // stage in the Sequence does no extra splitting (use_regex:false),
+      // so the Split regex list is the entire pre-tokenisation. Qwen3's
+      // tokenizer ships a single combined Split (GPT-2 style alternation);
+      // DeepSeek V4 split the same coverage into three regexes. Loop
+      // over whatever count the file declares.
       splitRegexes.push(new RegExp(p.pattern.Regex, "gu"));
     }
   }

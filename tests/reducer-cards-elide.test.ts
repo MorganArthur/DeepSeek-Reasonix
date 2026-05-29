@@ -13,7 +13,7 @@ const session: SessionInfo = {
   id: "test-session",
   branch: "main",
   workspace: "/tmp/repo",
-  model: "deepseek-chat",
+  model: "mimo-v2.5",
 };
 
 function run(events: AgentEvent[], from: AgentState = initialState(session)): AgentState {

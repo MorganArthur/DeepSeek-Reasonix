@@ -28,7 +28,7 @@ const settings: Settings = {
   budgetUsd: null,
   workspaceDir: "/repo",
   recentWorkspaces: [],
-  model: "deepseek-reasoner",
+  model: "mimo-v2.5-pro",
   version: "0.0.0",
 };
 

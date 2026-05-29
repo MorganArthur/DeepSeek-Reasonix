@@ -254,7 +254,7 @@ describe("Desktop App reducer — ApprovalPrompt integration", () => {
         budgetUsd: null,
         workspaceDir: "/workspace",
         recentWorkspaces: [],
-        model: "deepseek-v4-flash",
+        model: "mimo-v2.5",
         version: "0.50.1",
       },
     };

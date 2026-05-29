@@ -1,4 +1,4 @@
-import { DEEPSEEK_PRICING } from "../../telemetry/stats.js";
+import { XIAOMI_PRICING } from "../../telemetry/stats.js";
 import type { DashboardContext } from "../context.js";
 import type { ApiResult } from "../router.js";
 
@@ -16,7 +16,7 @@ export async function handleModels(
       models,
       current: ctx.loop?.model ?? null,
       /** USD per 1M tokens — same table the cost gauge uses. */
-      pricing: DEEPSEEK_PRICING,
+      pricing: XIAOMI_PRICING,
     },
   };
 }

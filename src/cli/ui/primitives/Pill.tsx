@@ -45,9 +45,15 @@ export interface ModelBadge {
   kind: keyof typeof PILL_MODEL;
 }
 
-/** Map full DeepSeek model id to short label + color class. */
+/** Map full Xiaomi MiMo (or legacy DeepSeek) model id to short label + color class. */
 export function modelBadgeFor(model: string | undefined): ModelBadge {
   if (!model) return { label: "?", kind: "unknown" };
+  // Xiaomi MiMo — current supported tier.
+  if (model === "mimo-v2.5") return { label: "v2.5", kind: "flash" };
+  if (model === "mimo-v2.5-pro") return { label: "v2.5-pro", kind: "pro" };
+  // Legacy DeepSeek ids — preserved so old transcripts and badges in replayed
+  // sessions still render with the same colour class they had before the
+  // migration.
   const stripped = model.replace(/^deepseek-/, "");
   if (stripped === "v4-flash" || stripped === "chat") return { label: "v4-flash", kind: "flash" };
   if (stripped === "v4-pro") return { label: "v4-pro", kind: "pro" };

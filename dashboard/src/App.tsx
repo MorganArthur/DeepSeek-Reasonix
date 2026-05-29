@@ -1688,7 +1688,7 @@ function TabRuntime({
       cmd: "/feedback",
       desc: t("app.cmd.feedback"),
       run: () => {
-        void openUrl("https://github.com/esengine/DeepSeek-Reasonix/issues/new/choose").catch(
+        void openUrl("https://github.com/esengine/reasonix/issues/new/choose").catch(
           () => undefined,
         );
       },
@@ -2081,7 +2081,7 @@ function TabRuntime({
                 }
                 busyElapsedMs={elapsed}
                 textareaRef={composerRef}
-                modelLabel={state.settings?.model ?? "deepseek-v4-flash"}
+                modelLabel={state.settings?.model ?? "mimo-v2.5"}
                 reasoningEffort={state.settings?.reasoningEffort ?? "high"}
                 onModelChange={(model) => {
                   saveSettings({ model });

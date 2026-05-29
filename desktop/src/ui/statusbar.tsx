@@ -77,12 +77,12 @@ export function StatusBar({
 
   return (
     <footer className="statusbar">
-      <span className="seg" title={`API · ${settings?.baseUrl ?? "api.deepseek.com"}`}>
+      <span className="seg" title={`API · ${settings?.baseUrl ?? "api.xiaomimimo.com"}`}>
         <span
           className={connState === "off" ? "sw warn" : "sw"}
           style={connState === "off" ? { background: "var(--danger)" } : undefined}
         />
-        <span>{settings?.baseUrl?.replace(/^https?:\/\//, "") ?? "api.deepseek.com"}</span>
+        <span>{settings?.baseUrl?.replace(/^https?:\/\//, "") ?? "api.xiaomimimo.com"}</span>
         <span className="v">{!ready ? t("statusbar.offline") : busy ? t("statusbar.busy") : t("statusbar.online")}</span>
       </span>
       <span className="seg" title={t("statusbar.cacheHit")}>

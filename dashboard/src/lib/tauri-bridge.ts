@@ -68,7 +68,7 @@ function sseToIncoming(ev: any): Record<string, any>[] {
           tabId: "tab-1",
           id: ev.id,
           turn: currentTurn,
-          model: "deepseek-reasoner",
+          model: "mimo-v2.5-pro",
         });
       }
       if (ev.contentDelta) {
@@ -328,7 +328,7 @@ function emitServerSettings(settings: any, overview?: any): void {
     budgetUsd: settings?.budgetUsd ?? overview?.budgetUsd ?? null,
     workspaceDir: overview?.cwd ?? "",
     recentWorkspaces: [],
-    model: overview?.model ?? settings?.model ?? "deepseek-v4-flash",
+    model: overview?.model ?? settings?.model ?? "mimo-v2.5",
     editor: "code",
     webSearchEngine: settings?.webSearchEngine ?? "bing",
     subagentModels: settings?.subagentModels ?? {},
@@ -1094,7 +1094,7 @@ const mockSettings = {
   budgetUsd: null,
   workspaceDir: "",
   recentWorkspaces: [],
-  model: "deepseek-v4-flash",
+  model: "mimo-v2.5",
   version: "0.47.2",
 };
 
@@ -1105,21 +1105,21 @@ const mockMessages: any[] = [
     turn: 1,
     segments: [
       { kind: "reasoning", text: "用户询问项目的技术栈和前端架构。" },
-      { kind: "text", text: "你好！**DeepSeek-Reasonix** 是一个以 DeepSeek 为内核的智能代码助手…" },
+      { kind: "text", text: "你好！**Reasonix** 是一个以小米 MiMo 为内核的智能代码助手…" },
     ],
     pending: false,
   },
 ];
 
 function mockAssistantTurn(_promptText: string) {
-  emitEvent({ type: "status", text: "DeepSeek R1 思考中...", tabId: "tab-1" });
+  emitEvent({ type: "status", text: "小米 MiMo 正在思考...", tabId: "tab-1" });
   setTimeout(() => {
     emitEvent({
       type: "model.turn.started",
       tabId: "tab-1",
       id: Date.now(),
       turn: 2,
-      model: "deepseek-reasoner",
+      model: "mimo-v2.5-pro",
       reasoningEffort: "high",
     });
   }, 600);

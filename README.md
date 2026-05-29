@@ -7,9 +7,9 @@
   &nbsp;·&nbsp;
   <a href="./README.zh-CN.md">简体中文</a>
   &nbsp;·&nbsp;
-  <a href="https://esengine.github.io/DeepSeek-Reasonix/">Website</a>
+  <a href="https://esengine.github.io/reasonix/">Website</a>
   &nbsp;·&nbsp;
-  <a href="https://esengine.github.io/DeepSeek-Reasonix/configuration.html">Guide</a>
+  <a href="https://esengine.github.io/reasonix/configuration.html">Guide</a>
   &nbsp;·&nbsp;
   <a href="./docs/ARCHITECTURE.md">Architecture</a>
   &nbsp;·&nbsp;
@@ -25,7 +25,7 @@
   <a href="https://www.npmjs.com/package/reasonix"><img src="https://img.shields.io/npm/dm/reasonix.svg?style=flat-square&color=3fb950&labelColor=161b22&label=downloads" alt="downloads"/></a>
   <a href="./package.json"><img src="https://img.shields.io/node/v/reasonix.svg?style=flat-square&color=5fa04e&labelColor=161b22&logo=nodedotjs&logoColor=white" alt="node"/></a>
   <a href="https://github.com/esengine/reasonix/stargazers"><img src="https://img.shields.io/github/stars/esengine/reasonix.svg?style=flat-square&color=dbab09&labelColor=161b22&logo=github&logoColor=white" alt="GitHub stars"/></a>
-  <a href="https://atomgit.com/esengine/DeepSeek-Reasonix"><img src="https://atomgit.com/esengine/DeepSeek-Reasonix/star/badge.svg" alt="AtomGit stars"/></a>
+  <a href="https://atomgit.com/esengine/reasonix"><img src="https://atomgit.com/esengine/reasonix/star/badge.svg" alt="AtomGit stars"/></a>
   <a href="https://github.com/esengine/reasonix/graphs/contributors"><img src="https://img.shields.io/github/contributors/esengine/reasonix.svg?style=flat-square&color=bc8cff&labelColor=161b22&logo=github&logoColor=white" alt="contributors"/></a>
   <a href="https://github.com/esengine/reasonix/discussions"><img src="https://img.shields.io/github/discussions/esengine/reasonix.svg?style=flat-square&color=58a6ff&labelColor=161b22&logo=github&logoColor=white" alt="Discussions"/></a>
   <a href="https://discord.gg/XF78rEME2D"><img src="https://img.shields.io/badge/discord-join-5865F2.svg?style=flat-square&labelColor=161b22&logo=discord&logoColor=white" alt="Discord"/></a>
@@ -39,7 +39,7 @@
 
 <br/>
 
-<h3 align="center">A DeepSeek-native AI coding agent for your terminal.</h3>
+<h3 align="center">A Xiaomi MiMo-native AI coding agent for your terminal.</h3>
 <p align="center">Engineered around prefix-cache stability — so token costs stay low across long sessions, and you can leave it running.</p>
 
 <br/>
@@ -51,10 +51,10 @@
 <br/>
 
 > [!TIP]
-> **Cache stability isn't a feature you turn on; it's an invariant the loop is designed around.** That's the whole reason Reasonix is DeepSeek-only — every layer is tuned to the byte-stable prefix-cache mechanic.
+> **Cache stability isn't a feature you turn on; it's an invariant the loop is designed around.** That's the whole reason Reasonix is Xiaomi MiMo-only — every layer is tuned to MiMo's cacheable OpenAI-compatible chat API.
 
 > [!NOTE]
-> **Real user, single day (2026-05-01):** 435M input tokens, **99.82% cache hit**, ~$12 instead of the ~$61 the same workload would cost with no cache on `v4-flash` — see the [case study](./benchmarks/real-world-cache/README.md). DeepSeek provides the cacheable bytes; the four mechanisms in [Pillar 1](./docs/ARCHITECTURE.md#pillar-1--cache-first-loop) are how Reasonix keeps them cacheable across long sessions.
+> **Real user, single day (2026-05-01):** 435M input tokens, **99.82% cache hit**, ~$12 instead of the ~$61 the same workload would cost with no cache on `v4-flash` — see the [case study](./benchmarks/real-world-cache/README.md). Xiaomi MiMo provides the cacheable bytes; the four mechanisms in [Pillar 1](./docs/ARCHITECTURE.md#pillar-1--cache-first-loop) are how Reasonix keeps them cacheable across long sessions.
 
 > [!IMPORTANT]
 > **Community · 加入社区** — bilingual Discord with channels for setup help (`#help` / `#求助`), workflow showcases, feature ideas, and contributor-only PR coordination. Verify your GitHub in-server to get the **Contributor** role automatically. → **<https://discord.gg/XF78rEME2D>**
@@ -69,7 +69,7 @@ Install Reasonix globally if you want the `reasonix` command available on your `
 
 ~~~bash
 npm install -g reasonix
-reasonix code my-project   # paste a DeepSeek API key on first run; persists after
+reasonix code my-project   # paste a Xiaomi MiMo API key on first run; persists after
 ~~~
 
 Or run it once without installing globally:
@@ -79,7 +79,7 @@ cd my-project
 npx reasonix code          # always uses the latest package by default
 ~~~
 
-Grab a [DeepSeek API key →](https://platform.deepseek.com/api_keys) · `reasonix code --help` for flags.
+Grab a [Xiaomi MiMo API key →](https://platform.xiaomimimo.com/console/api-keys) · `reasonix code --help` for flags.
 
 If you use Reasonix daily, global install is the simplest path. If you just want to try it, use `npx`.
 
@@ -102,7 +102,7 @@ Bare `reasonix` (no subcommand) launches `code` in the current directory — typ
 | `reasonix doctor` | Health check: Node, API key, MCP wiring. |
 | `reasonix update` | Upgrade Reasonix itself. |
 
-Other subcommands (`replay` · `diff` · `events` · `stats` · `index` · `mcp` · `prune-sessions`) are in `reasonix --help` and the [CLI reference](https://esengine.github.io/DeepSeek-Reasonix/#cli).
+Other subcommands (`replay` · `diff` · `events` · `stats` · `index` · `mcp` · `prune-sessions`) are in `reasonix --help` and the [CLI reference](https://esengine.github.io/reasonix/#cli).
 
 ### QQ channel
 
@@ -117,9 +117,9 @@ For full setup, desktop quick start, and troubleshooting, see [QQ channel setup]
 
 ### Desktop client (prerelease)
 
-A native Tauri client for users who want a GUI over the same loop. Multi-tab, the right-panel shows files the agent has read or edited this session, the same cost / cache / token meters live at the bottom. Same DeepSeek API key, same `~/.reasonix` config — the desktop bundles its own Node runtime, no separate `npm install` step.
+A native Tauri client for users who want a GUI over the same loop. Multi-tab, the right-panel shows files the agent has read or edited this session, the same cost / cache / token meters live at the bottom. Same Xiaomi MiMo API key, same `~/.reasonix` config — the desktop bundles its own Node runtime, no separate `npm install` step.
 
-Download platform installers from [GitHub Releases](https://github.com/esengine/DeepSeek-Reasonix/releases). The desktop ships as a **prerelease**: the loop and protocol are the same as the CLI, but the UI is still being polished and the installers aren't code-signed yet.
+Download platform installers from [GitHub Releases](https://github.com/esengine/reasonix/releases). The desktop ships as a **prerelease**: the loop and protocol are the same as the CLI, but the UI is still being polished and the installers aren't code-signed yet.
 
 - **macOS** — first launch hits Gatekeeper. One-time fix: `xattr -dr com.apple.quarantine /Applications/Reasonix.app` (or right-click → Open → confirm).
 - **Windows** — SmartScreen warns "Unknown publisher". Click **More info → Run anyway**.
@@ -171,17 +171,17 @@ npx openspec init --tools claude    # writes .claude/skills/openspec-*/SKILL.md
 
 One JSON file at `~/.reasonix/config.json` plus per-project overrides under `<project>/.reasonix/`. The full bilingual reference — every key, every slash command, the on-disk shape of skills/memory/hooks — lives at:
 
-> 📘 **[Configuration Guide](https://esengine.github.io/DeepSeek-Reasonix/configuration.html)** · [中文](https://esengine.github.io/DeepSeek-Reasonix/configuration.html?lang=zh)
+> 📘 **[Configuration Guide](https://esengine.github.io/reasonix/configuration.html)** · [中文](https://esengine.github.io/reasonix/configuration.html?lang=zh)
 
 | Topic | Quick read |
 |---|---|
-| [MCP servers](https://esengine.github.io/DeepSeek-Reasonix/configuration.html#mcp) | stdio · SSE · Streamable HTTP. One spec format works for both `config.json` and `--mcp`. |
-| [Skills](https://esengine.github.io/DeepSeek-Reasonix/configuration.html#skills) | Markdown playbooks the model can invoke. `inline` or `subagent` mode. |
-| [Memory](https://esengine.github.io/DeepSeek-Reasonix/configuration.html#memory) | User-private knowledge pinned into the prefix. `user` / `feedback` / `project` / `reference` types. |
-| [Hooks](https://esengine.github.io/DeepSeek-Reasonix/configuration.html#hooks) | Shell commands on lifecycle events. `PreToolUse` (gating) · `PostToolUse` · `UserPromptSubmit` · `Stop`. |
-| [Permissions](https://esengine.github.io/DeepSeek-Reasonix/configuration.html#permissions) | Per-workspace shell allowlist. Exact-prefix match. |
-| [Web search](https://esengine.github.io/DeepSeek-Reasonix/configuration.html#search) | Mojeek by default; switch to self-hosted SearXNG or Metaso with `/search-engine`. |
-| [Semantic index](https://esengine.github.io/DeepSeek-Reasonix/configuration.html#index) | `reasonix index` — local Ollama or any OpenAI-compatible embedding endpoint. |
+| [MCP servers](https://esengine.github.io/reasonix/configuration.html#mcp) | stdio · SSE · Streamable HTTP. One spec format works for both `config.json` and `--mcp`. |
+| [Skills](https://esengine.github.io/reasonix/configuration.html#skills) | Markdown playbooks the model can invoke. `inline` or `subagent` mode. |
+| [Memory](https://esengine.github.io/reasonix/configuration.html#memory) | User-private knowledge pinned into the prefix. `user` / `feedback` / `project` / `reference` types. |
+| [Hooks](https://esengine.github.io/reasonix/configuration.html#hooks) | Shell commands on lifecycle events. `PreToolUse` (gating) · `PostToolUse` · `UserPromptSubmit` · `Stop`. |
+| [Permissions](https://esengine.github.io/reasonix/configuration.html#permissions) | Per-workspace shell allowlist. Exact-prefix match. |
+| [Web search](https://esengine.github.io/reasonix/configuration.html#search) | Mojeek by default; switch to self-hosted SearXNG or Metaso with `/search-engine`. |
+| [Semantic index](https://esengine.github.io/reasonix/configuration.html#index) | `reasonix index` — local Ollama or any OpenAI-compatible embedding endpoint. |
 
 <br/>
 
@@ -209,10 +209,10 @@ Click through to the full architecture writeup → [Pillar 1 — Cache-first loo
 
 |                                   | Reasonix         | Claude Code       | Cursor              | Aider              |
 |-----------------------------------|------------------|-------------------|---------------------|--------------------|
-| Backend                           | DeepSeek         | Anthropic         | OpenAI / Anthropic  | any (OpenRouter)   |
+| Backend                           | Xiaomi MiMo         | Anthropic         | OpenAI / Anthropic  | any (OpenRouter)   |
 | License                           | **MIT**          | closed            | closed              | Apache 2           |
 | Cost profile                      | **low per task** | premium           | subscription + use  | varies             |
-| DeepSeek prefix-cache             | **engineered**   | not applicable    | not applicable      | incidental         |
+| Xiaomi MiMo prefix-cache          | **engineered**   | not applicable    | not applicable      | incidental         |
 | Embedded web dashboard            | yes              | —                 | n/a (IDE)           | —                  |
 | Configurable web search engine    | `/search-engine` | —             | —                   | —                  |
 | Persistent per-workspace sessions | yes              | partial           | n/a                 | —                  |
@@ -230,7 +230,7 @@ For live cache-hit rates, costs, and methodology, see [`benchmarks/`](./benchmar
 - [**CLI Reference**](./docs/CLI-REFERENCE.md) — every shell subcommand, every slash command, every keybinding
 - [**QQ channel setup**](./docs/qq-connect.md) — CLI first-connect flow, desktop entry, and QQ Open Platform credentials
 - [**Benchmarks**](./benchmarks/) — τ-bench-lite harness, transcripts, cost methodology
-- [**Website**](https://esengine.github.io/DeepSeek-Reasonix/) — getting started, dashboard mockup, TUI mockup
+- [**Website**](https://esengine.github.io/reasonix/) — getting started, dashboard mockup, TUI mockup
 - [**Contributing**](./CONTRIBUTING.md) — comment policy, error-handling rules, library-over-hand-rolled
 - [**Code of Conduct**](./CODE_OF_CONDUCT.md) · [**Security policy**](./SECURITY.md)
 
@@ -246,7 +246,7 @@ Scoped starter tickets — each with background, code pointers, acceptance crite
 **Open Discussions — opinions wanted:**
 
 - [#20 · CLI / TUI design](https://github.com/esengine/reasonix/discussions/20) — what's broken, what's missing, what would you change?
-- [#21 · Dashboard design](https://github.com/esengine/reasonix/discussions/21) — react against the [proposed mockup](https://esengine.github.io/DeepSeek-Reasonix/design/agent-dashboard.html)
+- [#21 · Dashboard design](https://github.com/esengine/reasonix/discussions/21) — react against the [proposed mockup](https://esengine.github.io/reasonix/design/agent-dashboard.html)
 - [#22 · Future feature wishlist](https://github.com/esengine/reasonix/discussions/22) — what would you build into Reasonix next?
 
 **Already using Reasonix and willing to help others discover it?** Publish blog posts, articles, screenshots, talks, or videos to [**Show and tell**](https://github.com/esengine/reasonix/discussions/categories/show-and-tell). The project has no marketing budget — community word of mouth is how new users find it. Sustained advocates earn the badge below, displayed next to the contributors wall once awarded:
@@ -266,20 +266,20 @@ Scoped starter tickets — each with background, code pointers, acceptance crite
 > [!IMPORTANT]
 > Reasonix is opinionated. Some things it deliberately *doesn't* do — listed here so you can pick the right tool for your work.
 
-- **Multi-provider flexibility.** DeepSeek-only on purpose. Coupling to one backend is the feature, not a limitation.
+- **Multi-provider flexibility.** Xiaomi MiMo-only on purpose. Coupling to one backend is the feature, not a limitation.
 - **IDE integration.** Terminal-first. The diff lives in `git diff`, the file tree in `ls`. The dashboard is a companion, not a Cursor replacement.
-- **Hardest-leaderboard reasoning.** Claude Opus still wins some benchmarks. DeepSeek is competitive on coding; if your work is "solve this PhD proof" rather than "fix this auth bug," start with Claude.
-- **Air-gapped / fully-free.** Reasonix needs a paid DeepSeek API key. For air-gapped or zero-cost runs see Aider + Ollama or [Continue](https://continue.dev).
+- **Hardest-leaderboard reasoning.** Claude Opus still wins some benchmarks. Xiaomi MiMo is the target backend for coding workflows; if your work is "solve this PhD proof" rather than "fix this auth bug," start with Claude.
+- **Air-gapped / fully-free.** Reasonix needs a paid Xiaomi MiMo API key. For air-gapped or zero-cost runs see Aider + Ollama or [Continue](https://continue.dev).
 
 <br/>
 
 ## Star History
 
-<a href="https://www.star-history.com/?repos=esengine%2FDeepSeek-Reasonix&type=date&legend=top-left">
+<a href="https://www.star-history.com/?repos=esengine%2Freasonix&type=date&legend=top-left">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=esengine/DeepSeek-Reasonix&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=esengine/DeepSeek-Reasonix&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=esengine/DeepSeek-Reasonix&type=date&legend=top-left" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=esengine/reasonix&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=esengine/reasonix&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=esengine/reasonix&type=date&legend=top-left" />
  </picture>
 </a>
 
@@ -303,7 +303,7 @@ If Reasonix has been useful and you'd like to say thanks, you can. It stays a co
 A small list of folks whose work has shaped Reasonix the most — measured
 by both commit count and code volume. **Listed alphabetically, no ordering
 of importance.** The full contributor graph is on
-[GitHub](https://github.com/esengine/DeepSeek-Reasonix/graphs/contributors).
+[GitHub](https://github.com/esengine/reasonix/graphs/contributors).
 
 - [**ctharvey**](https://github.com/ctharvey)
 - [**dimasd-angga**](https://github.com/dimasd-angga) (Dimas D. Angga)
@@ -320,8 +320,8 @@ for designing the project logo (see [`docs/brand/`](./docs/brand/)), and to
 [AIGC Link](https://xhslink.com/m/80ngts127cA) for promoting the project on XiaoHongShu.
 
 <p align="center">
-  <a href="https://github.com/esengine/DeepSeek-Reasonix/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=esengine/DeepSeek-Reasonix&max=100&columns=12" alt="Contributors to esengine/DeepSeek-Reasonix" width="860"/>
+  <a href="https://github.com/esengine/reasonix/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=esengine/reasonix&max=100&columns=12" alt="Contributors to esengine/reasonix" width="860"/>
   </a>
 </p>
 
@@ -332,5 +332,5 @@ for designing the project logo (see [`docs/brand/`](./docs/brand/)), and to
 <p align="center">
   <sub>MIT — see <a href="./LICENSE">LICENSE</a></sub>
   <br/>
-  <sub>Built by the community at <a href="https://github.com/esengine/DeepSeek-Reasonix/graphs/contributors">esengine/DeepSeek-Reasonix</a></sub>
+  <sub>Built by the community at <a href="https://github.com/esengine/reasonix/graphs/contributors">esengine/reasonix</a></sub>
 </p>

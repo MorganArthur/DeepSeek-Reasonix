@@ -10,7 +10,7 @@ const session: SessionInfo = {
   id: "mem-budget",
   branch: "main",
   workspace: "/tmp/repo",
-  model: "deepseek-chat",
+  model: "mimo-v2.5",
 };
 
 /** Per-turn payload sizes calibrated to a thinking-model session (Opus-ish reasoning, mid-size tool reads). */

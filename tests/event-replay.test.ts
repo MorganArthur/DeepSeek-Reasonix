@@ -16,7 +16,7 @@ afterEach(() => {
   rmSync(dir, { recursive: true, force: true });
 });
 
-const ctx = { model: "deepseek-v4-flash", prefixHash: "abc", reasoningEffort: "max" } as const;
+const ctx = { model: "mimo-v2.5", prefixHash: "abc", reasoningEffort: "max" } as const;
 const lev = (p: Partial<LoopEvent>): LoopEvent =>
   ({ turn: 1, role: "status", content: "", ...p }) as LoopEvent;
 

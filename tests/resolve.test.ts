@@ -36,37 +36,37 @@ describe("resolveDefaults", () => {
 
   it("empty flags + empty config → flash + high", () => {
     const r = resolveDefaults({});
-    expect(r.model).toBe("deepseek-v4-flash");
+    expect(r.model).toBe("mimo-v2.5");
     expect(r.reasoningEffort).toBe("high");
     expect(r.mcp).toEqual([]);
     expect(r.session).toBe("default");
   });
 
   it("config.model overrides the default", () => {
-    writeConfig({ model: "deepseek-v4-pro" }, join(home, ".reasonix", "config.json"));
+    writeConfig({ model: "mimo-v2.5-pro" }, join(home, ".reasonix", "config.json"));
     const r = resolveDefaults({});
-    expect(r.model).toBe("deepseek-v4-pro");
+    expect(r.model).toBe("mimo-v2.5-pro");
   });
 
   it("config.reasoningEffort persists across launches", () => {
-    writeConfig({ reasoningEffort: "max" }, join(home, ".reasonix", "config.json"));
-    expect(resolveDefaults({}).reasoningEffort).toBe("max");
+    writeConfig({ reasoningEffort: "medium" }, join(home, ".reasonix", "config.json"));
+    expect(resolveDefaults({}).reasoningEffort).toBe("medium");
   });
 
   it("--model wins over config.model", () => {
-    writeConfig({ model: "deepseek-v4-flash" }, join(home, ".reasonix", "config.json"));
-    const r = resolveDefaults({ model: "deepseek-v4-pro" });
-    expect(r.model).toBe("deepseek-v4-pro");
+    writeConfig({ model: "mimo-v2.5" }, join(home, ".reasonix", "config.json"));
+    const r = resolveDefaults({ model: "mimo-v2.5-pro" });
+    expect(r.model).toBe("mimo-v2.5-pro");
   });
 
   it("--effort wins over config.reasoningEffort", () => {
-    writeConfig({ reasoningEffort: "max" }, join(home, ".reasonix", "config.json"));
+    writeConfig({ reasoningEffort: "medium" }, join(home, ".reasonix", "config.json"));
     const r = resolveDefaults({ effort: "low" });
     expect(r.reasoningEffort).toBe("low");
   });
 
-  it("--effort accepts any of the four enum values", () => {
-    for (const e of ["low", "medium", "high", "max"] as const) {
+  it("--effort accepts any of the three enum values Xiaomi MiMo supports", () => {
+    for (const e of ["low", "medium", "high"] as const) {
       expect(resolveDefaults({ effort: e }).reasoningEffort).toBe(e);
     }
   });
@@ -97,11 +97,11 @@ describe("resolveDefaults", () => {
 
   it("--no-config ignores the config entirely", () => {
     writeConfig(
-      { model: "deepseek-v4-pro", reasoningEffort: "max", mcp: ["x=cmd"] },
+      { model: "mimo-v2.5-pro", reasoningEffort: "high", mcp: ["x=cmd"] },
       join(home, ".reasonix", "config.json"),
     );
     const r = resolveDefaults({ noConfig: true });
-    expect(r.model).toBe("deepseek-v4-flash");
+    expect(r.model).toBe("mimo-v2.5");
     expect(r.reasoningEffort).toBe("high");
     expect(r.mcp).toEqual([]);
   });

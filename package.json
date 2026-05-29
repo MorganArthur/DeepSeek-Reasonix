@@ -1,7 +1,7 @@
 {
   "name": "reasonix",
   "version": "0.52.0",
-  "description": "DeepSeek-native coding agent: cache-first loop, flash-first cost control, tool-call repair.",
+  "description": "Xiaomi MiMo-native coding agent: cache-first loop, flash-first cost control, tool-call repair.",
   "type": "module",
   "bin": {
     "reasonix": "dist/cli/index.js",
@@ -18,7 +18,7 @@
   },
   "files": [
     "dist",
-    "data/deepseek-tokenizer.json.gz",
+    "data/mimo-tokenizer.json.gz",
     "dashboard/index.html",
     "dashboard/app.css",
     "dashboard/dist",
@@ -59,8 +59,8 @@
   "keywords": [
     "agent",
     "llm",
-    "deepseek",
-    "r1",
+    "xiaomi",
+    "mimo",
     "tool-use",
     "prompt-cache",
     "cli",
@@ -70,12 +70,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/esengine/DeepSeek-Reasonix.git"
+    "url": "git+https://github.com/esengine/reasonix.git"
   },
   "bugs": {
-    "url": "https://github.com/esengine/DeepSeek-Reasonix/issues"
+    "url": "https://github.com/esengine/reasonix/issues"
   },
-  "homepage": "https://github.com/esengine/DeepSeek-Reasonix#readme",
+  "homepage": "https://github.com/esengine/reasonix#readme",
   "engines": {
     "node": ">=22"
   },

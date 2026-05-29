@@ -44,6 +44,11 @@ export interface RawUsage {
   prompt_tokens?: number;
   completion_tokens?: number;
   total_tokens?: number;
+  /** Xiaomi MiMo / OpenAI-standard nested cache field — current source of cache hit count. */
+  prompt_tokens_details?: { cached_tokens?: number };
+  /** Xiaomi MiMo / OpenAI o-series: reasoning tokens counted within completion_tokens. */
+  completion_tokens_details?: { reasoning_tokens?: number };
+  /** Legacy DeepSeek V4 flat cache fields — kept so old recorded transcripts replay correctly. */
   prompt_cache_hit_tokens?: number;
   prompt_cache_miss_tokens?: number;
   /** Ollama native API: input tokens processed. */
@@ -60,7 +65,7 @@ export interface ChatRequestOptions {
   maxTokens?: number;
   stream?: boolean;
   signal?: AbortSignal;
-  /** DeepSeek response_format — use { type: "json_object" } to force valid JSON. */
+  /** OpenAI-compatible response_format — use { type: "json_object" } to force valid JSON. */
   responseFormat?: { type: "json_object" | "text" };
   thinking?: "enabled" | "disabled";
   reasoningEffort?: import("./config.js").ReasoningEffort;

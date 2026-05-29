@@ -1,9 +1,10 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { DEFAULT_MODEL_FLASH } from "../config.js";
 import { applyMemoryStack } from "../memory/user.js";
 import { TUI_FORMATTING_RULES, escalationContract } from "../prompt-fragments.js";
 
-const DEFAULT_CODE_MODEL = "deepseek-v4-flash";
+const DEFAULT_CODE_MODEL = DEFAULT_MODEL_FLASH;
 
 /** Built per-session against the resolved model id so the contract names the actual tier (#582). */
 export function codeSystemBase(modelId: string): string {

@@ -63,7 +63,7 @@ installProxyIfConfigured(process.env, {
 markPhase("cli_module_loaded");
 
 function defaultSystemPrompt(modelId: string): string {
-  return `You are Reasonix, a helpful DeepSeek-powered assistant. Be concise and accurate. Use tools when available.
+  return `You are Reasonix, a helpful Xiaomi MiMo-powered assistant. Be concise and accurate. Use tools when available.
 
 # Cite or shut up — non-negotiable
 

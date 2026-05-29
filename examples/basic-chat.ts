@@ -1,4 +1,4 @@
-/** Minimal example: one-shot, non-streaming. Needs DEEPSEEK_API_KEY. */
+/** Minimal example: one-shot, non-streaming. Needs XIAOMI_API_KEY (or MIMO_API_KEY). */
 import {
   CacheFirstLoop,
   DeepSeekClient,

@@ -5,7 +5,12 @@ import type { ThemeChoice } from "../cli/ui/ThemePicker.js";
 import type { SlashResult } from "../cli/ui/slash/types.js";
 import { listThemeNames } from "../cli/ui/theme/tokens.js";
 import { type CheckpointMeta, fmtAgo, restoreCheckpoint } from "../code/checkpoints.js";
-import { loadQQConfig, resolveThemePreference, saveQQConfig } from "../config.js";
+import {
+  SUPPORTED_OFFICIAL_MODELS,
+  loadQQConfig,
+  resolveThemePreference,
+  saveQQConfig,
+} from "../config.js";
 import { t } from "../i18n/index.js";
 import { type SessionInfo, freshSessionName } from "../memory/session.js";
 import type { ChoiceOption } from "../tools/choice.js";
@@ -777,9 +782,7 @@ export function useQQChannel({
       "auto",
       "flash",
       "pro",
-      ...((models && models.length > 0
-        ? models
-        : ["deepseek-v4-flash", "deepseek-v4-pro"]) as string[]),
+      ...((models && models.length > 0 ? models : SUPPORTED_OFFICIAL_MODELS) as string[]),
     ],
     [],
   );

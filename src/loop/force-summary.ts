@@ -1,4 +1,5 @@
 import { type DeepSeekClient, Usage } from "../client.js";
+import { DEFAULT_MODEL_FLASH } from "../config.js";
 import { t } from "../i18n/index.js";
 import type { TurnStats } from "../telemetry/stats.js";
 import type { ChatMessage } from "../types.js";
@@ -40,7 +41,7 @@ export async function* forceSummaryAfterIterLimit(
     // results into prose", which needs zero reasoning. Letting flash
     // think here burns reasoning tokens on a job that's structurally
     // bounded (no decisions, no tools). Pro is 12× overkill.
-    const summaryModel = "deepseek-v4-flash";
+    const summaryModel = DEFAULT_MODEL_FLASH;
     const resp = await ctx.client.chat({
       model: summaryModel,
       messages,

@@ -23,7 +23,7 @@ Steps or minimal code that reproduces it.
 - OS (Windows 11 / macOS 14 / Ubuntu 24.04 / …):
 - Shell (bash, zsh, fish, PowerShell 7, PowerShell 5.1, cmd, …):
 - Terminal app (Windows Terminal, iTerm2, Alacritty, kitty, WezTerm, **VSCode integrated**, **Cursor integrated**, Hyper, …):
-- DeepSeek model (e.g. `deepseek-v4-flash`, `deepseek-v4-pro`):
+- Xiaomi MiMo model (e.g. `mimo-v2.5`, `mimo-v2.5-pro`):
 
 **Logs / transcript**
 If using the CLI, attach the relevant chunk of `--transcript`, or run

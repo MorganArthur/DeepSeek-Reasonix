@@ -37,7 +37,7 @@ describe("DeepSeekClient.stream() mid-stream error wrapping", () => {
     const chunks: any[] = [];
     const consume = async () => {
       for await (const chunk of client.stream({
-        model: "deepseek-chat",
+        model: "mimo-v2.5",
         messages: [{ role: "user", content: "hi" }],
       })) {
         chunks.push(chunk);
@@ -63,7 +63,7 @@ describe("DeepSeekClient.stream() mid-stream error wrapping", () => {
 
     const consume = async () => {
       for await (const _ of client.stream({
-        model: "deepseek-chat",
+        model: "mimo-v2.5",
         messages: [{ role: "user", content: "hi" }],
       })) {
         /* drain */

@@ -176,7 +176,7 @@ describe("installProxyIfConfigured", () => {
       NO_PROXY: "internal.corp.example, .private.lan",
     });
     const raws = result?.noProxy.map((p) => p.raw) ?? [];
-    expect(raws).toContain("api.deepseek.com");
+    expect(raws).toContain("api.xiaomimimo.com");
     expect(raws).toContain("internal.corp.example");
     expect(raws).toContain(".private.lan");
   });
@@ -216,7 +216,7 @@ describe("installProxyIfConfigured", () => {
   it("logs the proxy decision to stderr at startup", () => {
     installProxyIfConfigured({ HTTPS_PROXY: "http://example:8080" });
     expect(writes.join("")).toMatch(/\[proxy\] using http:\/\/example:8080\//);
-    expect(writes.join("")).toMatch(/NO_PROXY: .*api\.deepseek\.com/);
+    expect(writes.join("")).toMatch(/NO_PROXY: .*api\.xiaomimimo\.com/);
   });
 
   it("bypassDeepSeekDirect=false drops api.deepseek.com from the install-time NO_PROXY list (#1497)", () => {
@@ -309,7 +309,7 @@ describe("resolveNoProxy", () => {
       { NO_PROXY: "system.example", REASONIX_NO_PROXY: "app.example" },
       { extraNoProxy: ["config.example"] },
     );
-    expect(r.defaults.map((p) => p.raw)).toContain("api.deepseek.com");
+    expect(r.defaults.map((p) => p.raw)).toContain("api.xiaomimimo.com");
     expect(r.envSystem.map((p) => p.raw)).toEqual(["system.example"]);
     expect(r.envReasonix.map((p) => p.raw)).toEqual(["app.example"]);
     expect(r.extra.map((p) => p.raw)).toEqual(["config.example"]);
@@ -321,9 +321,9 @@ describe("resolveNoProxy", () => {
     ]);
   });
 
-  it("api.deepseek.com matches the resolved list by default", () => {
+  it("api.xiaomimimo.com matches the resolved list by default", () => {
     const r = resolveNoProxy({}, {});
-    expect(matchesNoProxy("api.deepseek.com", r.all)).toBe(true);
+    expect(matchesNoProxy("api.xiaomimimo.com", r.all)).toBe(true);
   });
 
   it("config bypassDeepSeekDirect=false drops the DeepSeek bypass but keeps loopback (#1497)", () => {
@@ -345,7 +345,7 @@ describe("resolveNoProxy", () => {
       { REASONIX_PROXY_DEEPSEEK_DIRECT: "1" },
       { bypassDeepSeekDirect: false },
     );
-    expect(matchesNoProxy("api.deepseek.com", r.all)).toBe(true);
+    expect(matchesNoProxy("api.xiaomimimo.com", r.all)).toBe(true);
   });
 });
 

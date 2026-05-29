@@ -14,7 +14,7 @@ function mkParsed(records: TranscriptRecord[], task = "t01"): ReadTranscriptResu
     meta: {
       version: 1,
       source: "test",
-      model: "deepseek-chat",
+      model: "mimo-v2.5",
       task,
       mode: "test",
       startedAt: "2026-04-21T00:00:00Z",
@@ -38,7 +38,7 @@ const mkAssistant = (
   turn,
   role: "assistant_final",
   content,
-  model: "deepseek-chat",
+  model: "mimo-v2.5",
   prefixHash: opts.prefixHash ?? "stable",
   usage: {
     prompt_tokens: (opts.hit ?? 900) + (opts.miss ?? 100),

@@ -17,12 +17,13 @@ function fakeFetch(captured: CapturedRequest[], stubContent: string): typeof fet
     const body = init?.body ? (JSON.parse(init.body) as Record<string, unknown>) : {};
     const messages = (body.messages ?? []) as ChatMessage[];
     const tools = body.tools as ToolSpec[] | undefined;
-    const extra = body.extra_body as { thinking?: { type?: string } } | undefined;
+    // Xiaomi MiMo: `thinking` lives at the top level of the payload.
+    const thinking = (body.thinking as { type?: string } | undefined)?.type;
     captured.push({
       model: body.model as string,
       messages,
       tools,
-      thinking: extra?.thinking?.type,
+      thinking,
       body,
     });
     return new Response(
@@ -94,7 +95,7 @@ describe("ContextManager fold sends cache-aligned summary request", () => {
     const loop = new CacheFirstLoop({
       client,
       prefix: new ImmutablePrefix({ system: SYSTEM_PROMPT, toolSpecs: TOOLS }),
-      model: "deepseek-v4-flash",
+      model: "mimo-v2.5",
       stream: false,
     });
     seedTurns(loop, 8);
@@ -116,7 +117,7 @@ describe("ContextManager fold sends cache-aligned summary request", () => {
     const loop = new CacheFirstLoop({
       client,
       prefix: new ImmutablePrefix({ system: SYSTEM_PROMPT, toolSpecs: TOOLS }),
-      model: "deepseek-v4-flash",
+      model: "mimo-v2.5",
       stream: false,
     });
     seedTurns(loop, 8);
@@ -138,7 +139,7 @@ describe("ContextManager fold sends cache-aligned summary request", () => {
     const loop = new CacheFirstLoop({
       client,
       prefix: new ImmutablePrefix({ system: SYSTEM_PROMPT, toolSpecs: TOOLS }),
-      model: "deepseek-v4-flash",
+      model: "mimo-v2.5",
       stream: false,
     });
     seedTurns(loop, 8);
@@ -168,7 +169,7 @@ describe("ContextManager fold sends cache-aligned summary request", () => {
     const loop = new CacheFirstLoop({
       client,
       prefix: new ImmutablePrefix({ system: SYSTEM_PROMPT, toolSpecs: TOOLS }),
-      model: "deepseek-v4-flash",
+      model: "mimo-v2.5",
       stream: false,
     });
     seedTurns(loop, 8);
@@ -188,13 +189,13 @@ describe("ContextManager fold sends cache-aligned summary request", () => {
     const loop = new CacheFirstLoop({
       client,
       prefix: new ImmutablePrefix({ system: SYSTEM_PROMPT, toolSpecs: TOOLS }),
-      model: "deepseek-v4-pro",
+      model: "mimo-v2.5-pro",
       stream: false,
     });
     seedTurns(loop, 8);
 
     await loop.compactHistory({ keepRecentTokens: 40 });
-    expect(captured[0]!.model).toBe("deepseek-v4-flash");
+    expect(captured[0]!.model).toBe("mimo-v2.5");
   });
 
   it("skill-pinned bodies are sent to summarizer verbatim (head bytes unchanged)", async () => {
@@ -206,7 +207,7 @@ describe("ContextManager fold sends cache-aligned summary request", () => {
     const loop = new CacheFirstLoop({
       client,
       prefix: new ImmutablePrefix({ system: SYSTEM_PROMPT, toolSpecs: TOOLS }),
-      model: "deepseek-v4-flash",
+      model: "mimo-v2.5",
       stream: false,
     });
 
@@ -246,7 +247,7 @@ describe("ContextManager fold sends cache-aligned summary request", () => {
     const loop = new CacheFirstLoop({
       client,
       prefix: new ImmutablePrefix({ system: SYSTEM_PROMPT, toolSpecs: TOOLS }),
-      model: "deepseek-v4-flash",
+      model: "mimo-v2.5",
       stream: false,
     });
     seedTurns(loop, 8);

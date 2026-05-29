@@ -1,4 +1,4 @@
-/** Empty-session welcome card — REASONIX × 🐋 DeepSeek brand row + tagline + starter slash commands. */
+/** Empty-session welcome card — REASONIX × 🤖 Xiaomi MiMo brand row + tagline + starter slash commands. */
 
 import { Box, Text } from "ink";
 // biome-ignore lint/style/useImportType: tsconfig jsx=react needs React in value scope for JSX compilation
@@ -44,9 +44,9 @@ export function WelcomeBanner({
           </Text>
           <Text color={FG.faint}>{"×"}</Text>
           <Box flexDirection="row" gap={1}>
-            <Text>{"🐋"}</Text>
+            <Text>{"🤖"}</Text>
             <Text color={TONE.accent} bold>
-              {"DeepSeek"}
+              {"Xiaomi MiMo"}
             </Text>
           </Box>
         </Box>

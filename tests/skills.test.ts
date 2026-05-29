@@ -274,8 +274,8 @@ describe("SkillStore", () => {
         subagentModels: { explore: "pro", review: "flash" },
       });
       const byName = new Map(store.list().map((s) => [s.name, s]));
-      expect(byName.get("explore")?.model).toBe("deepseek-v4-pro");
-      expect(byName.get("review")?.model).toBe("deepseek-v4-flash");
+      expect(byName.get("explore")?.model).toBe("mimo-v2.5-pro");
+      expect(byName.get("review")?.model).toBe("mimo-v2.5");
     });
 
     it("leaves inline skills (test) untouched even when their name appears in the override map", () => {
@@ -299,14 +299,14 @@ describe("SkillStore", () => {
           name: "custom-sub",
           description: "custom subagent skill",
           runAs: "subagent",
-          model: "deepseek-v4-pro",
+          model: "mimo-v2.5-pro",
         },
         "body",
         home,
       );
       const store = new SkillStore({ homeDir: home, projectRoot, disableBuiltins: true });
       const sub = store.list().find((s) => s.name === "custom-sub");
-      expect(sub?.model).toBe("deepseek-v4-pro");
+      expect(sub?.model).toBe("mimo-v2.5-pro");
     });
 
     it("override beats frontmatter model: when both are set", () => {
@@ -318,7 +318,7 @@ describe("SkillStore", () => {
           name: "custom-sub",
           description: "custom subagent skill",
           runAs: "subagent",
-          model: "deepseek-v4-pro",
+          model: "mimo-v2.5-pro",
         },
         "body",
         home,
@@ -330,7 +330,7 @@ describe("SkillStore", () => {
         subagentModels: { "custom-sub": "flash" },
       });
       const sub = store.list().find((s) => s.name === "custom-sub");
-      expect(sub?.model).toBe("deepseek-v4-flash");
+      expect(sub?.model).toBe("mimo-v2.5");
     });
   });
 
@@ -530,12 +530,12 @@ describe("Skill frontmatter — runAs", () => {
     expect(skill?.runAs).toBe("inline");
   });
 
-  it("captures a deepseek-* model override and ignores anything else", () => {
+  it("captures a mimo-* / deepseek-* model override and ignores anything else", () => {
     writeSkillDir(
       home,
       "global",
       "rsr",
-      { description: "...", runAs: "subagent", model: "deepseek-reasoner" },
+      { description: "...", runAs: "subagent", model: "mimo-v2.5" },
       "body",
       home,
     );
@@ -548,7 +548,7 @@ describe("Skill frontmatter — runAs", () => {
       home,
     );
     const store = new SkillStore({ homeDir: home, disableBuiltins: true });
-    expect(store.read("rsr")?.model).toBe("deepseek-reasoner");
+    expect(store.read("rsr")?.model).toBe("mimo-v2.5");
     expect(store.read("wrong")?.model).toBeUndefined();
   });
 

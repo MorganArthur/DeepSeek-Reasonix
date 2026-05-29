@@ -11,7 +11,7 @@ const settingsResponse = {
   reasoningEffort: "high",
   editMode: "review",
   budgetUsd: null,
-  model: "deepseek-v4-pro",
+  model: "mimo-v2.5-pro",
   webSearchEngine: "bing",
   subagentModels: {},
   baseUrl: "",
@@ -33,7 +33,7 @@ async function loadBridge(options?: {
 
   let overview = options?.overview ?? {
     cwd: "E:/proj",
-    model: "deepseek-v4-pro",
+    model: "mimo-v2.5-pro",
     version: "0.52.0",
     stats: {
       totalCostUsd: 0.123456,
@@ -171,7 +171,7 @@ describe("dashboard server bridge refresh", () => {
     });
     setOverview({
       cwd: "E:/proj",
-      model: "deepseek-v4-pro",
+      model: "mimo-v2.5-pro",
       version: "0.52.0",
       stats: {
         totalCostUsd: 0.2,

@@ -715,7 +715,7 @@ function Popup({
   );
 }
 
-const KNOWN_MODELS: readonly string[] = ["deepseek-v4-flash", "deepseek-v4-pro"];
+const KNOWN_MODELS: readonly string[] = ["mimo-v2.5", "mimo-v2.5-pro"];
 
 function ModelEffortMenu({
   modelLabel,

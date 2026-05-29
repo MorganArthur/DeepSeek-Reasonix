@@ -27,7 +27,7 @@ const SESSION: SessionInfo = {
   id: "session-1",
   branch: "main",
   workspace: "/tmp/repo",
-  model: "deepseek-chat",
+  model: "mimo-v2.5",
 };
 
 const OUTPUT = [

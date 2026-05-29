@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { Eventizer } from "../src/core/eventize.js";
 import type { LoopEvent } from "../src/loop.js";
 
-const ctx = { model: "deepseek-v4-flash", prefixHash: "abc123", reasoningEffort: "max" } as const;
+const ctx = { model: "mimo-v2.5", prefixHash: "abc123", reasoningEffort: "max" } as const;
 
 const lev = (partial: Partial<LoopEvent>): LoopEvent =>
   ({ turn: 1, role: "status", content: "", ...partial }) as LoopEvent;
@@ -114,7 +114,7 @@ describe("Eventizer.consume", () => {
     const e = new Eventizer();
     e.consume(lev({ turn: 1 }), ctx);
     const out = e.consume(
-      lev({ turn: 1, role: "warning", content: "⇧ auto-escalating to deepseek-v4-pro" }),
+      lev({ turn: 1, role: "warning", content: "⇧ auto-escalating to mimo-v2.5-pro" }),
       ctx,
     );
     expect(out[0]?.type).toBe("policy.escalated");

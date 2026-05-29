@@ -48,7 +48,7 @@ async function ensureApiKey(): Promise<string> {
   }
 
   process.stdout.write(
-    "DeepSeek API key not configured.\nGet one at https://platform.deepseek.com/api_keys\n",
+    "Xiaomi MiMo API key not configured.\nGet one at https://platform.xiaomimimo.com\n",
   );
   const rl = createInterface({ input: stdin, output: stdout });
   try {
