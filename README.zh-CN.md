@@ -56,6 +56,9 @@
 > [!IMPORTANT]
 > **加入社区 · Community** — 中英双语 Discord，频道包括 `#求助` / `#help`、`#分享` / `#showcase`、`#想法反馈`、贡献者专属 PR 协调区。在群内绑定 GitHub 后自动识别贡献者身份。→ **<https://discord.gg/XF78rEME2D>**
 
+> [!NOTE]
+> **这是一个 fork。** XiaoMi-Reasonix 基于 [**esengine**](https://github.com/esengine) 的优秀项目 [**Reasonix**](https://github.com/esengine/reasonix) 改造，让它原生跑在 [小米 MiMo](https://platform.xiaomimimo.com) 平台上。缓存优先的主循环、Agent 设计、以及你在这里看到的几乎全部工程，都是上游项目的成果 —— 本 fork 只是把模型后端从 DeepSeek 换成了小米 MiMo。万分感谢 esengine 和每一位上游贡献者。🙏
+
 <br/>
 
 ## 安装
@@ -253,6 +256,8 @@ npx reasonix code --dir /path/to/project
 <br/>
 
 ## 致谢
+
+**上游项目。** XiaoMi-Reasonix 是 [**esengine/reasonix**](https://github.com/esengine/reasonix) 的 fork。所有架构决策、缓存优先主循环、TUI、桌面端、测试套件全部来自上游 —— 本 fork 的贡献仅限于把模型后端从 DeepSeek 移植到小米 MiMo。深深感谢 [**esengine**](https://github.com/esengine) 和原班团队构建了它，并以 MIT 协议开源。🙏
 
 下面这些朋友的工作塑造了 Reasonix 今天的样子 —— 综合 commit 数和代码量两个维度。
 **按字母顺序排列，排名不分先后。** 完整贡献者列表在

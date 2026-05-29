@@ -59,6 +59,9 @@
 > [!IMPORTANT]
 > **Community · 加入社区** — bilingual Discord with channels for setup help (`#help` / `#求助`), workflow showcases, feature ideas, and contributor-only PR coordination. Verify your GitHub in-server to get the **Contributor** role automatically. → **<https://discord.gg/XF78rEME2D>**
 
+> [!NOTE]
+> **This is a fork.** XiaoMi-Reasonix adapts the excellent [**Reasonix**](https://github.com/esengine/reasonix) by [**esengine**](https://github.com/esengine) to run natively on the [Xiaomi MiMo](https://platform.xiaomimimo.com) platform. The cache-first loop, the agent design, and nearly all of the engineering you see here are the upstream project's work — this fork only swaps the model backend. Huge thanks to esengine and every upstream contributor. 🙏
+
 <br/>
 
 ## Install
@@ -299,6 +302,8 @@ If Reasonix has been useful and you'd like to say thanks, you can. It stays a co
 <br/>
 
 ## Acknowledgments
+
+**Upstream project.** XiaoMi-Reasonix is a fork of [**esengine/reasonix**](https://github.com/esengine/reasonix). Every architectural decision, the cache-first loop, the TUI, the desktop client, and the test suite originate upstream — this fork's contribution is limited to porting the model backend from DeepSeek to Xiaomi MiMo. Deep thanks to [**esengine**](https://github.com/esengine) and the original team for building and open-sourcing it under MIT. 🙏
 
 A small list of folks whose work has shaped Reasonix the most — measured
 by both commit count and code volume. **Listed alphabetically, no ordering
