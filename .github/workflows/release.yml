@@ -131,7 +131,7 @@ jobs:
         with:
           projectPath: desktop
           tagName: ${{ steps.tag.outputs.name }}
-          releaseName: Reasonix ${{ steps.tag.outputs.name }}
+          releaseName: XiaoMi-Reasonix ${{ steps.tag.outputs.name }}
           releaseDraft: true
           prerelease: false
           args: --target ${{ matrix.target.tauri }}
@@ -148,7 +148,7 @@ jobs:
         with:
           projectPath: desktop
           tagName: ${{ steps.tag.outputs.name }}
-          releaseName: Reasonix ${{ steps.tag.outputs.name }}
+          releaseName: XiaoMi-Reasonix ${{ steps.tag.outputs.name }}
           releaseDraft: true
           prerelease: false
           args: --target ${{ matrix.target.tauri }}
@@ -169,7 +169,7 @@ jobs:
         with:
           projectPath: desktop
           tagName: ${{ steps.tag.outputs.name }}
-          releaseName: Reasonix ${{ steps.tag.outputs.name }}
+          releaseName: XiaoMi-Reasonix ${{ steps.tag.outputs.name }}
           releaseDraft: true
           prerelease: false
           args: --target ${{ matrix.target.tauri }}

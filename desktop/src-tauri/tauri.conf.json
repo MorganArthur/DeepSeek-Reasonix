@@ -61,10 +61,9 @@
     "updater": {
       "active": true,
       "endpoints": [
-        "https://pub-147fb53b9c1e4bbf891a257968619ea7.r2.dev/latest/latest.json",
-        "https://github.com/esengine/reasonix/releases/latest/download/latest.json"
+        "https://github.com/MorganArthur/DeepSeek-Reasonix/releases/latest/download/latest.json"
       ],
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDI5RkE3RDJDQTgzMkFDNkMKUldSc3JES29MSDM2S1pwcjR2MnZZMW15eG5ydnQrRUJtdjdteFJiaHF6cnE0NzYyb09Wc2k0ZHEK"
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDlBMjhGNDZEMzEwOTkyNzcKUldSM2tna3hiZlFvbXRKemhOZEFVelV2eVI3Z1pEckdlaGUwRFpXN2xRZWRUejkvLzlpODlwcnYK"
     }
   }
 }
