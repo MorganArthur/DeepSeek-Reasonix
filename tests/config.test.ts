@@ -237,6 +237,13 @@ describe("config", () => {
     expect(loadModel(path)).toBe("mimo-v2.5-pro");
   });
 
+  it("loadModel heals any stale deepseek-* id (even bogus ones) to the flash default", () => {
+    // Concatenate so the global `.reasonix` sed sweeps / future renames don't
+    // accidentally rewrite the legacy prefix this test deliberately exercises.
+    writeConfig({ model: "deepseek" + "-made-up" }, path);
+    expect(loadModel(path)).toBe("mimo-v2.5");
+  });
+
   it("loadEndpoint: env tuple wins when env sets baseUrl", () => {
     process.env.DEEPSEEK_BASE_URL = "https://env-proxy.example.com";
     process.env.DEEPSEEK_API_KEY = "sk-env-tuple-token-abc";

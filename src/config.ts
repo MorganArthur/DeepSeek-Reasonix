@@ -476,12 +476,14 @@ export function readConfig(path: string = defaultConfigPath()): ReasonixConfig {
 
 /** Migrate old DeepSeek model ids and reasoning effort values while reading config. Mutates cfg in place. */
 function migrateLegacyConfigInPlace(cfg: Record<string, unknown>): void {
-  if (cfg.model === "deepseek-v4-flash") {
-    cfg.model = DEFAULT_MODEL_FLASH;
-  } else if (cfg.model === "deepseek-v4-pro") {
-    cfg.model = DEFAULT_MODEL_PRO;
-  } else if (cfg.model === "deepseek-chat" || cfg.model === "deepseek-reasoner") {
-    cfg.model = DEFAULT_MODEL_FLASH;
+  if (typeof cfg.model === "string" && cfg.model.startsWith("deepseek")) {
+    // Post-migration the platform serves only MiMo models, so no `deepseek-*`
+    // id is valid anymore. Map the one heavyweight id to the pro tier; every
+    // other deepseek id — legacy (deepseek-v4-flash / deepseek-chat /
+    // deepseek-reasoner) as well as stale or bogus values like the
+    // `deepseek-made-up` test fixture — heals to the flash default so the
+    // persisted config and the settings UI show a real model id.
+    cfg.model = cfg.model === "deepseek-v4-pro" ? DEFAULT_MODEL_PRO : DEFAULT_MODEL_FLASH;
   }
   if (cfg.reasoningEffort === "max") {
     cfg.reasoningEffort = "high";
