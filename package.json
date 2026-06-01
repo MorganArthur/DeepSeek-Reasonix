@@ -53,8 +53,8 @@
     "pitch:watch": "npx -y @marp-team/marp-cli pitch/pitch.md --preview --watch --allow-local-files"
   },
   "simple-git-hooks": {
-    "pre-commit": "npm run lint",
-    "pre-push": "npm run verify"
+    "pre-commit": "node_modules/.bin/biome check src tests",
+    "pre-push": "node_modules/.bin/biome check src tests && node_modules/.bin/tsc --noEmit && node_modules/.bin/tsc --noEmit -p dashboard && node_modules/.bin/vitest run"
   },
   "keywords": [
     "agent",
