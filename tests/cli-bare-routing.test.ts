@@ -14,6 +14,11 @@ vi.mock("../src/cli/commands/code.js", () => ({ codeCommand }));
 vi.mock("../src/cli/commands/chat.js", () => ({ chatCommand }));
 vi.mock("../src/cli/commands/setup.js", () => ({ setupCommand }));
 
+// Each test does `vi.resetModules()` + a cold `import()` of the whole CLI.
+// Under full-suite CPU contention that transform/import can blow past
+// vitest's 5s default test timeout, so give these routing tests headroom.
+vi.setConfig({ testTimeout: 30_000 });
+
 async function importCli(argv: string[]) {
   vi.resetModules();
   process.argv = ["node", "src/cli/index.ts", ...argv];

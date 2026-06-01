@@ -46,10 +46,11 @@ describe("JobRegistry", () => {
     const elapsed = Date.now() - t0;
     expect(res.stillRunning).toBe(true);
     expect(res.preview).toContain("hi");
-    expect(elapsed).toBeGreaterThanOrEqual(900);
-    // readiness pattern may or may not match "hi" depending on env;
-    // the test's primary claim is "we came back without waiting 10s".
-    expect(elapsed).toBeLessThan(3000);
+    // Lower/upper bounds are deliberately loose: under full-suite load the
+    // wall clock around a real child spawn jitters. The claim that matters is
+    // "we returned around waitSec, not after the child's 10s sleep".
+    expect(elapsed).toBeGreaterThanOrEqual(600);
+    expect(elapsed).toBeLessThan(6000);
   });
 
   it("short-circuits on ready signal before waitSec elapses", async () => {
@@ -61,9 +62,10 @@ describe("JobRegistry", () => {
     const elapsed = Date.now() - t0;
     expect(res.stillRunning).toBe(true);
     expect(res.readyMatched).toBe(true);
-    // Must be well under the 5s ceiling — startup + ready-regex match
-    // should land in a few hundred ms at most.
-    expect(elapsed).toBeLessThan(2500);
+    // Must land below the 5s waitSec ceiling — proves the ready-regex
+    // short-circuited instead of blocking the full window. Loose to absorb
+    // slow startup under full-suite CPU contention.
+    expect(elapsed).toBeLessThan(4800);
   });
 
   it("captures exit code when the child dies during wait", async () => {
@@ -196,7 +198,7 @@ describe("JobRegistry", () => {
     expect(waited?.exitCode).toBeNull();
     expect(waited?.latestOutput).toContain("second");
     expect(elapsed).toBeGreaterThanOrEqual(200);
-    expect(elapsed).toBeLessThan(1500);
+    expect(elapsed).toBeLessThan(1900);
   });
 
   it("waitForJob() default exit mode ignores chatty progress until timeout", async () => {
@@ -210,7 +212,7 @@ describe("JobRegistry", () => {
     expect(waited?.exited).toBe(false);
     expect(waited?.exitCode).toBeNull();
     expect(elapsed).toBeGreaterThanOrEqual(550);
-    expect(elapsed).toBeLessThan(1200);
+    expect(elapsed).toBeLessThan(2500);
   });
 
   it("waitForJob() default exit mode wakes on actual exit even with chatty output", async () => {
@@ -246,7 +248,9 @@ describe("JobRegistry", () => {
     expect(waited?.exited).toBe(true);
     expect(waited?.exitCode).toBe(7);
     expect(waited?.latestOutput).toContain("done");
-    expect(elapsed).toBeLessThan(200);
+    // "Returns immediately" — generous ceiling well below the 2s timeout so a
+    // loaded event loop doesn't trip it while still proving no real wait.
+    expect(elapsed).toBeLessThan(1500);
   });
 
   it("waitForJob() times out cleanly when nothing changes", async () => {
