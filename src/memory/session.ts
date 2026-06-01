@@ -1,4 +1,4 @@
-/** JSONL append-only message log under `~/.reasonix/sessions/`; concurrent-write safe. */
+/** JSONL append-only message log under `~/.xiaomi-reasonix/sessions/`; concurrent-write safe. */
 
 import { execFileSync } from "node:child_process";
 import {
@@ -78,7 +78,7 @@ export interface SessionMeta {
 }
 
 export function sessionsDir(): string {
-  return join(homedir(), ".reasonix", "sessions");
+  return join(homedir(), ".xiaomi-reasonix", "sessions");
 }
 
 export function sessionPath(name: string): string {

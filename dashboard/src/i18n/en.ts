@@ -720,7 +720,7 @@ export const en = {
     marketplaceEnvHint:
       "Set these in your shell before next `reasonix code` so the bridged server can authenticate.",
     marketplaceRestartHint:
-      "Spec written to ~/.reasonix/config.json. Restart `reasonix code` to bridge the server (live hot-reload is on the roadmap).",
+      "Spec written to ~/.xiaomi-reasonix/config.json. Restart `reasonix code` to bridge the server (live hot-reload is on the roadmap).",
   },
   memory: {
     loading: "loading memory…",
@@ -729,7 +729,7 @@ export const en = {
     create: "create",
     noFiles: "No memory files yet.",
     pickHint: "Pick a memory file on the left.",
-    pickDesc: "Project REASONIX.md is committable; global notes live in ~/.reasonix/memory/.",
+    pickDesc: "Project REASONIX.md is committable; global notes live in ~/.xiaomi-reasonix/memory/.",
     chars: "{count} chars",
     saved: "saved {scope}",
     reloadHint: "re-applied on next /new or session restart",
@@ -861,7 +861,7 @@ export const en = {
     openaiCompat: "openai-compatible",
     apiUrl: "API URL",
     apiKey: "API key",
-    apiKeyStoredNote: "API key is stored in ~/.reasonix/config.json — do not share that file.",
+    apiKeyStoredNote: "API key is stored in ~/.xiaomi-reasonix/config.json — do not share that file.",
     customRequestBody: "custom request body",
     invalidCustomRequestBody: "Custom request body must be valid JSON: {error}",
     customRequestBodyMustBeObject: "Custom request body must be a JSON object.",

@@ -35,7 +35,7 @@ import { registerWebTools } from "../tools/web.js";
 
 export interface CodeToolsetOpts {
   rootDir: string;
-  /** Override the default `~/.reasonix/config.json` lookup — primarily for tests that pin a tmp config. */
+  /** Override the default `~/.xiaomi-reasonix/config.json` lookup — primarily for tests that pin a tmp config. */
   configPath?: string;
   /** Fired after `install_skill` writes a new skill — desktop wires this to push a fresh `$skills` event so the sidebar updates without a tab reload. */
   onSkillInstalled?: SkillInstalledHook;

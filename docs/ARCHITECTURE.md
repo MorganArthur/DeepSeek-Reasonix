@@ -126,7 +126,7 @@ inside long multi-iter turns before the 80% emergency threshold fires.
 
 Users switch between flash and pro via `/model flash` or `/model pro`
 (persistent — applies to every turn until changed). Model can also be
-set in `.reasonix/settings.json` under the `model` key. No one-shot
+set in `.xiaomi-reasonix/settings.json` under the `model` key. No one-shot
 arming; no forgotten revert risk when switching is explicit and sticky.
 
 > **History.** Pre-0.50.0, `/pro` offered single-turn arming — type `/pro`,
@@ -182,12 +182,12 @@ src/
 ├── mcp/                    # MCP client + bridge (stdio + SSE)
 ├── memory.ts               # ImmutablePrefix / AppendOnlyLog / VolatileScratch
 ├── project-memory.ts       # REASONIX.md loader
-├── user-memory.ts          # ~/.reasonix/memory/ store (project + global)
+├── user-memory.ts          # ~/.xiaomi-reasonix/memory/ store (project + global)
 ├── skills.ts               # built-in explore + research skills
 ├── session.ts              # JSONL session persistence
 ├── telemetry.ts            # cost + cache-hit accounting + SessionSummary
 ├── tokenizer.ts            # DeepSeek V3 tokenizer (ported)
-├── usage.ts                # ~/.reasonix/usage.jsonl roll-up
+├── usage.ts                # ~/.xiaomi-reasonix/usage.jsonl roll-up
 ├── types.ts                # ChatMessage, ToolCall, ToolSpec
 ├── index.ts                # library barrel
 └── cli/

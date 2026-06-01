@@ -88,8 +88,8 @@ function DownloadHero() {
           }, lang) }}/>
           <p className="lede">
             {t({
-              zh: <>原生 <b>Tauri</b> 客户端 · 自带 Node runtime · 共享 <b>~/.reasonix</b> 配置与会话。多 tab 并行，右侧栏列出当前会话读过和改过的文件，底部 cost / cache / token 实时表盘。</>,
-              en: <>Native <b>Tauri</b> client · bundled Node runtime · shares <b>~/.reasonix</b> config + history with the CLI. Multi-tab sessions, side panel listing files read / edited this session, live cost / cache / token meters along the bottom.</>,
+              zh: <>原生 <b>Tauri</b> 客户端 · 自带 Node runtime · 共享 <b>~/.xiaomi-reasonix</b> 配置与会话。多 tab 并行，右侧栏列出当前会话读过和改过的文件，底部 cost / cache / token 实时表盘。</>,
+              en: <>Native <b>Tauri</b> client · bundled Node runtime · shares <b>~/.xiaomi-reasonix</b> config + history with the CLI. Multi-tab sessions, side panel listing files read / edited this session, live cost / cache / token meters along the bottom.</>,
             }, lang)}
           </p>
           <p className="lede-foot">

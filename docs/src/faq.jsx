@@ -32,15 +32,15 @@ const FAQS = [
   {
     q: { zh: 'CLI 和桌面端是什么关系？', en: 'How does the CLI relate to the desktop?' },
     a: {
-      zh: '完全同一份循环 / 协议 / ~/.reasonix 配置。桌面端 (Tauri) 自带 Node runtime，无需独立 npm install；多 tab 会话、右侧栏列出当前会话读过和改过的文件，底部显示 cost / cache / token 实时表盘。',
-      en: 'Same loop, same protocol, same `~/.reasonix` config. The desktop (Tauri) bundles its own Node runtime — no separate npm install. Multi-tab sessions, side panel listing files this session read or wrote, live cost / cache / token meters along the bottom.',
+      zh: '完全同一份循环 / 协议 / ~/.xiaomi-reasonix 配置。桌面端 (Tauri) 自带 Node runtime，无需独立 npm install；多 tab 会话、右侧栏列出当前会话读过和改过的文件，底部显示 cost / cache / token 实时表盘。',
+      en: 'Same loop, same protocol, same `~/.xiaomi-reasonix` config. The desktop (Tauri) bundles its own Node runtime — no separate npm install. Multi-tab sessions, side panel listing files this session read or wrote, live cost / cache / token meters along the bottom.',
     },
   },
   {
     q: { zh: '怎么开发自己的 Skill？', en: 'How do I write my own skill?' },
     a: {
-      zh: '没有远程注册表，直接写文件。在 TUI 内 /skill new my-skill 生成项目级模板，--global 写到 ~/.reasonix/skills 跨项目复用。Skill 是带 frontmatter (description, runAs, allowed-tools) 的 Markdown，runAs: subagent 会在隔离子循环里运行。',
-      en: 'No remote registry — just write a file. Inside the TUI run `/skill new my-skill` to scaffold a project-local skill; add `--global` to put it under `~/.reasonix/skills` for reuse across projects. Skills are Markdown with frontmatter (description, runAs, allowed-tools); `runAs: subagent` runs the body in an isolated sub-loop.',
+      zh: '没有远程注册表，直接写文件。在 TUI 内 /skill new my-skill 生成项目级模板，--global 写到 ~/.xiaomi-reasonix/skills 跨项目复用。Skill 是带 frontmatter (description, runAs, allowed-tools) 的 Markdown，runAs: subagent 会在隔离子循环里运行。',
+      en: 'No remote registry — just write a file. Inside the TUI run `/skill new my-skill` to scaffold a project-local skill; add `--global` to put it under `~/.xiaomi-reasonix/skills` for reuse across projects. Skills are Markdown with frontmatter (description, runAs, allowed-tools); `runAs: subagent` runs the body in an isolated sub-loop.',
     },
   },
   {

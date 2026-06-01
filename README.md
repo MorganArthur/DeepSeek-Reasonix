@@ -120,7 +120,7 @@ For full setup, desktop quick start, and troubleshooting, see [QQ channel setup]
 
 ### Desktop client (prerelease)
 
-A native Tauri client for users who want a GUI over the same loop. Multi-tab, the right-panel shows files the agent has read or edited this session, the same cost / cache / token meters live at the bottom. Same Xiaomi MiMo API key, same `~/.reasonix` config — the desktop bundles its own Node runtime, no separate `npm install` step.
+A native Tauri client for users who want a GUI over the same loop. Multi-tab, the right-panel shows files the agent has read or edited this session, the same cost / cache / token meters live at the bottom. Same Xiaomi MiMo API key, same `~/.xiaomi-reasonix` config — the desktop bundles its own Node runtime, no separate `npm install` step.
 
 Download platform installers from [GitHub Releases](https://github.com/esengine/reasonix/releases). The desktop ships as a **prerelease**: the loop and protocol are the same as the CLI, but the UI is still being polished and the installers aren't code-signed yet.
 
@@ -155,8 +155,8 @@ npx reasonix code --dir /path/to/project
 **Author your first skill.** No remote registry — write them directly. Edit the file (`description:` frontmatter + body), then `/skill list`. Add `runAs: subagent` to spawn an isolated subagent loop instead of inlining the body.
 
 ~~~bash
-/skill new my-skill              # <project>/.reasonix/skills/my-skill.md
-/skill new my-skill --global     # ~/.reasonix/skills for cross-project use
+/skill new my-skill              # <project>/.xiaomi-reasonix/skills/my-skill.md
+/skill new my-skill --global     # ~/.xiaomi-reasonix/skills for cross-project use
 ~~~
 
 **Claude-format skills also load.** `<project>/.claude/skills/<name>/SKILL.md` and `~/.claude/skills/` are read alongside Reasonix's native paths, so tooling that emits Claude-format skills works out of the box. Example — drop OpenSpec workflows in without an upstream adapter:
@@ -172,7 +172,7 @@ npx openspec init --tools claude    # writes .claude/skills/openspec-*/SKILL.md
 
 ## Configuration
 
-One JSON file at `~/.reasonix/config.json` plus per-project overrides under `<project>/.reasonix/`. The full bilingual reference — every key, every slash command, the on-disk shape of skills/memory/hooks — lives at:
+One JSON file at `~/.xiaomi-reasonix/config.json` plus per-project overrides under `<project>/.xiaomi-reasonix/`. The full bilingual reference — every key, every slash command, the on-disk shape of skills/memory/hooks — lives at:
 
 > 📘 **[Configuration Guide](https://esengine.github.io/reasonix/configuration.html)** · [中文](https://esengine.github.io/reasonix/configuration.html?lang=zh)
 

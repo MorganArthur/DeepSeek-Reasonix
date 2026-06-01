@@ -19,7 +19,7 @@ const CONFIG_TABS = [
     ],
     files: [
       {
-        name: '~/.reasonix/config.json',
+        name: '~/.xiaomi-reasonix/config.json',
         lang: 'json',
         code: `{
   "model": "deepseek-v4-flash",
@@ -60,14 +60,14 @@ const CONFIG_TABS = [
       en: 'A skill is a Markdown file with frontmatter that crystallises "how to do X" into something callable. `runAs: subagent` runs it inside an isolated sub-agent; `allowed-tools` restricts which tools it can call.',
     },
     bullets: [
-      { zh: '项目级: <project>/.reasonix/skills/<name>.md', en: 'Project: <project>/.reasonix/skills/<name>.md' },
-      { zh: '全局: ~/.reasonix/skills/<name>.md', en: 'Global: ~/.reasonix/skills/<name>.md' },
+      { zh: '项目级: <project>/.xiaomi-reasonix/skills/<name>.md', en: 'Project: <project>/.xiaomi-reasonix/skills/<name>.md' },
+      { zh: '全局: ~/.xiaomi-reasonix/skills/<name>.md', en: 'Global: ~/.xiaomi-reasonix/skills/<name>.md' },
       { zh: '/skill new <name> 生成脚手架', en: '/skill new <name> scaffolds a template' },
       { zh: 'runAs: subagent 让 skill 跑在隔离的子循环里', en: '`runAs: subagent` runs the body in an isolated sub-loop' },
     ],
     files: [
       {
-        name: '.reasonix/skills/review-pr.md',
+        name: '.xiaomi-reasonix/skills/review-pr.md',
         lang: 'md',
         code: `---
 description: Review the current branch diff against main
@@ -103,12 +103,12 @@ Only focus on the code touched by this diff — don't go off-topic.`,
     title: 'Memory',
     cn: { zh: '项目级与全局记忆', en: 'Project + global memory' },
     desc: {
-      zh: 'Reasonix 把"应当记住"的内容拆成两层：仓库级的 reasonix.md（提交进 git，团队共享）与用户级的 ~/.reasonix/memory.md（个人偏好，不入库）。每次会话启动时自动注入到 prompt 头部。',
-      en: 'Reasonix splits "what to remember" into two layers: repo-level `reasonix.md` (checked into git, shared with the team) and user-level `~/.reasonix/memory.md` (personal preferences, kept private). Both are injected at the top of the prompt on every session.',
+      zh: 'Reasonix 把"应当记住"的内容拆成两层：仓库级的 reasonix.md（提交进 git，团队共享）与用户级的 ~/.xiaomi-reasonix/memory.md（个人偏好，不入库）。每次会话启动时自动注入到 prompt 头部。',
+      en: 'Reasonix splits "what to remember" into two layers: repo-level `reasonix.md` (checked into git, shared with the team) and user-level `~/.xiaomi-reasonix/memory.md` (personal preferences, kept private). Both are injected at the top of the prompt on every session.',
     },
     bullets: [
       { zh: '<project>/reasonix.md · 项目约定 · git-tracked', en: '<project>/reasonix.md · project conventions · git-tracked' },
-      { zh: '~/.reasonix/memory.md · 用户偏好 · 私有', en: '~/.reasonix/memory.md · user preferences · private' },
+      { zh: '~/.xiaomi-reasonix/memory.md · 用户偏好 · 私有', en: '~/.xiaomi-reasonix/memory.md · user preferences · private' },
       { zh: '/memory edit 在 TUI 内直接编辑', en: '/memory edit opens it inside the TUI' },
       { zh: '注入位置位于 cache-stable 前缀 · 不影响命中', en: 'Injected inside the cache-stable prefix · cache hit unaffected' },
     ],
@@ -135,7 +135,7 @@ Only focus on the code touched by this diff — don't go off-topic.`,
 - Don't bump version numbers in package.json`,
       },
       {
-        name: '~/.reasonix/memory.md',
+        name: '~/.xiaomi-reasonix/memory.md',
         lang: 'md',
         code: `# Personal preferences
 
@@ -151,8 +151,8 @@ Only focus on the code touched by this diff — don't go off-topic.`,
     title: 'Config',
     cn: { zh: '全局与项目级配置', en: 'Global + project config' },
     desc: {
-      zh: '一份 JSON 配置承载所有可调项。全局放 ~/.reasonix/config.json，每个项目可以再用 <project>/.reasonix/config.json 局部覆盖。',
-      en: 'A single JSON file holds every knob. The global one lives at `~/.reasonix/config.json`; any project can override it locally with `<project>/.reasonix/config.json`.',
+      zh: '一份 JSON 配置承载所有可调项。全局放 ~/.xiaomi-reasonix/config.json，每个项目可以再用 <project>/.xiaomi-reasonix/config.json 局部覆盖。',
+      en: 'A single JSON file holds every knob. The global one lives at `~/.xiaomi-reasonix/config.json`; any project can override it locally with `<project>/.xiaomi-reasonix/config.json`.',
     },
     bullets: [
       { zh: '模型 · 推理深度 · 输出格式', en: 'Model · reasoning depth · output format' },
@@ -162,7 +162,7 @@ Only focus on the code touched by this diff — don't go off-topic.`,
     ],
     files: [
       {
-        name: '~/.reasonix/config.json',
+        name: '~/.xiaomi-reasonix/config.json',
         lang: 'json',
         code: `{
   "apiKey": "sk-***",
@@ -180,7 +180,7 @@ Only focus on the code touched by this diff — don't go off-topic.`,
 }`,
       },
       {
-        name: '<project>/.reasonix/config.json',
+        name: '<project>/.xiaomi-reasonix/config.json',
         lang: 'json',
         code: `{
   "model": "deepseek-v4-pro",

@@ -54,7 +54,7 @@ export function registerScaffoldTools(
           type: "string",
           enum: ["project", "global"],
           description:
-            "`project` (default) = workspace .reasonix/skills/; `global` = ~/.reasonix/skills/.",
+            "`project` (default) = workspace .xiaomi-reasonix/skills/; `global` = ~/.xiaomi-reasonix/skills/.",
         },
         allowed_tools: {
           type: "array",

@@ -51,7 +51,7 @@ describe("create_skill", () => {
     });
     expect(r.success).toBe(true);
     expect(r.scope).toBe("project");
-    expect(r.path).toContain(".reasonix");
+    expect(r.path).toContain(".xiaomi-reasonix");
     expect(existsSync(r.path)).toBe(true);
     const content = readFileSync(r.path, "utf8");
     expect(content).toContain("name: lint-before-commit");

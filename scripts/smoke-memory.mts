@@ -1,6 +1,6 @@
 /**
  * End-to-end smoke test for the memory layer. Runs against a temp
- * homeDir so the developer's real ~/.reasonix/memory/ is never touched.
+ * homeDir so the developer's real ~/.xiaomi-reasonix/memory/ is never touched.
  * Exercises: write → index regeneration → prefix assembly →
  * recall → delete → REASONIX_MEMORY=off short-circuit.
  *

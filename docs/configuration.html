@@ -6,7 +6,7 @@
     <title>Configuration Guide — Reasonix · MCP, Skills, Memory, Hooks</title>
     <meta
       name="description"
-      content="Bilingual configuration guide for Reasonix — MCP servers, skills, memory, hooks, permissions, web search, and the full ~/.reasonix/config.json reference."
+      content="Bilingual configuration guide for Reasonix — MCP servers, skills, memory, hooks, permissions, web search, and the full ~/.xiaomi-reasonix/config.json reference."
     />
     <meta
       name="keywords"
@@ -71,7 +71,7 @@
         "@context": "https://schema.org",
         "@type": "TechArticle",
         "headline": "Reasonix Configuration Guide",
-        "description": "MCP servers, skills, memory, hooks, permissions, web search, and the full ~/.reasonix/config.json reference.",
+        "description": "MCP servers, skills, memory, hooks, permissions, web search, and the full ~/.xiaomi-reasonix/config.json reference.",
         "url": "https://esengine.github.io/DeepSeek-Reasonix/configuration.html",
         "inLanguage": ["en", "zh-CN"],
         "author": {
@@ -154,8 +154,8 @@
             <span data-i18n="guide.title.line2">in five minutes</span>
           </h1>
           <p class="guide-sub" data-i18n="guide.sub">
-            One JSON file at <code>~/.reasonix/config.json</code> + per-project overrides
-            under <code>.reasonix/</code>. This page documents every key, every slash
+            One JSON file at <code>~/.xiaomi-reasonix/config.json</code> + per-project overrides
+            under <code>.xiaomi-reasonix/</code>. This page documents every key, every slash
             command, and the on-disk shape of skills, memory, and hooks.
           </p>
         </div>
@@ -180,13 +180,13 @@
           <section id="config-json">
             <h2 data-i18n="cfg.title">The config.json file</h2>
             <p data-i18n="cfg.body1">
-              Reasonix reads a single global config from <code>~/.reasonix/config.json</code>
-              (Windows: <code>%USERPROFILE%\.reasonix\config.json</code>). The file is created
+              Reasonix reads a single global config from <code>~/.xiaomi-reasonix/config.json</code>
+              (Windows: <code>%USERPROFILE%\.xiaomi-reasonix\config.json</code>). The file is created
               automatically on first run; you can hand-edit it any time. The CLI flag
               <code>--no-config</code> bypasses it, useful in CI.
             </p>
             <p data-i18n="cfg.body2">
-              Per-project overrides live under <code>&lt;project&gt;/.reasonix/</code> —
+              Per-project overrides live under <code>&lt;project&gt;/.xiaomi-reasonix/</code> —
               skills, memory, settings.json (hooks). Project scope wins over global on name
               collision.
             </p>
@@ -342,12 +342,12 @@ npx reasonix mcp list</code></pre>
               skills override global ones with the same name.
             </p>
             <h3 data-i18n="sk.h.layout">Layout</h3>
-            <pre class="code"><code>~/.reasonix/skills/<span class="hash">           # global</span>
+            <pre class="code"><code>~/.xiaomi-reasonix/skills/<span class="hash">           # global</span>
   audit-logs.md
   refactor-react/
     SKILL.md
 
-&lt;project&gt;/.reasonix/skills/<span class="hash">    # project (overrides global)</span>
+&lt;project&gt;/.xiaomi-reasonix/skills/<span class="hash">    # project (overrides global)</span>
   release-notes.md</code></pre>
             <p data-i18n="sk.body.layout">
               Two equivalent shapes: a flat <code>&lt;name&gt;.md</code>, or a
@@ -417,7 +417,7 @@ max-iters: 32                  <span class="hash"># <span data-i18n="sk.fm.iters
                   <td><code>/skill new &lt;name&gt;</code></td>
                   <td data-i18n="sk.cmd.new">
                     Scaffold a stub at project scope. Add <code>--global</code> for
-                    <code>~/.reasonix/skills</code>.
+                    <code>~/.xiaomi-reasonix/skills</code>.
                   </td>
                 </tr>
                 <tr>
@@ -444,7 +444,7 @@ max-iters: 32                  <span class="hash"># <span data-i18n="sk.fm.iters
             </p>
 
             <h3 data-i18n="mem.h.layout">Layout</h3>
-            <pre class="code"><code>~/.reasonix/memory/
+            <pre class="code"><code>~/.xiaomi-reasonix/memory/
   global/
     MEMORY.md                      <span class="hash"># <span data-i18n="mem.idx">index — pinned into the prefix</span></span>
     user_role.md
@@ -508,8 +508,8 @@ created: 2026-05-09
               first, then global.
             </p>
             <h3 data-i18n="hk.h.where">Where to put them</h3>
-            <pre class="code"><code>&lt;project&gt;/.reasonix/settings.json   <span class="hash"># <span data-i18n="hk.path.proj">project scope</span></span>
-~/.reasonix/settings.json           <span class="hash"># <span data-i18n="hk.path.glob">global scope</span></span></code></pre>
+            <pre class="code"><code>&lt;project&gt;/.xiaomi-reasonix/settings.json   <span class="hash"># <span data-i18n="hk.path.proj">project scope</span></span>
+~/.xiaomi-reasonix/settings.json           <span class="hash"># <span data-i18n="hk.path.glob">global scope</span></span></code></pre>
 
             <h3 data-i18n="hk.h.shape">Shape</h3>
             <pre class="code"><code>{

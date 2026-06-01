@@ -119,7 +119,7 @@
 
       "conf.title": "Configure in five minutes",
       "conf.sub":
-        "One JSON file at <code>~/.reasonix/config.json</code>, plus per-project overrides under <code>.reasonix/</code>. Point. Click. Wire in your stack.",
+        "One JSON file at <code>~/.xiaomi-reasonix/config.json</code>, plus per-project overrides under <code>.xiaomi-reasonix/</code>. Point. Click. Wire in your stack.",
       "conf.read": "Read →",
       "conf.mcp.title": "MCP servers",
       "conf.mcp.body":
@@ -161,7 +161,7 @@
       "cli.f.session": "named session",
       "cli.f.resume": "pick up the latest session for this workspace",
       "cli.f.new": "force a fresh session, preserve old",
-      "cli.f.noconf": "ignore ~/.reasonix/config.json (CI)",
+      "cli.f.noconf": "ignore ~/.xiaomi-reasonix/config.json (CI)",
 
       "comm.title": "Built by the community",
       "comm.sub":
@@ -300,7 +300,7 @@
 
       "conf.title": "五分钟配置完",
       "conf.sub":
-        "一个全局 JSON <code>~/.reasonix/config.json</code>，加上项目级 <code>.reasonix/</code> 下的覆盖。点几下，把你的工具链接进来。",
+        "一个全局 JSON <code>~/.xiaomi-reasonix/config.json</code>，加上项目级 <code>.xiaomi-reasonix/</code> 下的覆盖。点几下，把你的工具链接进来。",
       "conf.read": "阅读 →",
       "conf.mcp.title": "MCP 服务器",
       "conf.mcp.body":
@@ -342,7 +342,7 @@
       "cli.f.session": "命名会话",
       "cli.f.resume": "恢复本工作区的最近一个会话",
       "cli.f.new": "强制开新会话，旧会话保留",
-      "cli.f.noconf": "忽略 ~/.reasonix/config.json（CI 友好）",
+      "cli.f.noconf": "忽略 ~/.xiaomi-reasonix/config.json（CI 友好）",
 
       "comm.title": "由社区共建",
       "comm.sub":

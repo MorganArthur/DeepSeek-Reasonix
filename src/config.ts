@@ -407,7 +407,7 @@ const DEFAULT_TIMEOUT_MS = 180_000;
 const DEFAULT_BATCH_SIZE = 10;
 
 export function defaultConfigPath(): string {
-  return join(homedir(), ".reasonix", "config.json");
+  return join(homedir(), ".xiaomi-reasonix", "config.json");
 }
 
 const STRING_ARRAY_FIELDS: Array<readonly string[]> = [

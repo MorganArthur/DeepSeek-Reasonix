@@ -746,7 +746,7 @@ export const de: typeof en = {
     marketplaceEnvHint:
       "Setze diese in deiner Shell vor dem nächsten `reasonix code`, damit der verbundene Server authentifizieren kann.",
     marketplaceRestartHint:
-      "Spec in ~/.reasonix/config.json geschrieben. Starte `reasonix code` neu, um den Server zu verbinden (Live-Hot-Reload ist auf der Roadmap).",
+      "Spec in ~/.xiaomi-reasonix/config.json geschrieben. Starte `reasonix code` neu, um den Server zu verbinden (Live-Hot-Reload ist auf der Roadmap).",
   },
   memory: {
     ...en.memory,
@@ -756,7 +756,7 @@ export const de: typeof en = {
     create: "erstellen",
     noFiles: "Noch keine Memory-Dateien.",
     pickHint: "Wähle links eine Memory-Datei.",
-    pickDesc: "Projekt-REASONIX.md ist commitierbar; globale Notizen leben in ~/.reasonix/memory/.",
+    pickDesc: "Projekt-REASONIX.md ist commitierbar; globale Notizen leben in ~/.xiaomi-reasonix/memory/.",
     chars: "{count} Zeichen",
     saved: "{scope} gespeichert",
     reloadHint: "wird beim nächsten /new oder Sitzungsneustart neu angewendet",
@@ -893,7 +893,7 @@ export const de: typeof en = {
     openaiCompat: "OpenAI-kompatibel",
     apiUrl: "API-URL",
     apiKey: "API-Schlüssel",
-    apiKeyStoredNote: "API-Schlüssel wird in ~/.reasonix/config.json gespeichert — teile diese Datei nicht.",
+    apiKeyStoredNote: "API-Schlüssel wird in ~/.xiaomi-reasonix/config.json gespeichert — teile diese Datei nicht.",
     customRequestBody: "benutzerdefinierter Request-Body",
     invalidCustomRequestBody: "Der benutzerdefinierte Request-Body muss gültiges JSON sein: {error}",
     customRequestBodyMustBeObject: "Der benutzerdefinierte Request-Body muss ein JSON-Objekt sein.",

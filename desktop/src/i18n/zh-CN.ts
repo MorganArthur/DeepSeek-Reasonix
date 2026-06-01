@@ -196,7 +196,7 @@ export const zhCN: typeof en = {
     editorPlaceholder: '例如 "code"、"subl" 或可执行文件全路径',
     editorDefault: "(默认)",
     apiKey: "API key",
-    apiKeyHint: "小米 MiMo key — 保存到 ~/.reasonix/config.json (0600)。",
+    apiKeyHint: "小米 MiMo key — 保存到 ~/.xiaomi-reasonix/config.json (0600)。",
     apiKeyNotSet: "(未设置)",
     apiKeyCancel: "取消",
     apiKeySave: "保存",
@@ -279,7 +279,7 @@ export const zhCN: typeof en = {
     mcpAdd: "添加",
     skillsLoaded: "已加载 · {count} · 通过 / 命令调用",
     skillsEmpty:
-      "没有可用技能。可在 ~/.reasonix/skills/ 或 项目根/.reasonix/skills/ 下创建 SKILL.md。",
+      "没有可用技能。可在 ~/.xiaomi-reasonix/skills/ 或 项目根/.xiaomi-reasonix/skills/ 下创建 SKILL.md。",
     subagentModelFlash: "flash",
     subagentModelPro: "pro",
     subagentModelHint: "技能派生独立 subagent 时使用的模型",

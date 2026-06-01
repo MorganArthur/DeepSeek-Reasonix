@@ -212,7 +212,7 @@ export const de: typeof en = {
     editorPlaceholder: 'z.B. "code", "subl" oder vollständiger Pfad zur ausführbaren Datei',
     editorDefault: "(Standard)",
     apiKey: "API-Schlüssel",
-    apiKeyHint: "Xiaomi-MiMo-Schlüssel — gespeichert in ~/.reasonix/config.json (0600).",
+    apiKeyHint: "Xiaomi-MiMo-Schlüssel — gespeichert in ~/.xiaomi-reasonix/config.json (0600).",
     apiKeyNotSet: "(nicht gesetzt)",
     apiKeyCancel: "Abbrechen",
     apiKeySave: "Speichern",
@@ -298,7 +298,7 @@ export const de: typeof en = {
     mcpAdd: "Hinzufügen",
     skillsLoaded: "Geladen · {count} · aufrufbar über /-Befehle",
     skillsEmpty:
-      "Keine Skills verfügbar. Erstelle SKILL.md unter ~/.reasonix/skills/ oder .reasonix/skills/ in deinem Projekt-Root.",
+      "Keine Skills verfügbar. Erstelle SKILL.md unter ~/.xiaomi-reasonix/skills/ oder .xiaomi-reasonix/skills/ in deinem Projekt-Root.",
     subagentModelFlash: "flash",
     subagentModelPro: "pro",
     subagentModelHint:

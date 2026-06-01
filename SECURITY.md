@@ -35,6 +35,6 @@ Only the latest published minor of `reasonix` on npm is actively maintained. If 
 
 A few practical reminders for users running Reasonix:
 
-- API keys live in `~/.reasonix/config.json`. Treat that file like any other credential store.
+- API keys live in `~/.xiaomi-reasonix/config.json`. Treat that file like any other credential store.
 - `run_command` and the `!` shell shortcut respect a permission allowlist; the safe default is `ask` on anything not pre-approved. Don't set `editMode: yolo` on machines that hold secrets you'd regret leaking.
-- Hooks (`PreToolUse`, etc.) execute arbitrary shell scripts the user has configured. Audit `.reasonix/settings.json` before running Reasonix in a directory you didn't author.
+- Hooks (`PreToolUse`, etc.) execute arbitrary shell scripts the user has configured. Audit `.xiaomi-reasonix/settings.json` before running Reasonix in a directory you didn't author.

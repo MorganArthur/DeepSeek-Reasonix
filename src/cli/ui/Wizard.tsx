@@ -1,4 +1,4 @@
-/** First-run / re-configure wizard — saves to `~/.reasonix/config.json`. */
+/** First-run / re-configure wizard — saves to `~/.xiaomi-reasonix/config.json`. */
 
 import { mkdirSync, statSync } from "node:fs";
 import { Box, Text, useApp, useInput } from "ink";

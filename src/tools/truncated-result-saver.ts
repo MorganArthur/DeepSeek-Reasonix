@@ -21,7 +21,9 @@ function sanitizeToolName(name: string): string {
 
 /** Resolve the absolute storage directory for truncated results. */
 export function storageDir(rootDir: string): string {
-  const base = rootDir ? join(resolve(rootDir), ".reasonix") : join(homedir(), ".reasonix");
+  const base = rootDir
+    ? join(resolve(rootDir), ".xiaomi-reasonix")
+    : join(homedir(), ".xiaomi-reasonix");
   return join(base, TRUNCATED_DIR);
 }
 
@@ -33,7 +35,7 @@ function resultFilename(toolName: string): string {
   return `${ts}-${suffix}-${safeName}.txt`;
 }
 
-/** Save truncated result to .reasonix/truncated-results/; returns relative path. */
+/** Save truncated result to .xiaomi-reasonix/truncated-results/; returns relative path. */
 export function saveTruncatedResult(content: string, toolName: string, rootDir: string): string {
   // Tidy old files before writing a new one so the directory doesn't grow unbounded.
   cleanupOldResults(rootDir);

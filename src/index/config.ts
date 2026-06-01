@@ -54,7 +54,7 @@ export const DEFAULT_INDEX_EXCLUDES = {
     "coverage",
     ".turbo",
     ".vercel",
-    ".reasonix",
+    ".xiaomi-reasonix",
   ] as const,
   files: [
     "package-lock.json",

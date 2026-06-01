@@ -37,7 +37,7 @@ export interface WebFetchOptions {
   maxChars?: number;
   /** Timeout in ms. Defaults to 15_000. */
   timeoutMs?: number;
-  /** Config path for provider-specific keys. Defaults to ~/.reasonix/config.json. */
+  /** Config path for provider-specific keys. Defaults to ~/.xiaomi-reasonix/config.json. */
   configPath?: string;
   signal?: AbortSignal;
 }
@@ -45,7 +45,7 @@ export interface WebFetchOptions {
 export interface WebSearchOptions {
   topK?: number;
   signal?: AbortSignal;
-  /** Config path for provider-specific keys. Defaults to ~/.reasonix/config.json. */
+  /** Config path for provider-specific keys. Defaults to ~/.xiaomi-reasonix/config.json. */
   configPath?: string;
   /** Backend engine: "bing" (scrapes cn.bing.com HTML — default, works from CN without proxy), "searxng" (self-hosted SearXNG), "metaso" (Metaso API), "tavily" (LLM-friendly JSON API), "perplexity" (Perplexity AI), "exa" (Exa API), "brave" (Brave Search API), or "ollama" (Ollama cloud web search). */
   engine?: "bing" | "searxng" | "metaso" | "tavily" | "perplexity" | "exa" | "brave" | "ollama";
@@ -1061,7 +1061,7 @@ export interface WebToolsOptions {
   defaultTopK?: number;
   /** Byte cap for `web_fetch` extracted text. */
   maxFetchChars?: number;
-  /** Config path to read at tool-call time. Defaults to ~/.reasonix/config.json. */
+  /** Config path to read at tool-call time. Defaults to ~/.xiaomi-reasonix/config.json. */
   configPath?: string;
 }
 

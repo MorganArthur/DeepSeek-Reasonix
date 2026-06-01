@@ -1046,7 +1046,7 @@ export function applyIncoming(state: State, ev: IncomingEvent): State {
             kind: "error",
             message:
               `Session "${ev.name}" loaded with no messages (${sizeNote}). ` +
-              `The file ~/.reasonix/sessions/${ev.name}.jsonl exists but couldn't be parsed — ` +
+              `The file ~/.xiaomi-reasonix/sessions/${ev.name}.jsonl exists but couldn't be parsed — ` +
               `start a new chat or restore from .jsonl.bak if you have one.`,
             id: nextErrorId(),
           },

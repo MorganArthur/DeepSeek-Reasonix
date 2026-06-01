@@ -947,7 +947,7 @@ function AppInner({
   // Kernel event log sidecar —opens iff the session has a name (skip
   // ephemeral sessions). Sink + Eventizer share lifetime with App; the
   // for-await consumer below pipes every LoopEvent through them so a
-  // typed Event log accumulates at `~/.reasonix/sessions/<name>.events.jsonl`.
+  // typed Event log accumulates at `~/.xiaomi-reasonix/sessions/<name>.events.jsonl`.
   // Old transcript path is unchanged —this is a parallel artifact, not
   // a replacement. Future replay / projection consumers read from here.
   const eventSinkRef = useRef<JsonlEventSink | null>(null);
