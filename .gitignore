@@ -32,6 +32,8 @@ sessions/
 .reasonix-xiaomi/sessions/
 .reasonix-xiaomi/semantic-skip
 .reasonix-xiaomi/truncated-results/
+# Legacy upstream data dir — never tracked (stale leftovers from pre-rename test runs).
+.reasonix/
 # Scratch entry regenerated each time scripts/bundle-codemirror.mjs runs.
 scripts/.cm-entry.mjs
 # Personal bun lockfile — project uses npm officially.
