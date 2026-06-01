@@ -58,7 +58,7 @@ export interface UsageRecord {
 
 /** Where the log lives. Tests override via `opts.path`. */
 export function defaultUsageLogPath(homeDirOverride?: string): string {
-  return join(homeDirOverride ?? homedir(), ".xiaomi-reasonix", "usage.jsonl");
+  return join(homeDirOverride ?? homedir(), ".reasonix-xiaomi", "usage.jsonl");
 }
 
 export interface AppendUsageInput {

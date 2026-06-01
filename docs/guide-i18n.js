@@ -13,7 +13,7 @@
     "guide.title.line1": "Configure Reasonix",
     "guide.title.line2": "in five minutes",
     "guide.sub":
-      "One JSON file at <code>~/.xiaomi-reasonix/config.json</code> + per-project overrides under <code>.xiaomi-reasonix/</code>. This page documents every key, every slash command, and the on-disk shape of skills, memory, and hooks.",
+      "One JSON file at <code>~/.reasonix-xiaomi/config.json</code> + per-project overrides under <code>.reasonix-xiaomi/</code>. This page documents every key, every slash command, and the on-disk shape of skills, memory, and hooks.",
 
     "guide.toc.title": "On this page",
     "guide.toc.config": "config.json",
@@ -30,9 +30,9 @@
 
     "cfg.title": "The config.json file",
     "cfg.body1":
-      "Reasonix reads a single global config from <code>~/.xiaomi-reasonix/config.json</code> (Windows: <code>%USERPROFILE%\\.xiaomi-reasonix\\config.json</code>). The file is created automatically on first run; you can hand-edit it any time. The CLI flag <code>--no-config</code> bypasses it, useful in CI.",
+      "Reasonix reads a single global config from <code>~/.reasonix-xiaomi/config.json</code> (Windows: <code>%USERPROFILE%\\.reasonix-xiaomi\\config.json</code>). The file is created automatically on first run; you can hand-edit it any time. The CLI flag <code>--no-config</code> bypasses it, useful in CI.",
     "cfg.body2":
-      "Per-project overrides live under <code>&lt;project&gt;/.xiaomi-reasonix/</code> — skills, memory, settings.json (hooks). Project scope wins over global on name collision.",
+      "Per-project overrides live under <code>&lt;project&gt;/.reasonix-xiaomi/</code> — skills, memory, settings.json (hooks). Project scope wins over global on name collision.",
     "cfg.shape": "Top-level keys",
     "cfg.k.lang": "UI language: en | zh",
     "cfg.k.preset": "auto | flash | pro",
@@ -95,7 +95,7 @@
     "sk.h.cmds": "Slash commands",
     "sk.cmd.list": "List every skill, scope-tagged.",
     "sk.cmd.new":
-      "Scaffold a stub at project scope. Add <code>--global</code> for <code>~/.xiaomi-reasonix/skills</code>.",
+      "Scaffold a stub at project scope. Add <code>--global</code> for <code>~/.reasonix-xiaomi/skills</code>.",
     "sk.cmd.show": "Print the full body.",
     "sk.cmd.run": "Run it. Args are appended to the body as a single string.",
 
@@ -180,7 +180,7 @@
     "guide.title.line1": "五分钟",
     "guide.title.line2": "配置完 Reasonix",
     "guide.sub":
-      "一个全局 JSON 文件 <code>~/.xiaomi-reasonix/config.json</code>，加上项目级 <code>.xiaomi-reasonix/</code> 下的覆盖。这一页把每个 key、每条斜杠命令、以及 skills / memory / hooks 在磁盘上的形状全部讲清楚。",
+      "一个全局 JSON 文件 <code>~/.reasonix-xiaomi/config.json</code>，加上项目级 <code>.reasonix-xiaomi/</code> 下的覆盖。这一页把每个 key、每条斜杠命令、以及 skills / memory / hooks 在磁盘上的形状全部讲清楚。",
 
     "guide.toc.title": "本页目录",
     "guide.toc.config": "config.json",
@@ -197,9 +197,9 @@
 
     "cfg.title": "config.json 配置文件",
     "cfg.body1":
-      "Reasonix 只从 <code>~/.xiaomi-reasonix/config.json</code> 读取全局配置（Windows：<code>%USERPROFILE%\\.xiaomi-reasonix\\config.json</code>）。首次运行会自动创建，之后随便手改。CLI 加 <code>--no-config</code> 即可跳过，CI 友好。",
+      "Reasonix 只从 <code>~/.reasonix-xiaomi/config.json</code> 读取全局配置（Windows：<code>%USERPROFILE%\\.reasonix-xiaomi\\config.json</code>）。首次运行会自动创建，之后随便手改。CLI 加 <code>--no-config</code> 即可跳过，CI 友好。",
     "cfg.body2":
-      "项目级覆盖放在 <code>&lt;project&gt;/.xiaomi-reasonix/</code> 下——skills、memory、settings.json（hooks）都遵守这个目录。同名时项目级覆盖全局。",
+      "项目级覆盖放在 <code>&lt;project&gt;/.reasonix-xiaomi/</code> 下——skills、memory、settings.json（hooks）都遵守这个目录。同名时项目级覆盖全局。",
     "cfg.shape": "顶层 key",
     "cfg.k.lang": "界面语言：en | zh",
     "cfg.k.preset": "auto | flash | pro",
@@ -265,7 +265,7 @@
     "sk.h.cmds": "斜杠命令",
     "sk.cmd.list": "按 scope 列出全部 skill。",
     "sk.cmd.new":
-      "在项目 scope 下生成 stub。加 <code>--global</code> 可写到 <code>~/.xiaomi-reasonix/skills</code>。",
+      "在项目 scope 下生成 stub。加 <code>--global</code> 可写到 <code>~/.reasonix-xiaomi/skills</code>。",
     "sk.cmd.show": "打印完整 body。",
     "sk.cmd.run":
       "运行它。后续 args 会作为单一字符串拼到 body 之后。",

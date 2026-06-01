@@ -58,7 +58,7 @@ export interface CodeOptions {
 export async function codeCommand(opts: CodeOptions = {}): Promise<void> {
   markPhase("code_command_enter");
   const resolvedModel = opts.model?.trim() || loadModel() || DEFAULT_MODEL;
-  // Bridge .env + ~/.xiaomi-reasonix/config.json into process.env so buildCodeToolset's
+  // Bridge .env + ~/.reasonix-xiaomi/config.json into process.env so buildCodeToolset's
   // eager DeepSeekClient constructions (subagent client; semantic embedder) can
   // pick up a key the user already configured via `reasonix setup`. chatCommand
   // does the same dance — code.tsx wraps chatCommand but must also seed env

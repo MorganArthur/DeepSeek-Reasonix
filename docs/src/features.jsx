@@ -37,8 +37,8 @@ const FEATURES = [
     title: { zh: 'Skills 可编排', en: 'Composable skills' },
     en: 'Markdown skill scripts',
     desc: {
-      zh: '.xiaomi-reasonix/skills/<name>.md，frontmatter 支持 runAs: subagent + allowed-tools 隔离运行。',
-      en: 'Drop a Markdown file in `.xiaomi-reasonix/skills/<name>.md`; frontmatter supports `runAs: subagent` and `allowed-tools` for isolated execution.',
+      zh: '.reasonix-xiaomi/skills/<name>.md，frontmatter 支持 runAs: subagent + allowed-tools 隔离运行。',
+      en: 'Drop a Markdown file in `.reasonix-xiaomi/skills/<name>.md`; frontmatter supports `runAs: subagent` and `allowed-tools` for isolated execution.',
     },
   },
   {

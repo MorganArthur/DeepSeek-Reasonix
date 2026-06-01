@@ -75,7 +75,7 @@ export interface SlashContext {
   mcpServers?: McpServerSummary[];
   /** Absent → tests context; `/memory` MUST reply "root unknown" rather than silently reading wrong dir. */
   memoryRoot?: string;
-  /** Override `~/.xiaomi-reasonix` lookup root — production leaves this absent (defaults to `os.homedir()`); tests inject a tmpdir so they don't read the dev's real global memory. */
+  /** Override `~/.reasonix-xiaomi` lookup root — production leaves this absent (defaults to `os.homedir()`); tests inject a tmpdir so they don't read the dev's real global memory. */
   homeDir?: string;
   planMode?: boolean;
   editMode?: EditMode;

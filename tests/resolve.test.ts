@@ -43,24 +43,24 @@ describe("resolveDefaults", () => {
   });
 
   it("config.model overrides the default", () => {
-    writeConfig({ model: "mimo-v2.5-pro" }, join(home, ".xiaomi-reasonix", "config.json"));
+    writeConfig({ model: "mimo-v2.5-pro" }, join(home, ".reasonix-xiaomi", "config.json"));
     const r = resolveDefaults({});
     expect(r.model).toBe("mimo-v2.5-pro");
   });
 
   it("config.reasoningEffort persists across launches", () => {
-    writeConfig({ reasoningEffort: "medium" }, join(home, ".xiaomi-reasonix", "config.json"));
+    writeConfig({ reasoningEffort: "medium" }, join(home, ".reasonix-xiaomi", "config.json"));
     expect(resolveDefaults({}).reasoningEffort).toBe("medium");
   });
 
   it("--model wins over config.model", () => {
-    writeConfig({ model: "mimo-v2.5" }, join(home, ".xiaomi-reasonix", "config.json"));
+    writeConfig({ model: "mimo-v2.5" }, join(home, ".reasonix-xiaomi", "config.json"));
     const r = resolveDefaults({ model: "mimo-v2.5-pro" });
     expect(r.model).toBe("mimo-v2.5-pro");
   });
 
   it("--effort wins over config.reasoningEffort", () => {
-    writeConfig({ reasoningEffort: "medium" }, join(home, ".xiaomi-reasonix", "config.json"));
+    writeConfig({ reasoningEffort: "medium" }, join(home, ".reasonix-xiaomi", "config.json"));
     const r = resolveDefaults({ effort: "low" });
     expect(r.reasoningEffort).toBe("low");
   });
@@ -72,14 +72,14 @@ describe("resolveDefaults", () => {
   });
 
   it("--effort with garbage value falls through to config / default", () => {
-    writeConfig({ reasoningEffort: "medium" }, join(home, ".xiaomi-reasonix", "config.json"));
+    writeConfig({ reasoningEffort: "medium" }, join(home, ".reasonix-xiaomi", "config.json"));
     expect(resolveDefaults({ effort: "absurd" }).reasoningEffort).toBe("medium");
   });
 
   it("--mcp overrides config.mcp wholesale (no merging)", () => {
     writeConfig(
       { mcp: ["fs=npx -y @modelcontextprotocol/server-filesystem /tmp/old"] },
-      join(home, ".xiaomi-reasonix", "config.json"),
+      join(home, ".reasonix-xiaomi", "config.json"),
     );
     const r = resolveDefaults({ mcp: ["new=cmd arg"] });
     expect(r.mcp).toEqual(["new=cmd arg"]);
@@ -88,7 +88,7 @@ describe("resolveDefaults", () => {
   it("empty --mcp array falls through to config.mcp", () => {
     writeConfig(
       { mcp: ["fs=npx -y @modelcontextprotocol/server-filesystem /tmp/safe"] },
-      join(home, ".xiaomi-reasonix", "config.json"),
+      join(home, ".reasonix-xiaomi", "config.json"),
     );
     const r = resolveDefaults({ mcp: [] });
     expect(r.mcp).toHaveLength(1);
@@ -98,7 +98,7 @@ describe("resolveDefaults", () => {
   it("--no-config ignores the config entirely", () => {
     writeConfig(
       { model: "mimo-v2.5-pro", reasoningEffort: "high", mcp: ["x=cmd"] },
-      join(home, ".xiaomi-reasonix", "config.json"),
+      join(home, ".reasonix-xiaomi", "config.json"),
     );
     const r = resolveDefaults({ noConfig: true });
     expect(r.model).toBe("mimo-v2.5");
@@ -107,13 +107,13 @@ describe("resolveDefaults", () => {
   });
 
   it("--no-session beats config.session", () => {
-    writeConfig({ session: "work" }, join(home, ".xiaomi-reasonix", "config.json"));
+    writeConfig({ session: "work" }, join(home, ".reasonix-xiaomi", "config.json"));
     const r = resolveDefaults({ session: false });
     expect(r.session).toBeUndefined();
   });
 
   it("config.session=null means ephemeral by default", () => {
-    writeConfig({ session: null }, join(home, ".xiaomi-reasonix", "config.json"));
+    writeConfig({ session: null }, join(home, ".reasonix-xiaomi", "config.json"));
     const r = resolveDefaults({});
     expect(r.session).toBeUndefined();
   });
@@ -151,7 +151,7 @@ describe("resolveDefaults", () => {
         {
           mcpServers: { gh: { command: "user-level-cmd" } },
         },
-        join(home, ".xiaomi-reasonix", "config.json"),
+        join(home, ".reasonix-xiaomi", "config.json"),
       );
       writeFileSync(
         join(cwd, ".mcp.json"),

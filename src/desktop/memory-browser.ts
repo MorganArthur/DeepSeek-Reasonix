@@ -25,7 +25,7 @@ export interface MemoryEntryDetail extends MemoryEntryInfo {
 }
 
 export interface MemoryBrowserOptions {
-  /** Absolute ~/.xiaomi-reasonix directory. Tests override this; production uses homedir(). */
+  /** Absolute ~/.reasonix-xiaomi directory. Tests override this; production uses homedir(). */
   reasonixHome?: string;
 }
 

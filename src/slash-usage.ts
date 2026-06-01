@@ -12,7 +12,7 @@ interface UsageFile {
 export function slashUsagePath(): string {
   const override = process.env.REASONIX_SLASH_USAGE_PATH;
   if (override) return override;
-  return join(homedir(), ".xiaomi-reasonix", "slash-usage.json");
+  return join(homedir(), ".reasonix-xiaomi", "slash-usage.json");
 }
 
 export function loadSlashUsage(): SlashUsageCounts {

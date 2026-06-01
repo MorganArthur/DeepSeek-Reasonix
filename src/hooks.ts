@@ -43,7 +43,7 @@ export interface HookConfig {
   cwd?: string;
 }
 
-/** Shape of `<scope>/.xiaomi-reasonix/settings.json` — only `hooks` for now. */
+/** Shape of `<scope>/.reasonix-xiaomi/settings.json` — only `hooks` for now. */
 export interface HookSettings {
   hooks?: Partial<Record<HookEvent, HookConfig[]>>;
 }
@@ -81,9 +81,9 @@ export interface HookReport {
 }
 
 export const HOOK_SETTINGS_FILENAME = "settings.json";
-export const HOOK_SETTINGS_DIRNAME = ".xiaomi-reasonix";
+export const HOOK_SETTINGS_DIRNAME = ".reasonix-xiaomi";
 
-/** Where the global settings.json lives. Equivalent to `~/.xiaomi-reasonix/settings.json`. */
+/** Where the global settings.json lives. Equivalent to `~/.reasonix-xiaomi/settings.json`. */
 export function globalSettingsPath(homeDirOverride?: string): string {
   return join(homeDirOverride ?? homedir(), HOOK_SETTINGS_DIRNAME, HOOK_SETTINGS_FILENAME);
 }

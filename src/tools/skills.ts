@@ -226,8 +226,8 @@ export function registerSkillTools(
   });
 
   const installScopeDesc = hasProjectScope
-    ? "'project' (default) writes to <repo>/.xiaomi-reasonix/skills/, scoped to this workspace only; 'global' writes to ~/.xiaomi-reasonix/skills/, available in every project."
-    : "'global' (only option here — no project workspace) writes to ~/.xiaomi-reasonix/skills/.";
+    ? "'project' (default) writes to <repo>/.reasonix-xiaomi/skills/, scoped to this workspace only; 'global' writes to ~/.reasonix-xiaomi/skills/, available in every project."
+    : "'global' (only option here — no project workspace) writes to ~/.reasonix-xiaomi/skills/.";
 
   registry.register({
     name: "install_skill",

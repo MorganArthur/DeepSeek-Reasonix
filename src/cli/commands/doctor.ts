@@ -435,7 +435,7 @@ function readSemanticMeta(
 ): { provider: "ollama" | "openai-compat"; model: string } | null {
   try {
     const raw = readFileSync(
-      join(projectRoot, ".xiaomi-reasonix", "semantic", "index.meta.json"),
+      join(projectRoot, ".reasonix-xiaomi", "semantic", "index.meta.json"),
       "utf8",
     );
     const parsed = JSON.parse(raw) as { provider?: string; model?: string };

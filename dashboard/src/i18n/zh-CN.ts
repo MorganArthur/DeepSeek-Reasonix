@@ -698,7 +698,7 @@ export const zhCN = {
     marketplaceEnvTitle: "必需的环境变量",
     marketplaceEnvHint: "下次启动 `reasonix code` 之前在 shell 里设好，桥接的服务器才能正常鉴权。",
     marketplaceRestartHint:
-      "已写入 ~/.xiaomi-reasonix/config.json。重启 `reasonix code` 后服务器才会真正桥接（热重载在路线图上）。",
+      "已写入 ~/.reasonix-xiaomi/config.json。重启 `reasonix code` 后服务器才会真正桥接（热重载在路线图上）。",
   },
   memory: {
     loading: "加载记忆…",
@@ -707,7 +707,7 @@ export const zhCN = {
     create: "创建",
     noFiles: "暂无记忆文件。",
     pickHint: "选择左侧的记忆文件。",
-    pickDesc: "项目 REASONIX.md 可提交；全局笔记存储在 ~/.xiaomi-reasonix/memory/。",
+    pickDesc: "项目 REASONIX.md 可提交；全局笔记存储在 ~/.reasonix-xiaomi/memory/。",
     chars: "{count} 个字符",
     saved: "已保存 {scope}",
     reloadHint: "在下次 /new 或会话重启时重新加载",

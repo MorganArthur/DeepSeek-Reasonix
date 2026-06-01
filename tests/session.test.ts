@@ -68,9 +68,9 @@ describe("session persistence", () => {
     if (existsSync(tmp)) rmSync(tmp, { recursive: true, force: true });
   });
 
-  it("sessionPath lives under <home>/.xiaomi-reasonix/sessions", () => {
+  it("sessionPath lives under <home>/.reasonix-xiaomi/sessions", () => {
     const p = sessionPath("demo");
-    expect(p).toContain(".xiaomi-reasonix");
+    expect(p).toContain(".reasonix-xiaomi");
     expect(p).toContain("sessions");
     expect(p.endsWith("demo.jsonl")).toBe(true);
     expect(p.startsWith(tmp)).toBe(true);

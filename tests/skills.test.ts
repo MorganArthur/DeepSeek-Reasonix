@@ -20,9 +20,9 @@ function writeSkillDir(
 ): string {
   const parent =
     which === "global"
-      ? join(homeOrProject, ".xiaomi-reasonix", "skills")
+      ? join(homeOrProject, ".reasonix-xiaomi", "skills")
       : which === "project"
-        ? join(root, ".xiaomi-reasonix", "skills")
+        ? join(root, ".reasonix-xiaomi", "skills")
         : homeOrProject;
   const dir = join(parent, name);
   mkdirSync(dir, { recursive: true });
@@ -40,7 +40,7 @@ function writeFlatSkill(
   frontmatter: Record<string, string>,
   body: string,
 ): string {
-  const skills = join(dir, ".xiaomi-reasonix", "skills");
+  const skills = join(dir, ".reasonix-xiaomi", "skills");
   mkdirSync(skills, { recursive: true });
   const fmLines = ["---"];
   for (const [k, v] of Object.entries(frontmatter)) fmLines.push(`${k}: ${v}`);
@@ -99,7 +99,7 @@ describe("SkillStore", () => {
     expect(skills[0]?.description).toBe("Commit and push changes");
   });
 
-  it("surfaces project-scope skills from <projectRoot>/.xiaomi-reasonix/skills", () => {
+  it("surfaces project-scope skills from <projectRoot>/.reasonix-xiaomi/skills", () => {
     writeSkillDir(
       projectRoot,
       "project",
@@ -163,7 +163,7 @@ describe("SkillStore", () => {
 
   it("skips dotfiles that would masquerade as skills", () => {
     writeSkillDir(projectRoot, "global", "ok", { description: "fine" }, "body", home);
-    const dotDir = join(home, ".xiaomi-reasonix", "skills");
+    const dotDir = join(home, ".reasonix-xiaomi", "skills");
     writeFileSync(join(dotDir, ".hidden.md"), "---\ndescription: x\n---\nbody\n", "utf8");
     const list = new SkillStore({ homeDir: home, projectRoot, disableBuiltins: true }).list();
     expect(list.map((s) => s.name)).toEqual(["ok"]);

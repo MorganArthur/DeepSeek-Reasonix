@@ -28,7 +28,7 @@ describe("/permissions slash handler", () => {
     dir = mkdtempSync(join(tmpdir(), "reasonix-perms-slash-"));
     cfgPath = join(dir, "config.json");
     projectRoot = join(dir, "project");
-    // Redirect ~/.xiaomi-reasonix → temp dir so the handler's calls (which use
+    // Redirect ~/.reasonix-xiaomi → temp dir so the handler's calls (which use
     // defaultConfigPath) land in `cfgPath`. config.test.ts skips this by
     // passing `path` explicitly to every helper, but the slash handler
     // hardcodes the default — so we have to redirect HOME instead.
@@ -72,9 +72,9 @@ describe("/permissions slash handler", () => {
     addProjectShellAllowed(
       projectRoot,
       "npm run build",
-      join(dir, ".xiaomi-reasonix", "config.json"),
+      join(dir, ".reasonix-xiaomi", "config.json"),
     );
-    addProjectShellAllowed(projectRoot, "deploy.sh", join(dir, ".xiaomi-reasonix", "config.json"));
+    addProjectShellAllowed(projectRoot, "deploy.sh", join(dir, ".reasonix-xiaomi", "config.json"));
     const result = handleSlash("permissions", [], makeLoop(), {
       codeRoot: projectRoot,
       editMode: "review",
@@ -89,7 +89,7 @@ describe("/permissions slash handler", () => {
     });
     expect(result.info).toMatch(/added.*npm run build/);
     expect(
-      loadProjectShellAllowed(projectRoot, join(dir, ".xiaomi-reasonix", "config.json")),
+      loadProjectShellAllowed(projectRoot, join(dir, ".reasonix-xiaomi", "config.json")),
     ).toContain("npm run build");
   });
 
@@ -105,12 +105,12 @@ describe("/permissions slash handler", () => {
     expect(result.info).toMatch(/builtin allowlist/i);
     // Should NOT have written a redundant project entry.
     expect(
-      loadProjectShellAllowed(projectRoot, join(dir, ".xiaomi-reasonix", "config.json")),
+      loadProjectShellAllowed(projectRoot, join(dir, ".reasonix-xiaomi", "config.json")),
     ).toEqual([]);
   });
 
   it("/permissions remove drops by exact prefix", () => {
-    const cfgFile = join(dir, ".xiaomi-reasonix", "config.json");
+    const cfgFile = join(dir, ".reasonix-xiaomi", "config.json");
     addProjectShellAllowed(projectRoot, "npm run build", cfgFile);
     addProjectShellAllowed(projectRoot, "deploy.sh", cfgFile);
     const result = handleSlash("permissions", ["remove", "deploy.sh"], makeLoop(), {
@@ -121,7 +121,7 @@ describe("/permissions slash handler", () => {
   });
 
   it("/permissions remove drops by 1-based project index", () => {
-    const cfgFile = join(dir, ".xiaomi-reasonix", "config.json");
+    const cfgFile = join(dir, ".reasonix-xiaomi", "config.json");
     addProjectShellAllowed(projectRoot, "alpha", cfgFile);
     addProjectShellAllowed(projectRoot, "beta", cfgFile);
     addProjectShellAllowed(projectRoot, "gamma", cfgFile);
@@ -133,7 +133,7 @@ describe("/permissions slash handler", () => {
   });
 
   it("/permissions remove flags an out-of-range index", () => {
-    const cfgFile = join(dir, ".xiaomi-reasonix", "config.json");
+    const cfgFile = join(dir, ".reasonix-xiaomi", "config.json");
     addProjectShellAllowed(projectRoot, "alpha", cfgFile);
     const result = handleSlash("permissions", ["remove", "5"], makeLoop(), {
       codeRoot: projectRoot,
@@ -157,7 +157,7 @@ describe("/permissions slash handler", () => {
   });
 
   it("/permissions clear without 'confirm' asks for confirmation", () => {
-    const cfgFile = join(dir, ".xiaomi-reasonix", "config.json");
+    const cfgFile = join(dir, ".reasonix-xiaomi", "config.json");
     addProjectShellAllowed(projectRoot, "alpha", cfgFile);
     addProjectShellAllowed(projectRoot, "beta", cfgFile);
     const result = handleSlash("permissions", ["clear"], makeLoop(), { codeRoot: projectRoot });
@@ -166,7 +166,7 @@ describe("/permissions slash handler", () => {
   });
 
   it("/permissions clear confirm wipes the project list", () => {
-    const cfgFile = join(dir, ".xiaomi-reasonix", "config.json");
+    const cfgFile = join(dir, ".reasonix-xiaomi", "config.json");
     addProjectShellAllowed(projectRoot, "alpha", cfgFile);
     addProjectShellAllowed(projectRoot, "beta", cfgFile);
     const result = handleSlash("permissions", ["clear", "confirm"], makeLoop(), {

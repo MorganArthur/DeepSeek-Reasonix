@@ -37,7 +37,7 @@ Run `reasonix --help` (or any subcommand with `--help`) for the full flag list. 
 | `--budget <usd>` | Per-session USD cap — warns at 80%, refuses next turn at 100% |
 | `--preset <auto\|flash\|pro>` | Model bundle (auto-escalation, locked flash, locked pro) |
 | `--mcp <spec>` | Attach an MCP server for this run (repeatable) |
-| `--no-config` | Ignore `~/.xiaomi-reasonix/config.json` for this run |
+| `--no-config` | Ignore `~/.reasonix-xiaomi/config.json` for this run |
 | `--no-dashboard` | Don't auto-start the embedded web dashboard |
 | `--no-alt-screen` | Render to scrollback instead of the alt-screen buffer (preserves chat in shell history; legacy mode, can ghost on resize) |
 | `--no-mouse` | Disable DECSET 1007 (alternate-scroll); wheel reverts to native terminal scroll |
@@ -87,7 +87,7 @@ Type `/` mid-chat to open the picker. Aliases shown in parentheses. Code-mode-on
 | `/mcp` | Open the MCP hub (live + marketplace tabs) |
 | `/resource [uri]` | Browse / read MCP resources |
 | `/prompt [name]` | Browse / fetch MCP prompts |
-| `/memory [list\|show\|forget\|clear]` | Manage pinned memory (REASONIX.md + `~/.xiaomi-reasonix/memory`) |
+| `/memory [list\|show\|forget\|clear]` | Manage pinned memory (REASONIX.md + `~/.reasonix-xiaomi/memory`) |
 | `/skill [list\|show\|new\|<name>]` | List / run / scaffold user skills |
 
 ### Session

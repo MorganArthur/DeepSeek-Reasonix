@@ -14,7 +14,7 @@ import type { ToolRegistry } from "../tools.js";
 export interface MemoryToolsOptions {
   /** Sandbox root for the `project` scope. Omit for chat mode. */
   projectRoot?: string;
-  /** Override `~/.xiaomi-reasonix` (tests). */
+  /** Override `~/.reasonix-xiaomi` (tests). */
   homeDir?: string;
 }
 

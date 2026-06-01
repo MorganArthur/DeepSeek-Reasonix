@@ -336,7 +336,7 @@ export function costUsd(model: string, usage: Usage, path?: string): number {
 - 同步改 4 语言 i18n（EN/zh-CN/de/ru）的 `proArmed` key
 
 **老配置迁移**（首次启动时）：
-- 如果 `~/.xiaomi-reasonix/config.json` 的 `model` 字段是旧的 `deepseek-v4-flash` / `deepseek-v4-pro`，启动时自动映射为 `mimo-v2.5` / `mimo-v2.5-pro` 并保存
+- 如果 `~/.reasonix-xiaomi/config.json` 的 `model` 字段是旧的 `deepseek-v4-flash` / `deepseek-v4-pro`，启动时自动映射为 `mimo-v2.5` / `mimo-v2.5-pro` 并保存
 - 如果 `reasoningEffort` 是 `"max"`，自动降级为 `"high"`
 
 ---
@@ -357,7 +357,7 @@ export function costUsd(model: string, usage: Usage, path?: string): number {
 #### D2. `packages/dsnix/` — CLI 短别名包
 
 整个目录建议 `git mv packages/dsnix packages/mimonix`（或保留 dsnix 兼容）：
-- `packages/dsnix/package.json`：name、description、keywords、homepage、repository 全部更新；`dependencies.xiaomi-reasonix` 保留。
+- `packages/dsnix/package.json`：name、description、keywords、homepage、repository 全部更新；`dependencies.reasonix-xiaomi` 保留。
 - `packages/dsnix/bin.cjs`：内部 `require("reasonix")` 逻辑不需改。
 - `packages/dsnix/README.md`：内容重写。
 
@@ -426,7 +426,7 @@ i18n 文件未提供 `errors.xiaomi5xxHead` 等新 key 时，TS 编译会报错�
 
 - **建议保留 `reasonix`**：它是产品名（非品牌捆绑名），改名会失去所有历史 issue / star / npm 下载量 / SEO。
 - 仅把"DeepSeek-native" → "Xiaomi MiMo-native" 即可。
-- `~/.xiaomi-reasonix/config.json` 路径同理保留——老用户配置不迁移。
+- `~/.reasonix-xiaomi/config.json` 路径同理保留——老用户配置不迁移。
 
 #### F2. Anthropic 兼容端点 `https://api.xiaomimimo.com/anthropic`
 

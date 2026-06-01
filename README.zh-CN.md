@@ -118,8 +118,8 @@ npx reasonix code --dir /path/to/project
 **写第一个 Skill。** 暂无在线市场——自己写。编辑文件（`description:` frontmatter + 正文），然后 `/skill list` 就能看到。frontmatter 加 `runAs: subagent` 会以隔离 subagent 跑，而不是把正文内联进父 prompt。
 
 ~~~bash
-/skill new my-skill              # <project>/.xiaomi-reasonix/skills/my-skill.md
-/skill new my-skill --global     # ~/.xiaomi-reasonix/skills，跨项目共用
+/skill new my-skill              # <project>/.reasonix-xiaomi/skills/my-skill.md
+/skill new my-skill --global     # ~/.reasonix-xiaomi/skills，跨项目共用
 ~~~
 
 </details>
@@ -128,7 +128,7 @@ npx reasonix code --dir /path/to/project
 
 ## 配置
 
-一个全局 JSON 文件 `~/.xiaomi-reasonix/config.json`，加上项目级 `<project>/.xiaomi-reasonix/` 下的覆盖。完整的双语参考 —— 每一个 key、每一条斜杠命令、skills / memory / hooks 在磁盘上的形状 —— 都在这里：
+一个全局 JSON 文件 `~/.reasonix-xiaomi/config.json`，加上项目级 `<project>/.reasonix-xiaomi/` 下的覆盖。完整的双语参考 —— 每一个 key、每一条斜杠命令、skills / memory / hooks 在磁盘上的形状 —— 都在这里：
 
 > 📘 **[配置指南](https://esengine.github.io/reasonix/configuration.html?lang=zh)** · [English](https://esengine.github.io/reasonix/configuration.html)
 

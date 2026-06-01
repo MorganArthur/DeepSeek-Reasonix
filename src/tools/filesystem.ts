@@ -44,11 +44,11 @@ const HARD_MAX_FILE_BYTES = 32 * 1024 * 1024;
 const OUTLINE_HEAD_LINES = 80;
 
 // Skipped unless `include_deps:true`. Derived from the semantic indexer's exclude
-// list, minus `.xiaomi-reasonix` — the indexer shouldn't embed session logs / cache, but
-// user skills live at `<root>/.xiaomi-reasonix/skills/` (and `~/.xiaomi-reasonix/skills/`) and
+// list, minus `.reasonix-xiaomi` — the indexer shouldn't embed session logs / cache, but
+// user skills live at `<root>/.reasonix-xiaomi/skills/` (and `~/.reasonix-xiaomi/skills/`) and
 // must stay reachable to read_file / search_files / search_content (#1357).
 const SKIP_DIR_NAMES: ReadonlySet<string> = new Set(
-  DEFAULT_INDEX_EXCLUDES.dirs.filter((d) => d !== ".xiaomi-reasonix"),
+  DEFAULT_INDEX_EXCLUDES.dirs.filter((d) => d !== ".reasonix-xiaomi"),
 );
 
 /** First line of binary defense; NUL-byte sniff is the second (catches mislabeled `.txt`). */

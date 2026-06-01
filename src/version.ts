@@ -47,7 +47,7 @@ interface VersionCacheEntry {
 }
 
 function cachePath(homeDirOverride?: string): string {
-  return join(homeDirOverride ?? homedir(), ".xiaomi-reasonix", "version-cache.json");
+  return join(homeDirOverride ?? homedir(), ".reasonix-xiaomi", "version-cache.json");
 }
 
 function readCache(homeDirOverride?: string): VersionCacheEntry | null {

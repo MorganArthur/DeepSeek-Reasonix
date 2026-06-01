@@ -49,7 +49,7 @@ export interface MemoryEntry {
 }
 
 export interface MemoryStoreOptions {
-  /** Override `~/.xiaomi-reasonix` — tests set this to a tmpdir. */
+  /** Override `~/.reasonix-xiaomi` — tests set this to a tmpdir. */
   homeDir?: string;
   /** Absolute sandbox root. Required to use `scope: "project"`. */
   projectRoot?: string;
@@ -138,7 +138,7 @@ export class MemoryStore {
   private readonly projectRoot: string | undefined;
 
   constructor(opts: MemoryStoreOptions = {}) {
-    this.homeDir = opts.homeDir ?? join(homedir(), ".xiaomi-reasonix");
+    this.homeDir = opts.homeDir ?? join(homedir(), ".reasonix-xiaomi");
     this.projectRoot = opts.projectRoot ? resolve(opts.projectRoot) : undefined;
   }
 
@@ -307,7 +307,7 @@ export class MemoryStore {
 
 /** Freeform `#g` destination, distinct from MEMORY.md's curated index of named files. */
 export function readGlobalReasonixMemory(
-  homeDir: string = join(homedir(), ".xiaomi-reasonix"),
+  homeDir: string = join(homedir(), ".reasonix-xiaomi"),
 ): { path: string; content: string; originalChars: number; truncated: boolean } | null {
   const path = join(homeDir, "REASONIX.md");
   if (!existsSync(path)) return null;
@@ -332,13 +332,13 @@ export function readGlobalReasonixMemory(
 
 export function applyGlobalReasonixMemory(basePrompt: string, homeDir?: string): string {
   if (!memoryEnabled()) return basePrompt;
-  const dir = homeDir ?? join(homedir(), ".xiaomi-reasonix");
+  const dir = homeDir ?? join(homedir(), ".reasonix-xiaomi");
   const mem = readGlobalReasonixMemory(dir);
   if (!mem) return basePrompt;
   return [
     basePrompt,
     "",
-    "# Global memory (~/.xiaomi-reasonix/REASONIX.md)",
+    "# Global memory (~/.reasonix-xiaomi/REASONIX.md)",
     "",
     "Cross-project notes the user pinned via the `#g` prompt prefix. Treat as authoritative — same level of trust as project memory.",
     "",
@@ -431,7 +431,7 @@ export function applyUserMemory(
   if (global) {
     parts.push(
       "",
-      "# User memory — global (~/.xiaomi-reasonix/memory/global/MEMORY.md)",
+      "# User memory — global (~/.reasonix-xiaomi/memory/global/MEMORY.md)",
       "",
       "Cross-project facts and preferences the user has told you in prior sessions. TREAT AS AUTHORITATIVE — don't re-verify via filesystem or web. One-liners index detail files; call `recall_memory` for full bodies only when the one-liner isn't enough.",
       "",
@@ -465,7 +465,7 @@ export function applyMemoryStack(
   const withProject = applyProjectMemory(basePrompt, rootDir);
   const withGlobal = applyGlobalReasonixMemory(
     withProject,
-    homeDir ? join(homeDir, ".xiaomi-reasonix") : undefined,
+    homeDir ? join(homeDir, ".reasonix-xiaomi") : undefined,
   );
   const withGlobalClaude = applyGlobalClaudeMemory(withGlobal);
   const withMemory = applyUserMemory(withGlobalClaude, { projectRoot: rootDir, homeDir, cfg });

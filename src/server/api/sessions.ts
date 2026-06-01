@@ -81,7 +81,7 @@ export async function handleSessions(
 ): Promise<ApiResult> {
   // Listing — workspace-scoped when the CLI knows its cwd. Without this,
   // every subagent transcript and every other-workspace session lands in the
-  // sidebar; users have reported 10 000+ entries in `~/.xiaomi-reasonix/sessions/`.
+  // sidebar; users have reported 10 000+ entries in `~/.reasonix-xiaomi/sessions/`.
   if (method === "GET" && rest.length === 0) {
     const workspaceFilter = ctx.getCurrentCwd?.();
     const sessions = workspaceFilter ? listSessionsForWorkspace(workspaceFilter) : listSessions();

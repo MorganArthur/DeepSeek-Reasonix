@@ -10,7 +10,7 @@ export interface DashboardContext {
   /** Caller resolves via `defaultConfigPath()`; module deliberately avoids `homedir()` so tests can redirect. */
   configPath: string;
   usageLogPath: string;
-  /** Override the sessions dir (events.jsonl readers); production reads `~/.xiaomi-reasonix/sessions`. */
+  /** Override the sessions dir (events.jsonl readers); production reads `~/.reasonix-xiaomi/sessions`. */
   sessionsDir?: string;
   mode: "standalone" | "attached";
 

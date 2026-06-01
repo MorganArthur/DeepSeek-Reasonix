@@ -29,11 +29,11 @@ function projectHash(rootDir: string): string {
 }
 
 function globalMemoryDir(): string {
-  return join(homedir(), ".xiaomi-reasonix", "memory", "global");
+  return join(homedir(), ".reasonix-xiaomi", "memory", "global");
 }
 
 function projectMemoryDir(rootDir: string): string {
-  return join(homedir(), ".xiaomi-reasonix", "memory", projectHash(rootDir));
+  return join(homedir(), ".reasonix-xiaomi", "memory", projectHash(rootDir));
 }
 
 interface WriteBody {

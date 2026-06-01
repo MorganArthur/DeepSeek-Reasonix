@@ -18,8 +18,8 @@ import {
 } from "../src/hooks.js";
 
 function writeSettings(dir: string, json: unknown): string {
-  const path = join(dir, ".xiaomi-reasonix", "settings.json");
-  mkdirSync(join(dir, ".xiaomi-reasonix"), { recursive: true });
+  const path = join(dir, ".reasonix-xiaomi", "settings.json");
+  mkdirSync(join(dir, ".reasonix-xiaomi"), { recursive: true });
   writeFileSync(path, JSON.stringify(json), "utf8");
   return path;
 }
@@ -115,8 +115,8 @@ describe("loadHooks", () => {
   });
 
   it("tolerates malformed JSON without throwing", () => {
-    mkdirSync(join(home, ".xiaomi-reasonix"), { recursive: true });
-    writeFileSync(join(home, ".xiaomi-reasonix", "settings.json"), "{ not valid json", "utf8");
+    mkdirSync(join(home, ".reasonix-xiaomi"), { recursive: true });
+    writeFileSync(join(home, ".reasonix-xiaomi", "settings.json"), "{ not valid json", "utf8");
     expect(() => loadHooks({ homeDir: home })).not.toThrow();
     expect(loadHooks({ homeDir: home })).toEqual([]);
   });
@@ -128,8 +128,8 @@ describe("loadHooks", () => {
   });
 
   it("paths reported by *SettingsPath helpers are absolute", () => {
-    expect(globalSettingsPath(home)).toBe(join(home, ".xiaomi-reasonix", "settings.json"));
-    expect(projectSettingsPath(project)).toBe(join(project, ".xiaomi-reasonix", "settings.json"));
+    expect(globalSettingsPath(home)).toBe(join(home, ".reasonix-xiaomi", "settings.json"));
+    expect(projectSettingsPath(project)).toBe(join(project, ".reasonix-xiaomi", "settings.json"));
   });
 });
 

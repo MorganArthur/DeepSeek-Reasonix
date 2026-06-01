@@ -166,7 +166,7 @@ export const SLASH_COMMANDS: readonly SlashCommandSpec[] = [
     cmd: "memory",
     group: "extend",
     argsHint: "[list|show <name>|forget <name>|clear <scope> confirm]",
-    summary: "show / manage pinned memory (REASONIX.md + ~/.xiaomi-reasonix/memory)",
+    summary: "show / manage pinned memory (REASONIX.md + ~/.reasonix-xiaomi/memory)",
   },
   {
     cmd: "skill",
@@ -328,14 +328,14 @@ export const SLASH_COMMANDS: readonly SlashCommandSpec[] = [
     group: "advanced",
     argsHint: "[reload]",
     summary:
-      "list active hooks (settings.json under .xiaomi-reasonix/) · reload re-reads from disk",
+      "list active hooks (settings.json under .reasonix-xiaomi/) · reload re-reads from disk",
   },
   {
     cmd: "permissions",
     group: "advanced",
     argsHint: "[list|add <prefix>|remove <prefix|N>|clear confirm]",
     summary:
-      "show / edit shell allowlist (builtin read-only · per-project: ~/.xiaomi-reasonix/config.json)",
+      "show / edit shell allowlist (builtin read-only · per-project: ~/.reasonix-xiaomi/config.json)",
     argCompleter: ["list", "add", "remove", "clear"],
   },
   {

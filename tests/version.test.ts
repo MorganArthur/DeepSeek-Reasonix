@@ -216,7 +216,7 @@ describe("getLatestVersion", () => {
     expect(calls).toBe(1);
 
     // Cache file exists and parses.
-    const cacheFile = join(home, ".xiaomi-reasonix", "version-cache.json");
+    const cacheFile = join(home, ".reasonix-xiaomi", "version-cache.json");
     expect(existsSync(cacheFile)).toBe(true);
     const parsed = JSON.parse(readFileSync(cacheFile, "utf8"));
     expect(parsed.version).toBe("0.9.9");
@@ -224,12 +224,12 @@ describe("getLatestVersion", () => {
   });
 
   it("force:true bypasses the cache", async () => {
-    writeFileSync(join(home, ".xiaomi-reasonix-cache-preseed.json"), ""); // just ensures the tmp dir is real
+    writeFileSync(join(home, ".reasonix-xiaomi-cache-preseed.json"), ""); // just ensures the tmp dir is real
     // Preseed the cache directly.
     const { mkdirSync } = await import("node:fs");
-    mkdirSync(join(home, ".xiaomi-reasonix"), { recursive: true });
+    mkdirSync(join(home, ".reasonix-xiaomi"), { recursive: true });
     writeFileSync(
-      join(home, ".xiaomi-reasonix", "version-cache.json"),
+      join(home, ".reasonix-xiaomi", "version-cache.json"),
       JSON.stringify({ version: "0.1.0", checkedAt: Date.now() }),
     );
 
@@ -240,9 +240,9 @@ describe("getLatestVersion", () => {
 
   it("honors an expired cache entry as stale and refetches", async () => {
     const { mkdirSync } = await import("node:fs");
-    mkdirSync(join(home, ".xiaomi-reasonix"), { recursive: true });
+    mkdirSync(join(home, ".reasonix-xiaomi"), { recursive: true });
     writeFileSync(
-      join(home, ".xiaomi-reasonix", "version-cache.json"),
+      join(home, ".reasonix-xiaomi", "version-cache.json"),
       JSON.stringify({
         version: "0.1.0",
         checkedAt: Date.now() - LATEST_CACHE_TTL_MS - 1000,

@@ -14,7 +14,7 @@ describe("desktop memory browser", () => {
 
   beforeEach(() => {
     root = mkdtempSync(join(tmpdir(), "reasonix-memory-project-"));
-    reasonixHome = join(mkdtempSync(join(tmpdir(), "reasonix-memory-home-")), ".xiaomi-reasonix");
+    reasonixHome = join(mkdtempSync(join(tmpdir(), "reasonix-memory-home-")), ".reasonix-xiaomi");
     mkdirSync(reasonixHome, { recursive: true });
   });
 

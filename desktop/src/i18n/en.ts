@@ -198,7 +198,7 @@ export const en = {
     editorPlaceholder: 'e.g. "code", "subl", or full path to executable',
     editorDefault: "(default)",
     apiKey: "API key",
-    apiKeyHint: "Xiaomi MiMo key — saved to ~/.xiaomi-reasonix/config.json (0600).",
+    apiKeyHint: "Xiaomi MiMo key — saved to ~/.reasonix-xiaomi/config.json (0600).",
     apiKeyNotSet: "(not set)",
     apiKeyCancel: "Cancel",
     apiKeySave: "Save",
@@ -288,7 +288,7 @@ export const en = {
     // Skills
     skillsLoaded: "Loaded · {count} · invoke via / commands",
     skillsEmpty:
-      "No skills available. Create SKILL.md under ~/.xiaomi-reasonix/skills/ or .xiaomi-reasonix/skills/ in your project root.",
+      "No skills available. Create SKILL.md under ~/.reasonix-xiaomi/skills/ or .reasonix-xiaomi/skills/ in your project root.",
     subagentModelFlash: "flash",
     subagentModelPro: "pro",
     subagentModelHint: "Model used when this skill spawns its isolated subagent",

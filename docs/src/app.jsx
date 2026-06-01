@@ -11,8 +11,8 @@ function DlPromo() {
             en: 'Or — the <em>desktop</em>, no setup required.',
           }, lang)}}/>
           <p>{t({
-            zh: '原生 Tauri 客户端 · 自带 Node runtime · 共享 ~/.xiaomi-reasonix 配置。多 tab 会话、实时 cost / cache / token 表盘。',
-            en: 'Native Tauri client · bundled Node runtime · shares ~/.xiaomi-reasonix config. Multi-tab sessions, live cost / cache / token meters.',
+            zh: '原生 Tauri 客户端 · 自带 Node runtime · 共享 ~/.reasonix-xiaomi 配置。多 tab 会话、实时 cost / cache / token 表盘。',
+            en: 'Native Tauri client · bundled Node runtime · shares ~/.reasonix-xiaomi config. Multi-tab sessions, live cost / cache / token meters.',
           }, lang)}</p>
         </div>
         <div className="dl-promo-actions">
