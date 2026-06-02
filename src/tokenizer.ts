@@ -130,7 +130,7 @@ function loadTokenizer(): LoadedTokenizer {
       // tokenizer ships a single combined Split (GPT-2 style alternation);
       // DeepSeek V4 split the same coverage into three regexes. Loop
       // over whatever count the file declares.
-      splitRegexes.push(new RegExp(p.pattern.Regex, "gu"));
+      splitRegexes.push(compileSplitRegex(p.pattern.Regex));
     }
   }
 
@@ -168,6 +168,92 @@ export function warmupTokenizer(): void {
 
 function escapeRegex(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/** Fold ASCII letters in a regex fragment to case-insensitive classes (`a` → `[aA]`),
+ *  skipping escapes and existing character classes so structure is preserved. */
+function foldAsciiCaseInsensitive(inner: string): string {
+  let out = "";
+  let inClass = false;
+  for (let i = 0; i < inner.length; i++) {
+    const c = inner[i]!;
+    if (c === "\\") {
+      out += c + (inner[i + 1] ?? "");
+      i++;
+      continue;
+    }
+    if (c === "[") inClass = true;
+    else if (c === "]") inClass = false;
+    if (!inClass && /[a-zA-Z]/.test(c)) {
+      out += `[${c.toLowerCase()}${c.toUpperCase()}]`;
+    } else {
+      out += c;
+    }
+  }
+  return out;
+}
+
+/** Rewrite inline modifier groups `(?i:…)` into engine-agnostic `(?:…)` with
+ *  case folding. Inline modifiers need V8 ≥12; older bundled runtimes reject
+ *  them with "Invalid group". Only the `i` flag is emulated. */
+export function stripInlineModifiers(src: string): string {
+  let out = "";
+  let i = 0;
+  while (i < src.length) {
+    if (src[i] === "\\") {
+      out += src.slice(i, i + 2);
+      i += 2;
+      continue;
+    }
+    const m = /^\(\?([a-z]*)(?:-[a-z]+)?:/.exec(src.slice(i));
+    if (m) {
+      const flags = m[1] ?? "";
+      // Find the matching close paren for this group.
+      let depth = 1;
+      let j = i + m[0].length;
+      let inClass = false;
+      const start = j;
+      for (; j < src.length; j++) {
+        const c = src[j];
+        if (c === "\\") {
+          j++;
+          continue;
+        }
+        if (inClass) {
+          if (c === "]") inClass = false;
+          continue;
+        }
+        if (c === "[") inClass = true;
+        else if (c === "(") depth++;
+        else if (c === ")") {
+          depth--;
+          if (depth === 0) break;
+        }
+      }
+      let inner = src.slice(start, j);
+      inner = stripInlineModifiers(inner); // handle nested groups
+      if (flags.includes("i")) inner = foldAsciiCaseInsensitive(inner);
+      out += `(?:${inner})`;
+      i = j + 1;
+      continue;
+    }
+    out += src[i];
+    i++;
+  }
+  return out;
+}
+
+/** Compile a pre-tokenizer split regex, falling back to a modifier-stripped form
+ *  on engines whose V8 rejects inline modifier groups (older bundled runtimes). */
+function compileSplitRegex(src: string): RegExp {
+  try {
+    return new RegExp(src, "gu");
+  } catch (err) {
+    if (err instanceof SyntaxError) {
+      return new RegExp(stripInlineModifiers(src), "gu");
+    }
+    throw err;
+  }
 }
 
 function applySplit(chunks: string[], re: RegExp): string[] {

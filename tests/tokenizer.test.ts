@@ -7,6 +7,7 @@ import {
   estimateConversationTokens,
   estimateRequestTokens,
   formatDeepSeekPrompt,
+  stripInlineModifiers,
 } from "../src/tokenizer.js";
 
 // Token IDs are sourced from Qwen3 tokenizer (Qwen/Qwen3-0.6B), which is the
@@ -360,5 +361,41 @@ describe("performance sanity", () => {
     const t1 = performance.now();
     expect(n).toBeGreaterThan(1000);
     expect(t1 - t0).toBeLessThan(200);
+  });
+});
+
+// The bundled MiMo/Qwen split pattern uses an inline modifier group
+// `(?i:'s|'t|…)`. V8 only accepts inline modifiers from v12 (Node 22); the
+// older V8 in some Electron builds rejects them with "Invalid group", which
+// crashed the desktop app on first tokenize. stripInlineModifiers() rewrites
+// them to an engine-agnostic, case-folded `(?:…)` form. These cases lock in
+// that the rewrite both compiles everywhere and matches identically.
+describe("inline modifier fallback (older-V8 Electron)", () => {
+  const SPLIT_PATTERN =
+    "(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\\r\\n\\p{L}\\p{N}]?\\p{L}+|\\p{N}| ?[^\\s\\p{L}\\p{N}]+[\\r\\n]*|\\s*[\\r\\n]+|\\s+(?!\\S)|\\s+";
+
+  it("rewrites (?i:…) to a case-folded non-capturing group", () => {
+    expect(stripInlineModifiers("(?i:'s|'t|'d)")).toBe("(?:'[sS]|'[tT]|'[dD])");
+  });
+
+  it("leaves patterns without inline modifiers untouched", () => {
+    expect(stripInlineModifiers("\\p{L}+|\\s+(?!\\S)")).toBe("\\p{L}+|\\s+(?!\\S)");
+  });
+
+  it("rewritten split pattern compiles and matches identically to the original", () => {
+    const rewritten = stripInlineModifiers(SPLIT_PATTERN);
+    expect(rewritten).not.toContain("(?i");
+    const original = new RegExp(SPLIT_PATTERN, "gu");
+    const fallback = new RegExp(rewritten, "gu");
+    for (const text of [
+      "I'm fine, you're right. It's 23 cats!\nHe'll go.",
+      "Don'T STOP, We'RE here\t\n  end",
+      "например's 你好'll 日本語",
+      "plain text 123 abc'd",
+    ]) {
+      const a = [...text.matchAll(original)].map((m) => m[0]);
+      const b = [...text.matchAll(fallback)].map((m) => m[0]);
+      expect(b).toEqual(a);
+    }
   });
 });
