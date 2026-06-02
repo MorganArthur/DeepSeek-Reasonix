@@ -2,6 +2,7 @@
   "name": "reasonix-desktop",
   "private": true,
   "version": "0.52.0",
+  "author": "xiaomi-reasonix",
   "type": "module",
   "scripts": {
     "dev": "vite",
