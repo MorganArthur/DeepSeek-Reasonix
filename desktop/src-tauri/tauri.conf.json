@@ -43,7 +43,8 @@
     ],
     "resources": {
       "../../dist": "dist",
-      "../../data": "data"
+      "../../data": "data",
+      "icons/icon.ico": "icons/icon.ico"
     },
     "createUpdaterArtifacts": true,
     "windows": {
