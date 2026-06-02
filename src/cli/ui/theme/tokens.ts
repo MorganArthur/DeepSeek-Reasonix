@@ -207,8 +207,8 @@ const deepBlue = defineTheme({
     faint: "#606060",
   },
   tone: {
-    brand: "#0153e5",
-    accent: "#4d94ff",
+    brand: "#ff6a00",
+    accent: "#ff8a1c",
     violet: "#7b68ee",
     ok: "#4caf50",
     warn: "#ff9800",
@@ -216,8 +216,8 @@ const deepBlue = defineTheme({
     info: "#2196f3",
   },
   toneActive: {
-    brand: "#4d94ff",
-    accent: "#80b3ff",
+    brand: "#ff8a1c",
+    accent: "#ffb24a",
     violet: "#9b8bff",
     ok: "#66bb6a",
     warn: "#ffb74d",

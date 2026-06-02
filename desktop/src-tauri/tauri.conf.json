@@ -46,6 +46,9 @@
     "createUpdaterArtifacts": true,
     "windows": {
       "nsis": {
+        "installerIcon": "icons/icon.ico",
+        "installerHooks": "nsis/hooks.nsh",
+        "uninstallerIcon": "icons/icon.ico",
         "languages": [
           "English",
           "SimpChinese"
